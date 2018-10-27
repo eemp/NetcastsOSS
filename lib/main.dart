@@ -14,6 +14,12 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       home: Homepage(title: appTitle),
+      theme: ThemeData(
+        accentColor: Colors.blue[900],
+        brightness: Brightness.dark,
+        primaryColor: Colors.pink[900],
+        primaryTextTheme: Typography(platform: TargetPlatform.android).white,
+      ),
     );
   }
 }
@@ -40,7 +46,7 @@ class Homepage extends StatelessWidget {
               child: DrawerHeader(
                 child: Text('Debug Menu'),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),

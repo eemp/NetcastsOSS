@@ -9,10 +9,13 @@ class Podcast extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Image.asset(
-            'images/sample-podcast-main.jpg',
-            fit: BoxFit.cover,
-            height: 360.0,
+          Container(
+            child: Image.asset(
+              'images/sample-podcast-main.jpg',
+              fit: BoxFit.cover,
+              //height: MediaQuery.of(context).size.height * 0.40,
+            ),
+            padding: const EdgeInsets.all(32.0),
           ),
           Container(
             child: Text(

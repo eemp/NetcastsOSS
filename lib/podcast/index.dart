@@ -5,10 +5,24 @@ class Podcast extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Podcast'),
+        title: Text('Twice Removed'),
       ),
-      body: Center(
-        child: Text('Podcast main page placeholder'),
+      body: ListView(
+        children: [
+          Image.asset(
+            'images/sample-podcast-main.jpg',
+            fit: BoxFit.cover,
+            height: 360.0,
+          ),
+          Container(
+            child: Text(
+              'A new family history podcast hosted by A.J. Jacobs.  They say we\'re one big family: this is the show that proves it.  You will be filled with delight... or abject horror.  You never know.  It\'s family.',
+              softWrap: true,
+              style: Theme.of(context).textTheme.body1,
+            ),
+            padding: const EdgeInsets.all(32.0),
+          ),
+        ],
       ),
     );
   }

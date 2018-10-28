@@ -15,7 +15,7 @@ class Podcast extends StatelessWidget {
               fit: BoxFit.cover,
               //height: MediaQuery.of(context).size.height * 0.40,
             ),
-            padding: const EdgeInsets.all(32.0),
+            margin: const EdgeInsets.all(16.0),
           ),
           Container(
             child: Text(
@@ -23,8 +23,26 @@ class Podcast extends StatelessWidget {
               softWrap: true,
               style: Theme.of(context).textTheme.body1,
             ),
-            padding: const EdgeInsets.all(32.0),
+            margin: const EdgeInsets.all(16.0),
           ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0, // this will be set when a new tab is tapped
+        fixedColor: Theme.of(context).primaryColor,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            title: Text('Episodes'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info),
+            title: Text('About'),
+          )
         ],
       ),
     );

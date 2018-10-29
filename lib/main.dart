@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'home.dart';
-import 'podcast/index.dart';
-import 'podcast/episode.dart';
+import 'package:hear2learn/home.dart';
+import 'package:hear2learn/podcast/index.dart';
+import 'package:hear2learn/podcast/episode.dart';
 
 void main() => runApp(App());
 
@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       title: appTitle,
       home: Homepage(title: appTitle),
       theme: ThemeData(
-        accentColor: Colors.blue[900],
+        accentColor: Colors.blue,
         brightness: Brightness.dark,
         fontFamily: 'OpenSans',
         primaryColor: Colors.pink[900],

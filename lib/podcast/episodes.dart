@@ -7,109 +7,38 @@ class PodcastEpisodesList extends StatelessWidget {
       child: ListView(
         children: [
           Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
+            child: ListTile(
+              title: Text('The Enchanted Nightingale'),
+              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              isThreeLine: true,
+              leading: new Container(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    new Image.asset("images/fff.png")
+                  ]
+                ),
+                constraints: new BoxConstraints(maxWidth: 64.0, minWidth: 64.0),
               ),
-              elevation: 8.0,
+              trailing: IconButton(icon: Icon(Icons.get_app)),
             ),
             margin: const EdgeInsets.only(bottom: 8.0),
           ),
           Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
+            child: ListTile(
+              title: Text('The Enchanted Nightingale'),
+              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              isThreeLine: true,
+              leading: new Container(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    new Image.asset("images/fff.png")
+                  ]
+                ),
+                constraints: new BoxConstraints(maxWidth: 64.0, minWidth: 64.0),
               ),
-              elevation: 8.0,
-            ),
-            margin: const EdgeInsets.only(bottom: 8.0),
-          ),
-          Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
-              ),
-            ),
-            margin: const EdgeInsets.only(bottom: 8.0),
-          ),
-          Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
-              ),
-            ),
-            margin: const EdgeInsets.only(bottom: 8.0),
-          ),
-          Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
-              ),
-            ),
-            margin: const EdgeInsets.only(bottom: 8.0),
-          ),
-          Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
-              ),
-            ),
-            margin: const EdgeInsets.only(bottom: 8.0),
-          ),
-          Container(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('The Enchanted Nightingale'),
-                    subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                  ),
-                ],
-              ),
+              trailing: IconButton(icon: Icon(Icons.get_app)),
             ),
             margin: const EdgeInsets.only(bottom: 8.0),
           ),

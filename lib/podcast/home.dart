@@ -9,7 +9,7 @@ class PodcastHome extends StatelessWidget {
           child: Image.asset(
             'images/sample-podcast-main.jpg',
             fit: BoxFit.cover,
-            height: 240.0,
+            //height: 240.0,
           ),
           margin: const EdgeInsets.all(16.0),
         ),

@@ -11,7 +11,7 @@ class PodcastHome extends StatelessWidget {
             fit: BoxFit.cover,
             //height: 240.0,
           ),
-          margin: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
           child: Text(
@@ -19,7 +19,7 @@ class PodcastHome extends StatelessWidget {
             softWrap: true,
             style: Theme.of(context).textTheme.body1,
           ),
-          margin: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
         ),
       ],
     );

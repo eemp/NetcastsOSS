@@ -8,8 +8,8 @@ class PodcastEpisodesList extends StatelessWidget {
         children: [
           Container(
             child: ListTile(
-              title: Text('The Enchanted Nightingale'),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              title: Text('Azure Functions and CosmosDB'),
+              subtitle: Text('2d ago.'),
               isThreeLine: true,
               leading: new Container(
                 child: new Column(
@@ -26,8 +26,8 @@ class PodcastEpisodesList extends StatelessWidget {
           ),
           Container(
             child: ListTile(
-              title: Text('The Enchanted Nightingale'),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              title: Text('Containerization with Docker'),
+              subtitle: Text('9d ago.'),
               isThreeLine: true,
               leading: new Container(
                 child: new Column(

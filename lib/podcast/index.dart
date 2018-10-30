@@ -29,9 +29,18 @@ class Podcast extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            PodcastHome(),
-            PodcastEpisodesList(),
-            PodcastInfo(),
+            Container(
+              child: PodcastHome(),
+              margin: EdgeInsets.all(16.0),
+            ),
+            Container(
+              child: PodcastEpisodesList(),
+              margin: EdgeInsets.all(16.0),
+            ),
+            Container(
+              child: PodcastInfo(),
+              margin: EdgeInsets.all(16.0),
+            ),
           ],
         ),
       ),

@@ -10,19 +10,19 @@ class PodcastInfo extends StatelessWidget {
       children: [
         Container(
           child: Text('People', style: Theme.of(context).textTheme.subhead),
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
           child: PeopleList(),
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
           child: Text('Topics', style: Theme.of(context).textTheme.subhead),
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
           child: Tags(),
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.only(bottom: 16.0),
         ),
       ],
     );

@@ -43,7 +43,7 @@ class PodcastEpisodesList extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8.0),
           ),
         ],
-        padding: const EdgeInsets.all(16.0),
+        shrinkWrap: true,
       ),
     );
   }

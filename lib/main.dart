@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hear2learn/home.dart';
 import 'package:hear2learn/podcast/index.dart';
-import 'package:hear2learn/podcast/episode.dart';
+import 'package:hear2learn/episode/index.dart';
 
 void main() => runApp(App());
 

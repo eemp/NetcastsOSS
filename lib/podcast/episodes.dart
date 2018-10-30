@@ -9,7 +9,7 @@ class PodcastEpisodesList extends StatelessWidget {
           Container(
             child: ListTile(
               title: Text('Azure Functions and CosmosDB'),
-              subtitle: Text('2d ago.'),
+              subtitle: Text('Added: 2d ago. Duration: 50m.'),
               isThreeLine: true,
               leading: new Container(
                 child: new Column(
@@ -20,14 +20,19 @@ class PodcastEpisodesList extends StatelessWidget {
                 ),
                 constraints: new BoxConstraints(maxWidth: 64.0, minWidth: 64.0),
               ),
-              trailing: IconButton(icon: Icon(Icons.get_app)),
+              trailing: Column(
+                children: [
+                  IconButton(icon: Icon(Icons.get_app)),
+                  Text('32mb'),
+                ],
+              ),
             ),
             margin: const EdgeInsets.only(bottom: 8.0),
           ),
           Container(
             child: ListTile(
               title: Text('Containerization with Docker'),
-              subtitle: Text('9d ago.'),
+              subtitle: Text('Added: 9d ago. Duration: 40m.'),
               isThreeLine: true,
               leading: new Container(
                 child: new Column(
@@ -38,7 +43,12 @@ class PodcastEpisodesList extends StatelessWidget {
                 ),
                 constraints: new BoxConstraints(maxWidth: 64.0, minWidth: 64.0),
               ),
-              trailing: IconButton(icon: Icon(Icons.get_app)),
+              trailing: Column(
+                children: [
+                  IconButton(icon: Icon(Icons.get_app)),
+                  Text('24mb'),
+                ],
+              ),
             ),
             margin: const EdgeInsets.only(bottom: 8.0),
           ),

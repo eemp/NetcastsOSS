@@ -70,7 +70,7 @@ class Homepage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Podcast Episode Page'),
+              title: Text('Episode Page'),
               onTap: () {
                 Navigator.push(
                   context,

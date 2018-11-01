@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear2learn/common/circle_button.dart';
 
 class EpisodeHome extends StatelessWidget {
   @override
@@ -6,10 +7,33 @@ class EpisodeHome extends StatelessWidget {
     return ListView(
       children: [
         Container(
-          child: Image.asset(
-            'images/sample-podcast-main.jpg',
-            fit: BoxFit.cover,
-            //height: 240.0,
+          child: Stack(
+            alignment: const Alignment(0.0, 0.0),
+            children: [
+              Image.asset(
+                'images/sample-podcast-main.jpg',
+                fit: BoxFit.cover,
+                //height: 240.0,
+              ),
+              Row(
+                children: [
+                  FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                    child: Icon(Icons.replay_10),
+                    tooltip: 'Play',
+                  ),
+                  CircleButton(
+                    icon: Icon(Icons.play_arrow),
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                    child: Icon(Icons.forward_30),
+                    tooltip: 'Play',
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ),
+            ],
           ),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),

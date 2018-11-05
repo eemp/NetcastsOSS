@@ -30,7 +30,6 @@ class EpisodePlayer extends StatelessWidget {
               Expanded(
                 child: Container(
                   child: LinearProgressIndicator(
-                    //backgroundColor: Theme.of(context).accentColor,
                     valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
                     value: 0.33,
                   ),
@@ -73,10 +72,6 @@ class EpisodePlayer extends StatelessWidget {
                   ),
                 ),
               ),
-              //IconButton(
-                //icon: Icon(Icons.play_arrow),
-                //iconSize: 64.0,
-              //),
               IconButton(
                 icon: Icon(Icons.forward_30),
                 iconSize: 40.0,

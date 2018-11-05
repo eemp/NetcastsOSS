@@ -56,10 +56,27 @@ class EpisodePlayer extends StatelessWidget {
                 icon: Icon(Icons.replay_10),
                 iconSize: 40.0,
               ),
-              IconButton(
-                icon: Icon(Icons.play_arrow),
-                iconSize: 64.0,
+              RawMaterialButton(
+                shape: new CircleBorder(),
+                fillColor: Theme.of(context).primaryColor,
+                splashColor: Theme.of(context).splashColor,
+                highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
+                elevation: 10.0,
+                highlightElevation: 5.0,
+                //onPressed: onPressed,
+                child: new Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 35.0,
+                  ),
+                ),
               ),
+              //IconButton(
+                //icon: Icon(Icons.play_arrow),
+                //iconSize: 64.0,
+              //),
               IconButton(
                 icon: Icon(Icons.forward_30),
                 iconSize: 40.0,

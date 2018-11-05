@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:hear2learn/home.dart';
 import 'package:hear2learn/podcast/index.dart';
 import 'package:hear2learn/episode/index.dart';
 
-void main() => runApp(App());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   final appTitle = 'App';

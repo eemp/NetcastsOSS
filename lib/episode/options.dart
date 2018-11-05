@@ -6,22 +6,31 @@ class EpisodeOptions extends StatelessWidget {
     return Row(
       children: [
         Container(
-          child: Icon(Icons.get_app),
-          padding: EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(Icons.get_app),
+            iconSize: 32.0,
+          ),
         ),
         Container(
-          child: Icon(Icons.playlist_add),
-          padding: EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(Icons.playlist_add),
+            iconSize: 32.0,
+          ),
         ),
         Container(
-          child: Icon(Icons.favorite_border),
-          padding: EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(Icons.favorite_border),
+            iconSize: 32.0,
+          ),
         ),
         Container(
-          child: Icon(Icons.share),
-          padding: EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(Icons.share),
+            iconSize: 32.0,
+          ),
         ),
       ],
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
     );
   }
 }

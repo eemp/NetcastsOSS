@@ -9,7 +9,7 @@ class Episode extends StatelessWidget {
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Twice Removed'),
+          title: Text('Episode of Star Talk'),
           bottom: TabBar(
             tabs: [
               Tab(
@@ -34,25 +34,6 @@ class Episode extends StatelessWidget {
               margin: EdgeInsets.all(16.0),
             ),
           ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.replay_10),
-                iconSize: 35.0,
-              ),
-              IconButton(
-                icon: Icon(Icons.play_arrow),
-                iconSize: 50.0,
-              ),
-              IconButton(
-                icon: Icon(Icons.forward_30),
-                iconSize: 35.0,
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
         ),
       ),
       length: 2,

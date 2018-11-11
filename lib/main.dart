@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/home.dart';
 import 'package:hear2learn/podcast/index.dart';
-import 'package:hear2learn/episode/index.dart';
+import 'package:hear2learn/podcast_search/index.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -79,6 +80,15 @@ class Homepage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Episode()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Podcast Search Page'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PodcastSearch()),
                 );
               },
             ),

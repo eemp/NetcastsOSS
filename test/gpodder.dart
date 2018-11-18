@@ -1,4 +1,4 @@
-import 'package:hear2learn/services/api/client/api.dart';
+import 'package:swagger/api.dart';
 
 main() async {
   var podcast_api_instance = new PodcastApi();

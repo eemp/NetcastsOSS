@@ -1,33 +1,33 @@
 part of swagger.api;
 
 class Podcast {
-  
+
   String description = null;
-  
+
 
   String logoUrl = null;
-  
+
 
   String mygpoLink = null;
-  
+
 
   String scaledLogoUrl = null;
-  
+
 
   int subscribers = null;
-  
+
 
   int subscribersLastWeek = null;
-  
+
 
   String title = null;
-  
+
 
   String url = null;
-  
+
 
   String website = null;
-  
+
   Podcast();
 
   @override
@@ -47,7 +47,7 @@ class Podcast {
         json['mygpoLink']
     ;
     scaledLogoUrl =
-        json['scaledLogoUrl']
+        json['scaled_logo_url']
     ;
     subscribers =
         json['subscribers']

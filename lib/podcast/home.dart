@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 
 class PodcastHome extends StatelessWidget {
+  String description;
+  String logo_url;
+
+  PodcastHome({
+    Key key,
+    this.description,
+    this.logo_url,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         Container(
-          child: Image.asset(
-            'images/sample-podcast-main.jpg',
+          child: Image.network(
+            logo_url,
             fit: BoxFit.cover,
-            //height: 240.0,
           ),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
           child: Text(
-            'A new family history podcast hosted by A.J. Jacobs.  They say we\'re one big family: this is the show that proves it.  You will be filled with delight... or abject horror.  You never know.  It\'s family.',
+            description,
             softWrap: true,
             style: Theme.of(context).textTheme.body1,
           ),

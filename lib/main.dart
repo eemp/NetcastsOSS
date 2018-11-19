@@ -70,7 +70,10 @@ class Homepage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Podcast()),
+                  MaterialPageRoute(builder: (context) => PodcastPage(
+                    url: 'http://feeds.feedburner.com/thetimferrissshow'
+                    //url: 'http://feeds.feedburner.com/StartupsForTheRestOfUs'
+                  )),
                 );
               },
             ),

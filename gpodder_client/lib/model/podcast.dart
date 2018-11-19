@@ -41,10 +41,10 @@ class Podcast {
         json['description']
     ;
     logoUrl =
-        json['logoUrl']
+        json['logo_url']
     ;
     mygpoLink =
-        json['mygpoLink']
+        json['mygpo_link']
     ;
     scaledLogoUrl =
         json['scaled_logo_url']
@@ -53,7 +53,7 @@ class Podcast {
         json['subscribers']
     ;
     subscribersLastWeek =
-        json['subscribersLastWeek']
+        json['subscribers_last_week']
     ;
     title =
         json['title']

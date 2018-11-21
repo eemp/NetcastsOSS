@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:hear2learn/download/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/home.dart';
 import 'package:hear2learn/podcast/index.dart';
@@ -62,6 +63,15 @@ class Homepage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Downloads'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DownloadPage()),
                 );
               },
             ),

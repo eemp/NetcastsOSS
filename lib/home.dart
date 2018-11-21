@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
       body: ListView(
         children: [
           HorizontalListViewCard(
-            title: 'Your Podcasts',
+            title: 'Favorites',
             children: [
               HorizontalListTile(
                 image: Image.network('https://content.production.cdn.art19.com/images/ea/bf/ce/0f/eabfce0f-4d38-4600-b5b9-3e0043b94987/e76f68f407f76ddc2b497f144e037abfe10216f49cae2716c5e174f705b1c05d83f0ff7082da9d6180d42d5a999d7979a140becf59cdc0b91aeaa0e0906793e5.jpeg'),
@@ -28,6 +28,27 @@ class Home extends StatelessWidget {
               HorizontalListTile(
                 image: Image.network('https://content.production.cdn.art19.com/images/ea/bf/ce/0f/eabfce0f-4d38-4600-b5b9-3e0043b94987/e76f68f407f76ddc2b497f144e037abfe10216f49cae2716c5e174f705b1c05d83f0ff7082da9d6180d42d5a999d7979a140becf59cdc0b91aeaa0e0906793e5.jpeg'),
                 title: 'Star Talk',
+              ),
+            ],
+          ),
+          HorizontalListViewCard(
+            title: 'Downloaded Podcasts',
+            children: [
+              HorizontalListTile(
+                image: Image.network('https://content.production.cdn.art19.com/images/04/3a/fd/ae/043afdae-cf15-4bc5-8522-e0dc522f4cfc/690d7a0f71063143cd34fc294012c53e28e31cd410df0f7b99e20939237371881a55a864d7cb9db35094d8737b07bc2b92111c26e1796d203bf777049225667c.jpeg'),
+                title: 'Ellen on the Go',
+              ),
+              HorizontalListTile(
+                image: Image.network('https://content.production.cdn.art19.com/images/1d/53/8f/a0/1d538fa0-4053-481a-bc95-55b0df8d4b6a/7b5c4d189c1de41d09336dce75b6ff3be53031429822a666584b07b745c1881005b3ea8612048df9207741f9298e1d784da946fc98f373e2c8c3097694a0efc8.jpeg'),
+                title: 'Dr. Death',
+              ),
+              HorizontalListTile(
+                image: Image.network('https://content.production.cdn.art19.com/images/58/a1/cf/f4/58a1cff4-2127-476f-a386-eb043b863a7a/fb3ae239ce76e71eb5c71e73c2599b185b3afa215fec998b7e80c79a329ab63a3d722f42cba430910a265f720f33636129747921d1fb2fe0f85fcd528b2db0c5.jpeg'),
+                title: 'ID10T with Chris Hardwick',
+              ),
+              HorizontalListTile(
+                image: Image.network('https://content.production.cdn.art19.com/images/01/1b/f3/d6/011bf3d6-a448-4533-967b-e2f19e376480/ee941330897d8dc10ebc021d9c6aaf0521e8bf2257b627bfdde546723f3c9ade4a95b30a3264671c913559f88416486ac22625a9b5b661ec1e9adeb768747318.jpeg'),
+                title: 'The Daily',
               ),
             ],
           ),

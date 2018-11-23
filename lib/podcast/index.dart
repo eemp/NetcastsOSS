@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
+import 'package:hear2learn/services/feeds/podcast.dart';
 
 class PodcastPage extends StatelessWidget {
   String url;
@@ -16,6 +18,8 @@ class PodcastPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var podcastApiService = new PodcastApi();
     var podcastFuture = podcastApiService.getPodcast(url);
+
+    var episodesFuture = getPodcastEpisodes(url);
 
     return DefaultTabController(
       child: Scaffold(
@@ -45,7 +49,7 @@ class PodcastPage extends StatelessWidget {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: PodcastEpisodesList(),
+              child: buildEpisodesList(episodesFuture),
               margin: EdgeInsets.all(16.0),
             ),
             Container(
@@ -56,6 +60,17 @@ class PodcastPage extends StatelessWidget {
         ),
       ),
       length: 3,
+    );
+  }
+
+  Widget buildPodcastTitle(Future<Podcast> podcastFuture) {
+    return FutureBuilder(
+      future: podcastFuture,
+      builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
+        return snapshot.hasData
+          ? Text(snapshot.data.title)
+          : Text('...');
+      },
     );
   }
 
@@ -76,13 +91,16 @@ class PodcastPage extends StatelessWidget {
     );
   }
 
-  Widget buildPodcastTitle(Future<Podcast> podcastFuture) {
+  Widget buildEpisodesList(Future<List<Episode>> episodesFuture) {
     return FutureBuilder(
-      future: podcastFuture,
-      builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
+      future: episodesFuture,
+      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
         return snapshot.hasData
-          ? Text(snapshot.data.title)
-          : Text('...');
+          ? PodcastEpisodesList(episodes: snapshot.data)
+          : Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
       },
     );
   }

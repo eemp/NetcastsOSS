@@ -10,22 +10,26 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  http: '>=0.11.1 <0.12.0'
-  swagger:
-    path: ./gpodder_client
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  # cupertino_icons: ^0.1.2
+  flutter:
+    sdk: flutter
+
+  http: '>=0.11.1 <0.12.0'
+  #kilobyte:
+    #path: ./kilobyte
+  swagger:
+    path: ./gpodder_client
+  webfeed: ^0.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: any
 
 
 # For information on the generic Dart part of this file, see the

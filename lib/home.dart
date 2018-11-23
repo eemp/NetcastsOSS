@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hear2learn/common/horizontal_list_view_card.dart';
+import 'package:hear2learn/podcast/index.dart';
+import 'package:swagger/api.dart';
+
+const MAX_SHOWCASE_LIST_SIZE = 20;
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var podcastApiService = new PodcastApi();
+    var toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
@@ -31,6 +38,7 @@ class Home extends StatelessWidget {
               ),
             ],
           ),
+          /*
           HorizontalListViewCard(
             title: 'Recommendations for You',
             children: [
@@ -85,8 +93,40 @@ class Home extends StatelessWidget {
               ),
             ],
           ),
+          */
+          buildToplist(toplistFuture),
         ],
       ),
+    );
+  }
+
+  Widget buildToplist(Future<List<Podcast>> toplistFuture) {
+    return FutureBuilder(
+      future: toplistFuture,
+      builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
+        return HorizontalListViewCard(
+          title: 'Top Podcasts',
+          children: snapshot.hasData
+            ? snapshot.data.map((podcast) =>
+              HorizontalListTile(
+                image: Image.network(
+                  podcast.scaledLogoUrl,
+                  fit: BoxFit.cover,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PodcastPage(
+                      url: podcast.url,
+                    )),
+                  );
+                },
+                title: podcast.title,
+              )
+            ).toList()
+            : [],
+        );
+      },
     );
   }
 }

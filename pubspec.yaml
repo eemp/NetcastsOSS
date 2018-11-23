@@ -20,10 +20,12 @@ dependencies:
     sdk: flutter
 
   http: '>=0.11.1 <0.12.0'
+  intl: ^0.15.7
   #kilobyte:
     #path: ./kilobyte
   swagger:
     path: ./gpodder_client
+  timeago: ^2.0.9
   webfeed: ^0.4.0
 
 dev_dependencies:

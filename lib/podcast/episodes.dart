@@ -2,7 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hear2learn/common/episode_tile.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:intl/intl.dart';
 //import 'package:kilobyte';
+import 'package:timeago/timeago.dart' as timeago;
 
 Widget mockEpisodeImage = Image.asset("images/fff.png");
 
@@ -26,7 +28,7 @@ class PodcastEpisodesList extends StatelessWidget {
 
           return EpisodeTile(
             //image: mockEpisodeImage,
-            subtitle: 'Added: 2d ago. Duration: 50m.',
+            subtitle: 'Added: ' + friendlyDate(episodes[idx].pubDate) + '.',
             title: title,
             options: Column(
               children: [
@@ -40,5 +42,11 @@ class PodcastEpisodesList extends StatelessWidget {
         shrinkWrap: true,
       ),
     );
+  }
+
+  String friendlyDate(dateStr) {
+    String shortFormat = 'EEE, dd MMM yyyy';
+    DateFormat podcastDateFormat = DateFormat(shortFormat);
+    return timeago.format(podcastDateFormat.parseLoose(dateStr.substring(0, shortFormat.length)));
   }
 }

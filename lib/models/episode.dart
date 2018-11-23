@@ -1,15 +1,9 @@
 class Episode {
-
   String description;
-
   String media;
-
   String pubDate;
-
   int size;
-
   String title;
-
   String url;
 
   Episode({

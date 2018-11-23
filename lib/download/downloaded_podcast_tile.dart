@@ -7,6 +7,7 @@ class DownloadedPodcastTile extends StatelessWidget {
   String subtitle;
   String title;
   int numDownloads;
+  double imageSize = 80.0;
 
   DownloadedPodcastTile({
     Key key,
@@ -19,29 +20,31 @@ class DownloadedPodcastTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.zero,
-      isThreeLine: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       leading: Container(
         child: image,
-        constraints: new BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
+        constraints: new BoxConstraints(maxWidth: imageSize, minWidth: imageSize),
       ),
-      subtitle: Text(getDescriptionWithCount()),
+      subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            new Flexible(
+              child: Text(
+                this.subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              )
+            ),
+            Text(
+              this.numDownloads.toString() + ' episode' + (this.numDownloads > 1 ? 's' : '') + ' downloaded',
+              maxLines: 1,
+            )
+          ],
+        ),
       title: Text(title)
     );
-  }
-
-  T min<T extends num>(T a, T b) {
-    return a < b ? a : b;
-  }
-
-  String truncatedSubtitle() {
-    return this.subtitle.substring(0, min(this.subtitle.length, MAX_DESCRIPTION_LEN)).trimRight()
-      + (this.subtitle.length > MAX_DESCRIPTION_LEN ? '...' : '');
-  }
-
-  String getDescriptionWithCount() {
-    return this.truncatedSubtitle() + '\n' + this.numDownloads.toString() + ' episode'
-      + (this.numDownloads > 1 ? 's' : '') + ' downloaded';
   }
 }
 

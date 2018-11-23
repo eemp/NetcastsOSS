@@ -20,7 +20,7 @@ class DownloadPage extends StatelessWidget {
           children: [
             Container(
               child: DownloadedPodcastTile(
-                image: Image.network('https://content.production.cdn.art19.com/images/ea/bf/ce/0f/eabfce0f-4d38-4600-b5b9-3e0043b94987/e76f68f407f76ddc2b497f144e037abfe10216f49cae2716c5e174f705b1c05d83f0ff7082da9d6180d42d5a999d7979a140becf59cdc0b91aeaa0e0906793e5.jpeg'),
+                image: Image.network('https://content.production.cdn.art19.com/images/04/3a/fd/ae/043afdae-cf15-4bc5-8522-e0dc522f4cfc/690d7a0f71063143cd34fc294012c53e28e31cd410df0f7b99e20939237371881a55a864d7cb9db35094d8737b07bc2b92111c26e1796d203bf777049225667c.jpeg'),
                 numDownloads: 3,
                 subtitle: "Ellen on the Go is the place to hear what they’re talking about on the Ellen Degeneres Show! Hosted by the show’s Executive Producers, Ed, Mary, Andy and Kevin, this is your audio catch-up of this week’s Ellen Show, with a never-before-experienced glimpse at how the talk show comes together every day from the very minds that make it happen.",
                 title: 'Ellen on the Go',

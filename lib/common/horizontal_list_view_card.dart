@@ -20,7 +20,7 @@ class HorizontalListTile extends StatelessWidget {
           ),
           Flexible(
             child: Container(
-              child: Text(title, maxLines: 2, overflow: TextOverflow.clip),
+              child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
               padding: EdgeInsets.only(top: 8.0),
             ),
           ),

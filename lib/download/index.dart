@@ -73,36 +73,32 @@ class DownloadPage extends StatelessWidget {
   }) : super(key: key);
 
   List<VerticalListTile> createDownloadedPodcastTiles(List<DownloadedPodcastDetails> downloadedPodcasts) {
-    List<VerticalListTile> tiles = new List();
-    downloadedPodcasts.forEach((downloadedPodcast) =>
-      tiles.add(
-        VerticalListTile(
-          image: downloadedPodcast.image,
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              new Flexible(
-                child: Text(
-                  downloadedPodcast.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                )
-              ),
-              new Flexible(
-                child: Text(
-                  downloadedPodcast.numEpisodesDownloaded.toString() + ' episode' + (downloadedPodcast.numEpisodesDownloaded > 1 ? 's' : '') + ' downloaded',
-                  maxLines: 1,
-                )
+    return downloadedPodcasts.map((downloadedPodcast) =>
+      VerticalListTile(
+        image: downloadedPodcast.image,
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            new Flexible(
+              child: Text(
+                downloadedPodcast.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontStyle: FontStyle.italic),
               )
-            ],
-          ),
-          title: downloadedPodcast.name
-        )
+            ),
+            new Flexible(
+              child: Text(
+                downloadedPodcast.numEpisodesDownloaded.toString() + ' episode' + (downloadedPodcast.numEpisodesDownloaded > 1 ? 's' : '') + ' downloaded',
+                maxLines: 1,
+              )
+            )
+          ],
+        ),
+        title: downloadedPodcast.name
       )
-    );
-    return tiles;
+    ).toList();
   }
 
   @override

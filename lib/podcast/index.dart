@@ -4,7 +4,6 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
-import 'package:hear2learn/services/feeds/podcast.dart';
 
 class PodcastPage extends StatelessWidget {
   String url;
@@ -18,8 +17,6 @@ class PodcastPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var podcastApiService = new PodcastApi();
     var podcastFuture = podcastApiService.getPodcast(url);
-
-    var episodesFuture = getPodcastEpisodes(url);
 
     return DefaultTabController(
       child: Scaffold(
@@ -49,7 +46,7 @@ class PodcastPage extends StatelessWidget {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: buildEpisodesList(episodesFuture),
+              child: PodcastEpisodesList(podcastUrl: url),
               margin: EdgeInsets.all(16.0),
             ),
             Container(
@@ -83,20 +80,6 @@ class PodcastPage extends StatelessWidget {
             description: snapshot.data.description.replaceAll("\n", " "),
             logo_url: snapshot.data.logoUrl,
           )
-          : Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Center(child: CircularProgressIndicator()),
-          );
-      },
-    );
-  }
-
-  Widget buildEpisodesList(Future<List<Episode>> episodesFuture) {
-    return FutureBuilder(
-      future: episodesFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
-        return snapshot.hasData
-          ? PodcastEpisodesList(episodes: snapshot.data)
           : Padding(
             padding: EdgeInsets.all(32.0),
             child: Center(child: CircularProgressIndicator()),

@@ -18,7 +18,6 @@ class EpisodeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      isThreeLine: true,
       //leading: Container(
         //child: image,
         //constraints: new BoxConstraints(maxWidth: 80.0, minWidth: 80.0),

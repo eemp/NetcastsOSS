@@ -17,7 +17,7 @@ class PodcastEpisodesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
+      child: ListView.separated(
         itemCount: episodes.length,
         itemBuilder: (BuildContext context, int idx) {
           String title = episodes[idx].title;
@@ -25,16 +25,12 @@ class PodcastEpisodesList extends StatelessWidget {
           num sizeInMegabytes = size / 10e6;
 
           return EpisodeTile(
-            subtitle: 'Added: ' + friendlyDate(episodes[idx].pubDate) + '.',
+            subtitle: 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + friendlyDate(episodes[idx].pubDate) + '.',
             title: title,
-            options: Column(
-              children: [
-                IconButton(icon: Icon(Icons.get_app)),
-                Text(sizeInMegabytes.toStringAsFixed(2) + ' MB'),
-              ],
-            ),
+            options: IconButton(icon: Icon(Icons.get_app)),
           );
         },
+        separatorBuilder: (context, index) => Divider(),
         shrinkWrap: true,
       ),
     );

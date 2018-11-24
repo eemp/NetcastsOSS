@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
@@ -45,7 +46,7 @@ class PodcastPage extends StatelessWidget {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: PodcastEpisodesList(),
+              child: PodcastEpisodesList(podcastUrl: url),
               margin: EdgeInsets.all(16.0),
             ),
             Container(
@@ -56,6 +57,17 @@ class PodcastPage extends StatelessWidget {
         ),
       ),
       length: 3,
+    );
+  }
+
+  Widget buildPodcastTitle(Future<Podcast> podcastFuture) {
+    return FutureBuilder(
+      future: podcastFuture,
+      builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
+        return snapshot.hasData
+          ? Text(snapshot.data.title)
+          : Text('...');
+      },
     );
   }
 
@@ -72,17 +84,6 @@ class PodcastPage extends StatelessWidget {
             padding: EdgeInsets.all(32.0),
             child: Center(child: CircularProgressIndicator()),
           );
-      },
-    );
-  }
-
-  Widget buildPodcastTitle(Future<Podcast> podcastFuture) {
-    return FutureBuilder(
-      future: podcastFuture,
-      builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
-        return snapshot.hasData
-          ? Text(snapshot.data.title)
-          : Text('...');
       },
     );
   }

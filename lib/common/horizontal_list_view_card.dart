@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:hear2learn/common/with_fade_in_image.dart';
 
 class HorizontalListTile extends StatelessWidget {
-  Image image;
+  String image;
+  Function onTap;
   String title;
 
   HorizontalListTile({
     Key key,
     this.image,
+    this.onTap,
     this.title,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            child: image,
-          ),
-          Flexible(
-            child: Container(
-              child: Text(title, maxLines: 2, overflow: TextOverflow.clip),
-              padding: EdgeInsets.only(top: 8.0),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              child: WithFadeInImage(location: image),
             ),
-          ),
-        ],
+            Flexible(
+              child: Container(
+                child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
+                padding: EdgeInsets.only(top: 8.0),
+              ),
+            ),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+        width: 130.0,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-      width: 130.0,
     );
   }
 }

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:hear2learn/download/index.dart';
-import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/home.dart';
-import 'package:hear2learn/podcast/index.dart';
-import 'package:hear2learn/podcast_search/index.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -38,77 +34,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(child: Text('Homepage!')),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the Drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              child: DrawerHeader(
-                child: Text('Debug Menu'),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('Homepage'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Downloads'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DownloadPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Podcast Page'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PodcastPage(
-                    url: 'http://feeds.feedburner.com/thetimferrissshow'
-                    //url: 'http://feeds.feedburner.com/StartupsForTheRestOfUs'
-                  )),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Episode Page'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Episode()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Podcast Search Page'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PodcastSearch()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    return Home();
   }
 }
 

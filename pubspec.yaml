@@ -26,6 +26,7 @@ dependencies:
   swagger:
     path: ./gpodder_client
   timeago: ^2.0.9
+  transparent_image: ^0.1.0
   webfeed: ^0.4.0
 
 dev_dependencies:
@@ -46,9 +47,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-   - images/sample-podcast-main.jpg
-   - images/fff.png
+  #assets:
+   #- images/sample-podcast-main.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hear2learn/common/with_fade_in_image.dart';
 
 class HorizontalListTile extends StatelessWidget {
-  Image image;
+  String image;
   Function onTap;
   String title;
 
@@ -20,7 +21,7 @@ class HorizontalListTile extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              child: image,
+              child: WithFadeInImage(location: image),
             ),
             Flexible(
               child: Container(

@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 //import 'package:kilobyte';
 import 'package:timeago/timeago.dart' as timeago;
 
-Widget mockEpisodeImage = Image.asset("images/fff.png");
-
 class PodcastEpisodesList extends StatelessWidget {
   List<Episode> episodes;
 
@@ -27,13 +25,11 @@ class PodcastEpisodesList extends StatelessWidget {
           num sizeInMegabytes = size / 10e6;
 
           return EpisodeTile(
-            //image: mockEpisodeImage,
             subtitle: 'Added: ' + friendlyDate(episodes[idx].pubDate) + '.',
             title: title,
             options: Column(
               children: [
                 IconButton(icon: Icon(Icons.get_app)),
-                //Text(Size(bytes: size) + ' MB'),
                 Text(sizeInMegabytes.toStringAsFixed(2) + ' MB'),
               ],
             ),

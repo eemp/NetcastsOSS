@@ -15,8 +15,6 @@ class DownloadedPodcastDetails {
   );
 }
 
-DownloadedPodcastDetails ellenDetails = DownloadedPodcastDetails('name', 'desc', new Image(), 1);
-
 List<DownloadedPodcastDetails> sampleData = [
   DownloadedPodcastDetails(
     "Ellen on the Go",

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
 import 'package:hear2learn/common/horizontal_list_view_card.dart';
-import 'package:hear2learn/download/index.dart';
+import 'package:hear2learn/subscriptions/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/podcast/index.dart';
 import 'package:hear2learn/podcast_search/index.dart';
@@ -51,11 +51,11 @@ class Home extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Downloads'),
+              title: Text('Your Podcasts'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DownloadPage()),
+                  MaterialPageRoute(builder: (context) => SubscriptionsPage()),
                 );
               },
             ),

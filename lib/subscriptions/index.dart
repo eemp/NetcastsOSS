@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 
+// TODO: remove
 class DownloadedPodcastDetails {
   String name;
   String description;
@@ -15,6 +16,7 @@ class DownloadedPodcastDetails {
   );
 }
 
+// TODO: remove
 List<DownloadedPodcastDetails> sampleData = [
   DownloadedPodcastDetails(
     "Ellen on the Go",
@@ -66,51 +68,23 @@ List<DownloadedPodcastDetails> sampleData = [
   ),
 ];
 
-class DownloadPage extends StatelessWidget {
-  
-  DownloadPage({
-    Key key
-  }) : super(key: key);
-
-  List<VerticalListTile> createDownloadedPodcastTiles(List<DownloadedPodcastDetails> downloadedPodcasts) {
-    return downloadedPodcasts.map((downloadedPodcast) =>
-      VerticalListTile(
-        image: downloadedPodcast.image,
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            new Flexible(
-              child: Text(
-                downloadedPodcast.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontStyle: FontStyle.italic),
-              )
-            ),
-            new Flexible(
-              child: Text(
-                downloadedPodcast.numEpisodesDownloaded.toString() + ' episode' + (downloadedPodcast.numEpisodesDownloaded > 1 ? 's' : '') + ' downloaded',
-                maxLines: 1,
-              )
-            )
-          ],
-        ),
-        title: downloadedPodcast.name
-      )
-    ).toList();
-  }
-
+class SubscriptionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Downloaded Podcasts')
+          title: Text('Your Podcasts')
         ),
-        body: VerticalListView(
-          children: createDownloadedPodcastTiles(sampleData),
+        body: Container(
+          child: VerticalListView(
+            children: sampleData.map((item) => VerticalListTile(
+              image: item.image,
+              subtitle: item.description,
+              title: item.name,
+            )).toList(),
+          ),
+          padding: EdgeInsets.all(16.0),
         ),
       ),
       length: 3,

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class VerticalListTile extends StatelessWidget {
   Image image;
-  Widget subtitle;
+  String subtitle;
   String title;
-  double imageSize = 80.0;
 
   VerticalListTile({
     Key key,
@@ -19,14 +18,12 @@ class VerticalListTile extends StatelessWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
       leading: Container(
         child: image,
-        constraints: BoxConstraints(maxWidth: imageSize, minWidth: imageSize),
+        constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
       ),
-      subtitle: subtitle,
-      title: Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      )
+      subtitle: Text(
+        subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
+      ),
+      title: Text(title),
     );
   }
 }
@@ -41,11 +38,12 @@ class VerticalListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      physics: PageScrollPhysics(),
-      children: children,
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+    return ListView.separated(
+      itemCount: children.length,
+      itemBuilder: (context, idx) {
+        return children[idx];
+      },
+      separatorBuilder: (context, idx) => Divider(),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:hear2learn/common/horizontal_list_view_card.dart';
 import 'package:hear2learn/subscriptions/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/podcast/index.dart';
-import 'package:hear2learn/podcast_search/index.dart';
+import 'package:hear2learn/search/index.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
@@ -81,7 +81,7 @@ class Home extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Podcast Search Page'),
+              title: Text('Search Page'),
               onTap: () {
                 Navigator.push(
                   context,

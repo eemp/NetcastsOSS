@@ -1,29 +1,34 @@
 import 'package:flutter/material.dart';
 
 class VerticalListTile extends StatelessWidget {
-  Image image;
+  Widget image;
+  Function onTap;
   String subtitle;
   String title;
 
   VerticalListTile({
     Key key,
     this.image,
+    this.onTap,
     this.subtitle,
     this.title,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-      leading: Container(
-        child: image,
-        constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
+    return GestureDetector(
+      onTap: onTap,
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+        leading: Container(
+          child: image,
+          constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
+        ),
+        subtitle: Text(
+          subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
+        ),
+        title: Text(title),
       ),
-      subtitle: Text(
-        subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
-      ),
-      title: Text(title),
     );
   }
 }

@@ -12,3 +12,5 @@ build/
 tmp/
 
 .vscode/**
+
+coverage/

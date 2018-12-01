@@ -6,12 +6,6 @@ class EpisodePlayer extends StatelessWidget {
     return Column(
       children: [
         Container(
-          child: Center(
-            child: Text('Star Talk', style: Theme.of(context).textTheme.title),
-          ),
-          margin: EdgeInsets.only(top: 32.0, bottom: 8.0),
-        ),
-        Container(
           child: RichText(
             text: TextSpan(
               text: 'Technosignatures: Detecting Alien Civilizations with David Grinspoon',

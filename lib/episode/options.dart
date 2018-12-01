@@ -8,29 +8,29 @@ class EpisodeOptions extends StatelessWidget {
         Container(
           child: IconButton(
             icon: Icon(Icons.get_app),
-            iconSize: 32.0,
+            iconSize: 24.0,
           ),
         ),
         Container(
           child: IconButton(
             icon: Icon(Icons.playlist_add),
-            iconSize: 32.0,
+            iconSize: 24.0,
           ),
         ),
         Container(
           child: IconButton(
             icon: Icon(Icons.favorite_border),
-            iconSize: 32.0,
+            iconSize: 24.0,
           ),
         ),
         Container(
           child: IconButton(
             icon: Icon(Icons.share),
-            iconSize: 32.0,
+            iconSize: 24.0,
           ),
         ),
       ],
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //mainAxisAlignment: MainAxisAlignment.spaceAround,
     );
   }
 }

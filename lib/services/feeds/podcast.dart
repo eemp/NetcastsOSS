@@ -8,6 +8,8 @@ Future<List<Episode>> getPodcastEpisodes(String url) async {
   var feed = new RssFeed.parse(response.body);
   return feed.items.map((item) => new Episode(
     description: item.description,
+    podcastTitle: feed.title,
+    podcastUrl: url,
     pubDate: item.pubDate,
     size: item.enclosure.length,
     title: item.title,

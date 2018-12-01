@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hear2learn/models/episode.dart';
 
 class EpisodePlayer extends StatelessWidget {
+  Episode episode;
+
+  EpisodePlayer({
+    Key key,
+    this.episode,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -8,7 +16,7 @@ class EpisodePlayer extends StatelessWidget {
         Container(
           child: RichText(
             text: TextSpan(
-              text: 'Technosignatures: Detecting Alien Civilizations with David Grinspoon',
+              text: episode.title,
               style: Theme.of(context).textTheme.subhead
             ),
             textAlign: TextAlign.center,

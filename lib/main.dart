@@ -18,7 +18,7 @@ class App extends StatelessWidget {
       home: Homepage(title: appTitle),
       theme: ThemeData(
         accentColor: Colors.blue,
-        brightness: Brightness.dark,
+        //brightness: Brightness.dark,
         fontFamily: 'OpenSans',
         primaryColor: Colors.pink[900],
         primaryTextTheme: Typography(platform: TargetPlatform.android).white,

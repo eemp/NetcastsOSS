@@ -69,6 +69,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_html:
+    dependency: "direct main"
+    description:
+      name: flutter_html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -438,3 +445,4 @@ packages:
     version: "2.1.15"
 sdks:
   dart: ">=2.1.0-dev.5.0 <3.0.0"
+  flutter: ">=0.5.0"

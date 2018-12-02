@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
 
 class PodcastHome extends StatelessWidget {
@@ -19,17 +21,11 @@ class PodcastHome extends StatelessWidget {
           child: WithFadeInImage(
             location: logo_url,
           ),
-          //child: Image.network(
-            //logo_url,
-            //fit: BoxFit.cover,
-          //),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
-          child: Text(
-            description,
-            softWrap: true,
-            style: Theme.of(context).textTheme.body1,
+          child: Html(
+            data: description,
           ),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),

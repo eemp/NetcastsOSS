@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hear2learn/common/people.dart';
 import 'package:hear2learn/common/tags.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -29,10 +30,8 @@ class EpisodeInfo extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16.0),
         ),
         Container(
-          child: Text(
-            episode.description,
-            softWrap: true,
-            style: Theme.of(context).textTheme.body1,
+          child: Html(
+            data: episode.description,
           ),
           padding: EdgeInsets.only(bottom: 16.0),
         ),

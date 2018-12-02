@@ -71,23 +71,20 @@ List<DownloadedPodcastDetails> sampleData = [
 class SubscriptionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Your Podcasts')
-        ),
-        body: Container(
-          child: VerticalListView(
-            children: sampleData.map((item) => VerticalListTile(
-              image: item.image,
-              subtitle: item.description,
-              title: item.name,
-            )).toList(),
-          ),
-          padding: EdgeInsets.all(16.0),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Your Podcasts')
       ),
-      length: 3,
+      body: Container(
+        child: VerticalListView(
+          children: sampleData.map((item) => VerticalListTile(
+            image: item.image,
+            subtitle: item.description,
+            title: item.name,
+          )).toList(),
+        ),
+        padding: EdgeInsets.all(16.0),
+      ),
     );
   }
 }

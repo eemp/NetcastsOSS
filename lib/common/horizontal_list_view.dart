@@ -22,6 +22,8 @@ class HorizontalListTile extends StatelessWidget {
           children: [
             Container(
               child: WithFadeInImage(location: image),
+              height: 100.0,
+              width: 100.0,
             ),
             Flexible(
               child: Container(
@@ -32,7 +34,7 @@ class HorizontalListTile extends StatelessWidget {
           ],
         ),
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-        width: 130.0,
+        width: 110.0,
       ),
     );
   }
@@ -70,30 +72,26 @@ class HorizontalListViewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Card(
-        child: Column(
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Text(title, style: Theme.of(context).textTheme.subhead),
-                  Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-              padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+      child: Column(
+        children: [
+          Container(
+            child: Row(
+              children: [
+                Text(title, style: Theme.of(context).textTheme.subhead),
+                Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            Container(
-              child: HorizontalListView(
-                children: children,
-              ),
-              height: 200.0,
+            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+          ),
+          Container(
+            child: HorizontalListView(
+              children: children,
             ),
-          ],
-        ),
+            height: 175.0,
+          ),
+        ],
       ),
-      height: 246.0,
-      margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
     );
   }
 }

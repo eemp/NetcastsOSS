@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
-import 'package:hear2learn/common/horizontal_list_view_card.dart';
+import 'package:hear2learn/common/horizontal_list_view.dart';
 import 'package:hear2learn/subscriptions/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -20,11 +20,13 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: ListView(
-        children: [
-          buildToplist(toplistFuture, title: 'Favorites'),
-          buildToplist(toplistFuture),
-        ],
+      body: ListView.separated(
+        itemBuilder: (BuildContext context, int idx) {
+          return buildToplist(toplistFuture);
+        },
+        itemCount: 5,
+        separatorBuilder: (context, index) => Divider(),
+        shrinkWrap: true,
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll

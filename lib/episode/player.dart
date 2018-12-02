@@ -31,9 +31,12 @@ class EpisodePlayer extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  child: LinearProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                    value: 0.33,
+                  child: SizedBox(
+                    child: LinearProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                      value: 0.33,
+                    ),
+                    height: 2.0,
                   ),
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
                 ),
@@ -49,10 +52,10 @@ class EpisodePlayer extends StatelessWidget {
         Container(
           child: Row(
             children: [
-              IconButton(
-                icon: Icon(Icons.skip_previous),
-                iconSize: 32.0,
-              ),
+              //IconButton(
+                //icon: Icon(Icons.skip_previous),
+                //iconSize: 32.0,
+              //),
               IconButton(
                 icon: Icon(Icons.replay_10),
                 iconSize: 40.0,
@@ -78,10 +81,10 @@ class EpisodePlayer extends StatelessWidget {
                 icon: Icon(Icons.forward_30),
                 iconSize: 40.0,
               ),
-              IconButton(
-                icon: Icon(Icons.skip_next),
-                iconSize: 32.0,
-              ),
+              //IconButton(
+                //icon: Icon(Icons.skip_next),
+                //iconSize: 32.0,
+              //),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),

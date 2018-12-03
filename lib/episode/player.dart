@@ -24,25 +24,30 @@ class EpisodePlayerState extends State<EpisodePlayer> {
   @override
   void initState() {
     super.initState();
+    duration = new Duration(seconds: 0);
     player = new AudioPlayer();
+    player.completionHandler = () {
+      setState(() {
+        isPlaying = false;
+        position = new Duration(seconds: 0);
+        value = 0.0;
+      });
+    };
     player.durationHandler = (Duration duration) {
       setState(() {
         this.duration = duration;
-
         if (position != null) {
-          this.value = (position.inSeconds / duration.inSeconds);
+          value = position.inSeconds.toDouble();
         }
       });
     };
     player.positionHandler = (Duration position) {
       setState(() {
         this.position = position;
-
-        if (duration != null) {
-          this.value = (position.inSeconds / duration.inSeconds);
-        }
+        value = position.inSeconds.toDouble();
       });
     };
+    value = 0.0;
   }
 
   @override
@@ -66,7 +71,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
           margin: EdgeInsets.only(bottom: 32.0),
         ),
         Container(
-          child: duration != null
+          child: position != null
             ? Row(
               children: [
                 Container(
@@ -75,13 +80,10 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                 Expanded(
                   child: Slider(
                     activeColor: Theme.of(context).primaryColor,
-                    //min: 0.0,
-                    //max: duration != null ? duration.inSeconds.toDouble() : 0.0,
+                    min: 0.0,
+                    max: duration.inSeconds.toDouble(),
                     onChanged: (value) {
-                      if (duration != null) {
-                        var seconds = (duration.inSeconds * value).toInt();
-                        player.seek(new Duration(seconds: seconds));
-                      }
+                      player.seek(new Duration(seconds: value.toInt()));
                     },
                     value: value ?? 0.0,
                   ),

@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
+  audioplayers:
+    dependency: "direct main"
+    description:
+      name: audioplayers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.8"
   boolean_selector:
     dependency: transitive
     description:
@@ -251,6 +258,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.2"
+  path_provider:
+    dependency: transitive
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   petitparser:
     dependency: transitive
     description:
@@ -424,6 +438,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0+5"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   vector_math:
     dependency: transitive
     description:
@@ -475,4 +496,4 @@ packages:
     version: "2.1.15"
 sdks:
   dart: ">=2.1.0-dev.5.0 <3.0.0"
-  flutter: ">=0.5.0"
+  flutter: ">=0.5.0 <2.0.0"

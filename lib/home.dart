@@ -7,12 +7,14 @@ import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/podcast/index.dart';
 import 'package:hear2learn/search/index.dart';
+import 'package:hear2learn/settings/index.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const titles = [ 'Your Podcasts', 'Top Podcasts', 'New', 'Trending', 'Recommended' ];
     var podcastApiService = new PodcastApi();
     var toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
 
@@ -22,7 +24,7 @@ class Home extends StatelessWidget {
       ),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int idx) {
-          return buildToplist(toplistFuture);
+          return buildToplist(toplistFuture, title: titles[idx]);
         },
         itemCount: 5,
         separatorBuilder: (context, index) => Divider(),
@@ -90,11 +92,20 @@ class Home extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Search Page'),
+              title: Text('Search'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PodcastSearch()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Settings'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Settings()),
                 );
               },
             ),

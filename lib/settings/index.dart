@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swagger/api.dart';
 
-import 'package:hear2learn/common/vertical_list_view.dart';
-import 'package:hear2learn/common/with_fade_in_image.dart';
-import 'package:hear2learn/podcast/index.dart';
-
-const MAX_SHOWCASE_LIST_SIZE = 20;
-var podcastApiService = new PodcastApi();
+import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -17,6 +12,9 @@ class SettingsState extends State<Settings> {
   final formKey = new GlobalKey<FormState>();
   final globalKey = new GlobalKey<ScaffoldState>();
 
+  List<String> themes = [ 'Dark', 'Light' ];
+  String theme = 'Light';
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +22,6 @@ class SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> themes = [ 'Dark', 'Light' ];
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
@@ -42,8 +39,20 @@ class SettingsState extends State<Settings> {
                     child: Text(theme),
                     value: theme,
                   )).toList(),
-                  onChanged: (String newTheme) {},
-                  value: 'Light',
+                  onChanged: (String newTheme) async {
+                    Brightness brightness = newTheme == 'Dark'
+                      ? Brightness.dark
+                      : Brightness.light;
+
+                    DynamicTheme.of(context).setBrightness(brightness);
+                    setState(() {
+                      theme = newTheme;
+                    });
+
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setString('theme', newTheme);
+                  },
+                  value: theme,
                 ),
               ),
               decoration: InputDecoration(

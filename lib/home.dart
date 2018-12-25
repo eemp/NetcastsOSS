@@ -92,24 +92,26 @@ class Home extends StatelessWidget {
     return FutureBuilder(
       future: toplistFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
+        List<HorizontalListTile> tiles = snapshot.hasData
+          ? snapshot.data.map((podcast) =>
+            HorizontalListTile(
+              image: podcast.scaledLogoUrl,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PodcastPage(
+                    url: podcast.url,
+                  )),
+                );
+              },
+              title: podcast.title,
+            )
+          ).toList()
+          : [];
+        tiles.shuffle();
         return HorizontalListViewCard(
           title: title != null ? title : 'Top Podcasts',
-          children: snapshot.hasData
-            ? snapshot.data.map((podcast) =>
-              HorizontalListTile(
-                image: podcast.scaledLogoUrl,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PodcastPage(
-                      url: podcast.url,
-                    )),
-                  );
-                },
-                title: podcast.title,
-              )
-            ).toList()
-            : [],
+          children: tiles,
         );
       },
     );

@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
       ),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int idx) {
-          return buildToplist(toplistFuture, title: titles[idx]);
+          return buildHorizontalList(toplistFuture, title: titles[idx]);
         },
         itemCount: 5,
         separatorBuilder: (context, index) => Divider(),
@@ -88,7 +88,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget buildToplist(Future<List<Podcast>> toplistFuture, {String title}) {
+  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title}) {
     return FutureBuilder(
       future: toplistFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
@@ -108,7 +108,10 @@ class Home extends StatelessWidget {
             )
           ).toList()
           : [];
+
+        // TODO: REMOVE - temporary MOCK data
         tiles.shuffle();
+
         return HorizontalListViewCard(
           title: title != null ? title : 'Top Podcasts',
           children: tiles,

@@ -62,10 +62,12 @@ class HorizontalListView extends StatelessWidget {
 class HorizontalListViewCard extends StatelessWidget {
   List<Widget> children;
   String title;
+  Function onMoreClick;
 
   HorizontalListViewCard({
     Key key,
     this.children,
+    this.onMoreClick,
     this.title,
   }) : super(key: key);
 
@@ -78,7 +80,10 @@ class HorizontalListViewCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(title, style: Theme.of(context).textTheme.subhead),
-                Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
+                InkWell(
+                  child: Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
+                  onTap: onMoreClick,
+                ),
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),

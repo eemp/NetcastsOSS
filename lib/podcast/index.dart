@@ -87,11 +87,12 @@ class PodcastPageState extends State<PodcastPage> {
 
   void onSubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    await subscriptionModel.insert(PodcastSubscription(
+    PodcastSubscription newSubscription = PodcastSubscription(
       created: DateTime.now(),
       isSubscribed: true,
       podcastUrl: widget.url,
-    ));
+    );
+    await subscriptionModel.insert(newSubscription);
   }
 
   void onUnsubscribe() async {
@@ -152,7 +153,7 @@ class PodcastPageState extends State<PodcastPage> {
             });
           },
           tooltip: 'Subscribe',
-        ) : new Container(width: 0.0, height: 0.0);
+        ) : Container(width: 0.0, height: 0.0);
       },
     );
   }

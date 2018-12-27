@@ -32,8 +32,5 @@ class PodcastSubscription {
 class PodcastSubscriptionBean extends Bean<PodcastSubscription> with _PodcastSubscriptionBean {
   String get tableName => 'podcast_subscription';
 
-  /// Field DSL for msg column
-  final StrField podcastUrl = new StrField('podcastUrl');
-
   PodcastSubscriptionBean(Adapter adapter) : super(adapter);
 }

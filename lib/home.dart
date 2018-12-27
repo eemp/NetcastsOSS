@@ -1,22 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
+import 'package:hear2learn/app.dart';
 import 'package:hear2learn/common/horizontal_list_view.dart';
-import 'package:hear2learn/subscriptions/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/podcast/index.dart';
 import 'package:hear2learn/search/index.dart';
 import 'package:hear2learn/settings/index.dart';
+import 'package:hear2learn/subscriptions/index.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
 class Home extends StatelessWidget {
+  final App app = App();
+  final PodcastApi podcastApiService = new PodcastApi();
+
   @override
   Widget build(BuildContext context) {
     const titles = [ 'Your Podcasts', 'Top Podcasts', 'New', 'Trending', 'Recommended' ];
-    var podcastApiService = new PodcastApi();
-    var toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
+    Future<List<Podcast>> toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
+
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+    Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
+      return Future.wait(response.map((subscription) => podcastApiService.getPodcast(subscription.podcastUrl)));
+    });
+
+    List<Future<List<Podcast>>> homepageLists = [
+      subscriptionsFuture,
+      toplistFuture,
+      toplistFuture,
+      toplistFuture,
+      toplistFuture,
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +41,7 @@ class Home extends StatelessWidget {
       ),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int idx) {
-          return buildHorizontalList(toplistFuture, title: titles[idx]);
+          return buildHorizontalList(homepageLists[idx], title: titles[idx], debugWithShuffle: idx > 0);
         },
         itemCount: 5,
         separatorBuilder: (context, index) => Divider(),
@@ -88,7 +105,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title}) {
+  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title, bool debugWithShuffle = false}) {
     return FutureBuilder(
       future: toplistFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
@@ -110,12 +127,22 @@ class Home extends StatelessWidget {
           : [];
 
         // TODO: REMOVE - temporary MOCK data
-        tiles.shuffle();
+        if(debugWithShuffle) {
+          tiles.shuffle();
+        }
 
-        return HorizontalListViewCard(
-          title: title != null ? title : 'Top Podcasts',
-          children: tiles,
-        );
+        return tiles.length > 0
+          ? HorizontalListViewCard(
+            children: tiles,
+            onMoreClick: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+              );
+            },
+            title: title != null ? title : 'Top Podcasts',
+          )
+          : Container(width: 0.0, height: 0.0);
       },
     );
   }

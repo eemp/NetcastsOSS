@@ -7,10 +7,12 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
 
 class PodcastEpisodesList extends StatelessWidget {
+  Function onEpisodeDownload;
   String podcastUrl;
 
   PodcastEpisodesList({
     Key key,
+    this.onEpisodeDownload,
     this.podcastUrl,
   }) : super(key: key);
 
@@ -51,7 +53,12 @@ class PodcastEpisodesList extends StatelessWidget {
             child: EpisodeTile(
               subtitle: episode.getMetaLine(),
               title: title,
-              options: IconButton(icon: Icon(Icons.get_app)),
+              options: IconButton(
+                icon: Icon(Icons.get_app),
+                onPressed: () async {
+                  await onEpisodeDownload(episode.url);
+                }
+              ),
             ),
           );
         },

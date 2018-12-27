@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:dio/dio.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
+import 'package:path/path.dart';
 import 'package:swagger/api.dart';
 
 class PodcastData {
@@ -29,6 +32,7 @@ class PodcastPage extends StatefulWidget {
 
 class PodcastPageState extends State<PodcastPage> {
   final App app = App();
+  final Dio dio = new Dio();
   final PodcastApi podcastApiService = new PodcastApi();
 
   bool isSubscribed;
@@ -70,7 +74,10 @@ class PodcastPageState extends State<PodcastPage> {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: PodcastEpisodesList(podcastUrl: widget.url),
+              child: PodcastEpisodesList(
+                onEpisodeDownload: this.downloadEpisode,
+                podcastUrl: widget.url,
+              ),
               margin: EdgeInsets.all(16.0),
             ),
             //Container(
@@ -87,7 +94,7 @@ class PodcastPageState extends State<PodcastPage> {
 
   void onSubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    PodcastSubscription newSubscription = PodcastSubscription(
+    PodcastSubscription newSubscription = new PodcastSubscription(
       created: DateTime.now(),
       isSubscribed: true,
       podcastUrl: widget.url,
@@ -98,6 +105,18 @@ class PodcastPageState extends State<PodcastPage> {
   void onUnsubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(widget.url));
+  }
+
+  void downloadEpisode(episodeUrl) async {
+    EpisodeDownloadBean downloadModel= app.models['episode_download'];
+    String downloadId = EpisodeDownload.createNewId();
+    String downloadPath = join(await app.getApplicationDownloadsPath(), '${downloadId}.mp3');
+    EpisodeDownload download = new EpisodeDownload(
+      episodeUrl: episodeUrl,
+      downloadPath: downloadPath,
+      id: downloadId,
+    );
+    await dio.download(episodeUrl, download.downloadPath);
   }
 
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {

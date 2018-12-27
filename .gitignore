@@ -14,3 +14,7 @@ tmp/
 .vscode/**
 
 coverage/
+
+
+# custom ignores
+*.jorm.dart

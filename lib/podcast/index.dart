@@ -32,9 +32,7 @@ class PodcastPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<Podcast> podcastFuture = podcastApiService.getPodcast(url);
-    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOne(
-      subscriptionModel.finder.where(subscriptionModel.podcastUrl.eq(url))
-    );
+    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(url));
 
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
@@ -100,13 +98,19 @@ class PodcastPage extends StatelessWidget {
           ? PodcastHome(
             description: snapshot.data.podcast.description.replaceAll("\n", " "),
             isSubscribed: snapshot.data.subscription?.isSubscribed ?? false,
-            onSubscribe: () {
-              subscriptionModel.insert(PodcastSubscription(
+            onSubscribe: () async {
+              await subscriptionModel.insert(PodcastSubscription(
                 created: DateTime.now(),
                 isSubscribed: true,
                 lastUpdated: DateTime.now(),
                 podcastUrl: url,
               ));
+            },
+            onUnsubscribe: () async {
+              Map<String, dynamic> update = new Map<String, dynamic>();
+              update[subscriptionModel.isSubscribed.name] = false;
+              update[subscriptionModel.lastUpdated.name] = DateTime.now();
+              await subscriptionModel.updateFields(subscriptionModel.podcastUrl.eq(url), update);
             },
             logo_url: snapshot.data.podcast.logoUrl,
           )

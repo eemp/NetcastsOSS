@@ -4,12 +4,15 @@ import 'package:uuid/uuid.dart';
 part 'podcast_subscription.jorm.dart';
 
 class PodcastSubscription {
+  @IgnoreColumn()
   final Uuid uuid = new Uuid();
 
+  @PrimaryKey()
   String id;
   bool isSubscribed;
   DateTime created;
   DateTime lastUpdated;
+  @Column(length: 256, isNullable: false)
   String podcastUrl;
 
   PodcastSubscription({
@@ -20,6 +23,10 @@ class PodcastSubscription {
     this.podcastUrl,
   }) {
     this.id ??= uuid.v4();
+  }
+
+  String toString() {
+    return 'Id = ${id}: Created on ${created.toString()}, isSubscribed = ${isSubscribed.toString()}, podcastUrl: ${podcastUrl}';
   }
 }
 

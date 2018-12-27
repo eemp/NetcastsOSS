@@ -9,6 +9,7 @@ class PodcastHome extends StatelessWidget {
   bool isSubscribed;
   String logo_url;
   Function onSubscribe;
+  Function onUnsubscribe;
 
   PodcastHome({
     Key key,
@@ -16,6 +17,7 @@ class PodcastHome extends StatelessWidget {
     this.isSubscribed,
     this.logo_url,
     this.onSubscribe,
+    this.onUnsubscribe,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,11 @@ class PodcastHome extends StatelessWidget {
           ),
         ),
         Container(
-          child: PodcastOptions(isSubscribed: isSubscribed),
+          child: PodcastOptions(
+            isSubscribed: isSubscribed,
+            onSubscribe: onSubscribe,
+            onUnsubscribe: onUnsubscribe
+          ),
         ),
         Container(
           child: Html(

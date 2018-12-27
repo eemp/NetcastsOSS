@@ -31,7 +31,8 @@ class App {
     models['podcast_subscription'] = new PodcastSubscriptionBean(this.localDatabaseAdapter.adapter);
 
     await Future.forEach(models.values, (model) async {
-      await model.drop();
+      //await model.createTable();
+      //await model.drop();
       await model.createTable(ifNotExists: true);
     });
   }

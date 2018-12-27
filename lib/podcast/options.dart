@@ -25,7 +25,7 @@ class PodcastOptionsState extends State<PodcastOptions> {
       children: [
         Container(
           child: IconButton(
-            icon: Icon(isSubscribed ?? widget.isSubscribed ? Icons.done : Icons.library_add),
+            icon: Icon(isSubscribed ?? widget.isSubscribed ? Icons.done : Icons.add),
             iconSize: 24.0,
             onPressed: () async {
               bool willBeSubscribed = !(isSubscribed ?? widget.isSubscribed);
@@ -42,12 +42,12 @@ class PodcastOptionsState extends State<PodcastOptions> {
             }
           ),
         ),
-        Container(
-          child: IconButton(
-            icon: Icon(Icons.share),
-            iconSize: 24.0,
-          ),
-        ),
+        //Container(
+          //child: IconButton(
+            //icon: Icon(Icons.share),
+            //iconSize: 24.0,
+          //),
+        //),
       ],
     );
   }

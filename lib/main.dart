@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:hear2learn/app.dart';
 import 'package:hear2learn/home.dart';
 
 void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(App());
+  App app = new App();
+  await app.init();
+
+  runApp(AppWidget());
 }
 
-class App extends StatelessWidget {
+class AppWidget extends StatelessWidget {
   final appTitle = 'App';
 
   @override
@@ -27,22 +31,10 @@ class App extends StatelessWidget {
       themedWidgetBuilder: (context, theme) {
         return MaterialApp(
           title: appTitle,
-          home: Homepage(title: appTitle),
+          home: Home(),
           theme: theme,
         );
       },
     );
   }
 }
-
-class Homepage extends StatelessWidget {
-  final String title;
-
-  Homepage({Key key, this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Home();
-  }
-}
-

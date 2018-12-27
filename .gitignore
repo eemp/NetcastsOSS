@@ -17,4 +17,4 @@ coverage/
 
 
 # custom ignores
-*.jorm.dart
+# *.jorm.dart

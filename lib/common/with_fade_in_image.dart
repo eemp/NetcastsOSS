@@ -13,8 +13,9 @@ class WithFadeInImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FadeInImage.memoryNetwork(
       fadeInDuration: Duration(milliseconds: 300),
-      placeholder: kTransparentImage,
+      fit: BoxFit.fill,
       image: location,
+      placeholder: kTransparentImage,
     );
   }
 }

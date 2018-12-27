@@ -102,15 +102,11 @@ class PodcastPage extends StatelessWidget {
               await subscriptionModel.insert(PodcastSubscription(
                 created: DateTime.now(),
                 isSubscribed: true,
-                lastUpdated: DateTime.now(),
                 podcastUrl: url,
               ));
             },
             onUnsubscribe: () async {
-              Map<String, dynamic> update = new Map<String, dynamic>();
-              update[subscriptionModel.isSubscribed.name] = false;
-              update[subscriptionModel.lastUpdated.name] = DateTime.now();
-              await subscriptionModel.updateFields(subscriptionModel.podcastUrl.eq(url), update);
+              await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(url));
             },
             logo_url: snapshot.data.podcast.logoUrl,
           )

@@ -11,7 +11,6 @@ class PodcastSubscription {
   String id;
   bool isSubscribed;
   DateTime created;
-  DateTime lastUpdated;
   @Column(length: 256, isNullable: false)
   String podcastUrl;
 
@@ -19,7 +18,6 @@ class PodcastSubscription {
     this.created,
     this.id,
     this.isSubscribed,
-    this.lastUpdated,
     this.podcastUrl,
   }) {
     this.id ??= uuid.v4();

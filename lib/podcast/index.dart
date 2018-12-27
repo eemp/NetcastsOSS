@@ -15,25 +15,30 @@ class PodcastData {
   PodcastData({this.podcast, this.subscription});
 }
 
-class PodcastPage extends StatelessWidget {
-  final App app = App();
-  final PodcastApi podcastApiService = new PodcastApi();
-
-  PodcastSubscriptionBean subscriptionModel;
+class PodcastPage extends StatefulWidget {
   String url;
 
   PodcastPage({
     Key key,
     this.url,
-  }) : super(key: key) {
-    subscriptionModel = app.models['podcast_subscription'];
-  }
+  }) : super(key: key);
+
+  @override
+  PodcastPageState createState() => PodcastPageState();
+}
+
+class PodcastPageState extends State<PodcastPage> {
+  final App app = App();
+  final PodcastApi podcastApiService = new PodcastApi();
+
+  bool isSubscribed;
 
   @override
   Widget build(BuildContext context) {
-    Future<Podcast> podcastFuture = podcastApiService.getPodcast(url);
-    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(url));
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
+    Future<Podcast> podcastFuture = podcastApiService.getPodcast(widget.url);
+    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(widget.url));
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
@@ -51,10 +56,10 @@ class PodcastPage extends StatelessWidget {
                 icon: Icon(Icons.list),
                 text: 'Episodes',
               ),
-              Tab(
-                icon: Icon(Icons.info),
-                text: 'Info',
-              ),
+              //Tab(
+                //icon: Icon(Icons.info),
+                //text: 'Info',
+              //),
             ],
           ),
         ),
@@ -65,18 +70,33 @@ class PodcastPage extends StatelessWidget {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: PodcastEpisodesList(podcastUrl: url),
+              child: PodcastEpisodesList(podcastUrl: widget.url),
               margin: EdgeInsets.all(16.0),
             ),
-            Container(
-              child: PodcastInfo(),
-              margin: EdgeInsets.all(16.0),
-            ),
+            //Container(
+              //child: PodcastInfo(),
+              //margin: EdgeInsets.all(16.0),
+            //),
           ],
         ),
+        floatingActionButton: buildSubscriptionButton(podcastWithSubscriptionFuture),
       ),
       length: 3,
     );
+  }
+
+  void onSubscribe() async {
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+    await subscriptionModel.insert(PodcastSubscription(
+      created: DateTime.now(),
+      isSubscribed: true,
+      podcastUrl: widget.url,
+    ));
+  }
+
+  void onUnsubscribe() async {
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(widget.url));
   }
 
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {
@@ -91,6 +111,7 @@ class PodcastPage extends StatelessWidget {
   }
 
   Widget buildPodcastHome(podcastWithSubscriptionFuture) {
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     return FutureBuilder(
       future: podcastWithSubscriptionFuture,
       builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
@@ -98,22 +119,40 @@ class PodcastPage extends StatelessWidget {
           ? PodcastHome(
             description: snapshot.data.podcast.description.replaceAll("\n", " "),
             isSubscribed: snapshot.data.subscription?.isSubscribed ?? false,
-            onSubscribe: () async {
-              await subscriptionModel.insert(PodcastSubscription(
-                created: DateTime.now(),
-                isSubscribed: true,
-                podcastUrl: url,
-              ));
-            },
-            onUnsubscribe: () async {
-              await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(url));
-            },
             logo_url: snapshot.data.podcast.logoUrl,
           )
           : Padding(
             padding: EdgeInsets.all(32.0),
             child: Center(child: CircularProgressIndicator()),
           );
+      },
+    );
+  }
+
+  Widget buildSubscriptionButton(podcastWithSubscriptionFuture) {
+    return FutureBuilder(
+      future: podcastWithSubscriptionFuture,
+      builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
+        bool isCurrentlySubscribed = isSubscribed ?? snapshot.data?.subscription?.isSubscribed ?? false;
+        bool willBeSubscribed = !isCurrentlySubscribed;
+
+        return snapshot.hasData ? FloatingActionButton.extended(
+          icon: Icon(isCurrentlySubscribed ? Icons.remove : Icons.add),
+          label: Text(isCurrentlySubscribed ? 'Unsubscribe' : 'Subscribe'),
+          onPressed: () async {
+            if(willBeSubscribed) {
+              await this.onSubscribe();
+            }
+            else {
+              await this.onUnsubscribe();
+            }
+
+            setState(() {
+              isSubscribed = willBeSubscribed;
+            });
+          },
+          tooltip: 'Subscribe',
+        ) : new Container(width: 0.0, height: 0.0);
       },
     );
   }

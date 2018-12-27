@@ -29,18 +29,18 @@ class PodcastHome extends StatelessWidget {
             location: logo_url,
           ),
         ),
-        Container(
-          child: PodcastOptions(
-            isSubscribed: isSubscribed,
-            onSubscribe: onSubscribe,
-            onUnsubscribe: onUnsubscribe
-          ),
-        ),
+        //Container(
+          //child: PodcastOptions(
+            //isSubscribed: isSubscribed,
+            //onSubscribe: onSubscribe,
+            //onUnsubscribe: onUnsubscribe
+          //),
+        //),
         Container(
           child: Html(
             data: description,
           ),
-          padding: EdgeInsets.only(bottom: 16.0, top: 16.0),
+          padding: EdgeInsets.only(top: 16.0),
         ),
       ],
     );

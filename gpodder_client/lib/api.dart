@@ -12,8 +12,10 @@ part 'auth/api_key_auth.dart';
 part 'auth/oauth.dart';
 part 'auth/http_basic_auth.dart';
 
+part 'api/episode_api.dart';
 part 'api/podcast_api.dart';
 
+part 'model/episode.dart';
 part 'model/podcast.dart';
 
 

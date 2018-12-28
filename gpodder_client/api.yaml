@@ -35,7 +35,7 @@ paths:
   /api/2/data/episode.json:
     get:
       tags:
-        - episdoe
+        - episode
       summary: Get data about an episode
       description: ''
       operationId: getPodcastEpisode

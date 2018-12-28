@@ -38,7 +38,9 @@ TODO
 
 ## Getting Started
 
-Please follow the [installation procedure](#installation--usage) and then run the following:
+Please follow the [installation procedure](#installation--usage) and then try the following examples.
+
+Obtaining podcast data:
 
 ```dart
 import 'package:swagger/api.dart';
@@ -56,12 +58,32 @@ try {
 
 ```
 
+Obtaining episode data:
+
+```dart
+import 'package:swagger/api.dart';
+
+
+var api_instance = new EpisodeApi();
+var episodeUrl = episodeUrl_example; // String | Episode url
+var podcastUrl = podcastUrl_example; // String | Podcast url
+
+try {
+    var result = api_instance.getPodcastEpisode(episodeUrl, podcastUrl);
+    print(result);
+} catch (e) {
+    print("Exception when calling EpisodeApi->getPodcastEpisode: $e\n");
+}
+
+```
+
 ## Documentation for API Endpoints
 
 All URIs are relative to *https://gpodder.net*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*EpisodeApi* | [**getPodcastEpisode**](docs//EpisodeApi.md#getpodcastepisode) | **GET** /api/2/data/episode.json | Get data about an episode
 *PodcastApi* | [**getPodcast**](docs//PodcastApi.md#getpodcast) | **GET** /api/2/data/podcast.json | Get data about a podcast
 *PodcastApi* | [**getPodcastsByTag**](docs//PodcastApi.md#getpodcastsbytag) | **GET** /api/2/tag/{tag}/{total}.json | Get data about a podcast
 *PodcastApi* | [**getTopPodcasts**](docs//PodcastApi.md#gettoppodcasts) | **GET** /toplist/{total}.json | Search for podcasts
@@ -70,6 +92,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Episode](docs//Episode.md)
  - [Podcast](docs//Podcast.md)
 
 

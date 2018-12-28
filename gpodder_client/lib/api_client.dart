@@ -37,6 +37,8 @@ class ApiClient {
           return value is bool ? value : '$value'.toLowerCase() == 'true';
         case 'double':
           return value is double ? value : double.parse('$value');
+        case 'Episode':
+          return new Episode.fromJson(value);
         case 'Podcast':
           return new Podcast.fromJson(value);
         default:

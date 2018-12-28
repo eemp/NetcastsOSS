@@ -57,47 +57,57 @@ class Home extends StatelessWidget {
           children: [
             Container(
               child: DrawerHeader(
-                child: Text('Debug Menu'),
+                //child: Text('Hear2Learn'),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: ExactAssetImage('images/drawer-header--balloons.jpg'),
+                  ),
                 ),
               ),
             ),
             ListTile(
-              title: Text('Homepage'),
+              leading: Icon(Icons.home),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
                 );
               },
+              title: Text('Home'),
             ),
+            Divider(),
             ListTile(
-              title: Text('Your Podcasts'),
+              leading: Icon(Icons.subscriptions),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SubscriptionsPage()),
                 );
               },
+              title: Text('Your Podcasts'),
             ),
             ListTile(
-              title: Text('Search'),
+              leading: Icon(Icons.explore),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PodcastSearch()),
                 );
               },
+              title: Text('Explore'),
             ),
+            Divider(),
             ListTile(
-              title: Text('Settings'),
+              leading: Icon(Icons.settings),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Settings()),
                 );
               },
+              title: Text('Settings'),
             ),
           ],
         ),

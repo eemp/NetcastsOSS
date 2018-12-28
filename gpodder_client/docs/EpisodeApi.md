@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getPodcastEpisode**
-> Episode getPodcastEpisode(episodeUrl, podcastUrl)
+> Episode getPodcastEpisode(url, podcast)
 
 Get data about an episode
 
@@ -24,11 +24,11 @@ Get data about an episode
 import 'package:swagger/api.dart';
 
 var api_instance = new EpisodeApi();
-var episodeUrl = episodeUrl_example; // String | Episode url
-var podcastUrl = podcastUrl_example; // String | Podcast url
+var url = url_example; // String | Episode url
+var podcast = podcast_example; // String | Podcast url
 
 try { 
-    var result = api_instance.getPodcastEpisode(episodeUrl, podcastUrl);
+    var result = api_instance.getPodcastEpisode(url, podcast);
     print(result);
 } catch (e) {
     print("Exception when calling EpisodeApi->getPodcastEpisode: $e\n");
@@ -39,8 +39,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **episodeUrl** | **String**| Episode url | 
- **podcastUrl** | **String**| Podcast url | 
+ **url** | **String**| Episode url | 
+ **podcast** | **String**| Podcast url | 
 
 ### Return type
 

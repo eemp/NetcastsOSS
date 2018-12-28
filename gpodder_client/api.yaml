@@ -43,12 +43,12 @@ paths:
         - application/json
       parameters:
         - in: query
-          name: episode-url
+          name: url
           description: Episode url
           required: true
           type: string
         - in: query
-          name: podcast-url
+          name: podcast
           description: Podcast url
           required: true
           type: string

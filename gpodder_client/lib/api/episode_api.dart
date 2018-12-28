@@ -10,15 +10,15 @@ class EpisodeApi {
   /// Get data about an episode
   ///
   /// 
-  Future<Episode> getPodcastEpisode(String episodeUrl, String podcastUrl) async {
+  Future<Episode> getPodcastEpisode(String url, String podcast) async {
     Object postBody = null;
 
     // verify required params are set
-    if(episodeUrl == null) {
-     throw new ApiException(400, "Missing required param: episodeUrl");
+    if(url == null) {
+     throw new ApiException(400, "Missing required param: url");
     }
-    if(podcastUrl == null) {
-     throw new ApiException(400, "Missing required param: podcastUrl");
+    if(podcast == null) {
+     throw new ApiException(400, "Missing required param: podcast");
     }
 
     // create path and map variables
@@ -28,8 +28,8 @@ class EpisodeApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-      queryParams.addAll(_convertParametersForCollectionFormat("", "episode-url", episodeUrl));
-      queryParams.addAll(_convertParametersForCollectionFormat("", "podcast-url", podcastUrl));
+      queryParams.addAll(_convertParametersForCollectionFormat("", "url", url));
+      queryParams.addAll(_convertParametersForCollectionFormat("", "podcast", podcast));
     
     List<String> contentTypes = [];
 

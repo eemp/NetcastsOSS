@@ -37,8 +37,8 @@ class DownloadPage extends StatelessWidget {
                           )),
                         );
                       },
-                      subtitle: episode.title,
-                      title: episode.podcastTitle,
+                      subtitle: episode.podcastTitle,
+                      title: episode.title,
                     );
                   }).toList(),
                 ),

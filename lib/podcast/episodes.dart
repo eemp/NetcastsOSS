@@ -40,8 +40,6 @@ class PodcastEpisodesList extends StatelessWidget {
         itemBuilder: (BuildContext context, int idx) {
           Episode episode = episodes[idx];
           String title = episode.title;
-          num size = episode.size;
-          num sizeInMegabytes = size / 10e6;
 
           return GestureDetector(
             onTap: () {

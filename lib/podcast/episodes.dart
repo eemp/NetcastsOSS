@@ -2,15 +2,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/common/episode_tile.dart';
+import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class PodcastEpisodesList extends StatelessWidget {
+  Function onEpisodeDelete;
   Function onEpisodeDownload;
   List<Episode> episodes;
 
   PodcastEpisodesList({
     Key key,
+    this.onEpisodeDelete,
     this.onEpisodeDownload,
     this.episodes,
   }) : super(key: key);
@@ -24,6 +27,10 @@ class PodcastEpisodesList extends StatelessWidget {
           Episode episode = episodes[idx];
           String title = episode.title;
 
+          TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
+            value: episode.download != null ? TogglingWidgetPairValue.active : TogglingWidgetPairValue.initial,
+          );
+
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -34,11 +41,31 @@ class PodcastEpisodesList extends StatelessWidget {
             child: EpisodeTile(
               subtitle: episode.getMetaLine(),
               title: title,
-              options: IconButton(
-                icon: Icon(Icons.get_app),
-                onPressed: () async {
-                  await onEpisodeDownload(episode.url, episode.toJson());
-                }
+              options: TogglingWidgetPair(
+                controller: togglingWidgetPairController.setValue(
+                  episode.download != null
+                    ? TogglingWidgetPairValue.active
+                    : TogglingWidgetPairValue.initial,
+                ),
+                activeWidget: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    togglingWidgetPairController.setLoadingValue();
+                    await onEpisodeDelete(episode.url);
+                    togglingWidgetPairController.setInitialValue();
+                  },
+                ),
+                initialWidget: IconButton(
+                  icon: Icon(Icons.get_app),
+                  onPressed: () async {
+                    togglingWidgetPairController.setLoadingValue();
+                    await onEpisodeDownload(episode.url, episode.toJson());
+                    togglingWidgetPairController.setActiveValue();
+                  },
+                ),
+                loadingWidget: IconButton(
+                  icon: CircularProgressIndicator(value: null),
+                ),
               ),
             ),
           );

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
@@ -47,7 +48,11 @@ class PodcastPageState extends State<PodcastPage> {
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
-    Future<List<Episode>> episodesFuture = getPodcastEpisodes(widget.url);
+    Future<List<Episode>> episodesFuture = getPodcastEpisodes(widget.url).then(
+      (episodes) => Future.wait(episodes.map((episode) => episode.getDownload())).then(
+        (downloadsResponse) => Future.value(episodes)
+      )
+    );
 
     return DefaultTabController(
       child: Scaffold(
@@ -122,6 +127,16 @@ class PodcastPageState extends State<PodcastPage> {
     await downloadModel.insert(download);
   }
 
+  void deleteEpisode(episodeUrl) async {
+    EpisodeDownloadBean downloadModel= app.models['episode_download'];
+    await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(episodeUrl)).then((episodeDownload) {
+      return Future.wait([
+        File(episodeDownload.downloadPath).delete(),
+        downloadModel.removeWhere(downloadModel.episodeUrl.eq(episodeUrl)),
+      ]);
+    });
+  }
+
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {
     return FutureBuilder(
       future: podcastWithSubscriptionFuture,
@@ -186,6 +201,7 @@ class PodcastPageState extends State<PodcastPage> {
       builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
         return snapshot.hasData
           ? PodcastEpisodesList(
+            onEpisodeDelete: this.deleteEpisode,
             onEpisodeDownload: this.downloadEpisode,
             episodes: snapshot.data,
           )

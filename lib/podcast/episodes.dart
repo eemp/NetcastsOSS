@@ -4,36 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:hear2learn/common/episode_tile.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/services/feeds/podcast.dart';
 
 class PodcastEpisodesList extends StatelessWidget {
   Function onEpisodeDownload;
-  String podcastUrl;
+  List<Episode> episodes;
 
   PodcastEpisodesList({
     Key key,
     this.onEpisodeDownload,
-    this.podcastUrl,
+    this.episodes,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Episode>> episodesFuture = getPodcastEpisodes(podcastUrl);
-
-    return FutureBuilder(
-      future: episodesFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
-        return snapshot.hasData
-          ? buildEpisodesList(snapshot.data)
-          : Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Center(child: CircularProgressIndicator()),
-          );
-      },
-    );
-  }
-
-  Widget buildEpisodesList(episodes) {
     return Container(
       child: ListView.separated(
         itemCount: episodes.length,

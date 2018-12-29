@@ -3,6 +3,7 @@ import 'package:swagger/api.dart';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/common/horizontal_list_view.dart';
+import 'package:hear2learn/downloads/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -77,17 +78,6 @@ class Home extends StatelessWidget {
               },
               title: Text('Home'),
             ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.subscriptions),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SubscriptionsPage()),
-                );
-              },
-              title: Text('Your Podcasts'),
-            ),
             ListTile(
               leading: Icon(Icons.explore),
               onTap: () {
@@ -97,6 +87,27 @@ class Home extends StatelessWidget {
                 );
               },
               title: Text('Explore'),
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.apps),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+                );
+              },
+              title: Text('Your Podcasts'),
+            ),
+            ListTile(
+              leading: Icon(Icons.subscriptions),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DownloadPage()),
+                );
+              },
+              title: Text('Downloads'),
             ),
             Divider(),
             ListTile(

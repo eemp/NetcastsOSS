@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:hear2learn/models/episode.dart';
 import 'package:jaguar_orm/jaguar_orm.dart';
 import 'package:uuid/uuid.dart';
 
@@ -8,15 +10,18 @@ class EpisodeDownload {
   static final Uuid uuid = new Uuid();
 
   DateTime created;
-  @Column(length: 256, isNullable: false)
+  @Column(length: 0, isNullable: false)
+  String details;
+  @Column(length: 0, isNullable: false)
   String downloadPath;
-  @Column(length: 256, isNullable: false)
+  @Column(length: 0, isNullable: false)
   String episodeUrl;
-  @PrimaryKey()
+  @PrimaryKey(length: 36)
   String id;
 
   EpisodeDownload({
     this.created,
+    this.details,
     this.downloadPath,
     this.episodeUrl,
     this.id,
@@ -25,7 +30,21 @@ class EpisodeDownload {
   }
 
   String toString() {
-    return 'Id = ${id}: Created on ${created.toString()}, episodeUrl = ${episodeUrl.toString()}, downloadPath: ${downloadPath}';
+    return 'Id = ${id}: Created on ${created.toString()}, episodeUrl = ${episodeUrl.toString()}, downloadPath: ${downloadPath}, details: ${details}';
+  }
+
+  Episode getEpisodeFromDetails() {
+    var decodedDetails = jsonDecode(details);
+    return Episode(
+      description: decodedDetails['description'],
+      media: decodedDetails['media'],
+      podcastTitle: decodedDetails['podcastTitle'],
+      podcastUrl: decodedDetails['podcastUrl'],
+      pubDate: decodedDetails['pubDate'],
+      size: decodedDetails['size'],
+      title: decodedDetails['title'],
+      url: decodedDetails['url'],
+    );
   }
 
   static String createNewId() {

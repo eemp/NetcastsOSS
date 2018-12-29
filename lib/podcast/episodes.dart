@@ -56,7 +56,7 @@ class PodcastEpisodesList extends StatelessWidget {
               options: IconButton(
                 icon: Icon(Icons.get_app),
                 onPressed: () async {
-                  await onEpisodeDownload(episode.url);
+                  await onEpisodeDownload(episode.url, episode.toJson());
                 }
               ),
             ),

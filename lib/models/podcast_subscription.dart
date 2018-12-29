@@ -7,11 +7,11 @@ class PodcastSubscription {
   @IgnoreColumn()
   final Uuid uuid = new Uuid();
 
-  @PrimaryKey()
+  @PrimaryKey(length: 36)
   String id;
   bool isSubscribed;
   DateTime created;
-  @Column(length: 256, isNullable: false)
+  @Column(length: 0, isNullable: false)
   String podcastUrl;
 
   PodcastSubscription({

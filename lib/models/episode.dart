@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -13,6 +14,7 @@ class Episode {
 
   Episode({
     this.description,
+    this.media,
     this.podcastTitle,
     this.podcastUrl,
     this.pubDate,
@@ -35,5 +37,18 @@ class Episode {
   @override
   String toString() {
     return 'Episode[description=$description, media=$media, pubDate=$pubDate, size=$size, title=$title, url=$url, ]';
+  }
+
+  String toJson() {
+    return jsonEncode({
+      'description': description,
+      'media': media,
+      'podcastTitle': podcastTitle,
+      'podcastUrl': podcastUrl,
+      'pubDate': pubDate,
+      'size': size,
+      'title': title,
+      'url': url,
+    });
   }
 }

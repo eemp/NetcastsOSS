@@ -51,10 +51,10 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
 
   Future<void> createTable({bool ifNotExists: false}) async {
     final st = Sql.create(tableName, ifNotExists: ifNotExists);
-    st.addStr(id.name, primary: true, isNullable: false);
+    st.addStr(id.name, primary: true, length: 36, isNullable: false);
     st.addBool(isSubscribed.name, isNullable: false);
     st.addDateTime(created.name, isNullable: false);
-    st.addStr(podcastUrl.name, length: 256, isNullable: false);
+    st.addStr(podcastUrl.name, length: 0, isNullable: false);
     return adapter.createTable(st);
   }
 

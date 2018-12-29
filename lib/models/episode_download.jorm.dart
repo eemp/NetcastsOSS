@@ -11,12 +11,14 @@ abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
   final downloadPath = StrField('download_path');
   final episodeUrl = StrField('episode_url');
   final id = StrField('id');
+  final details = StrField('details');
   Map<String, Field> _fields;
   Map<String, Field> get fields => _fields ??= {
         created.name: created,
         downloadPath.name: downloadPath,
         episodeUrl.name: episodeUrl,
         id.name: id,
+        details.name: details,
       };
   EpisodeDownload fromMap(Map map) {
     EpisodeDownload model = EpisodeDownload();
@@ -24,6 +26,7 @@ abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
     model.downloadPath = adapter.parseValue(map['download_path']);
     model.episodeUrl = adapter.parseValue(map['episode_url']);
     model.id = adapter.parseValue(map['id']);
+    model.details = adapter.parseValue(map['details']);
 
     return model;
   }
@@ -37,6 +40,7 @@ abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
       ret.add(downloadPath.set(model.downloadPath));
       ret.add(episodeUrl.set(model.episodeUrl));
       ret.add(id.set(model.id));
+      ret.add(details.set(model.details));
     } else {
       if (only.contains(created.name)) ret.add(created.set(model.created));
       if (only.contains(downloadPath.name))
@@ -44,6 +48,7 @@ abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
       if (only.contains(episodeUrl.name))
         ret.add(episodeUrl.set(model.episodeUrl));
       if (only.contains(id.name)) ret.add(id.set(model.id));
+      if (only.contains(details.name)) ret.add(details.set(model.details));
     }
 
     return ret;
@@ -52,9 +57,10 @@ abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
   Future<void> createTable({bool ifNotExists: false}) async {
     final st = Sql.create(tableName, ifNotExists: ifNotExists);
     st.addDateTime(created.name, isNullable: false);
-    st.addStr(downloadPath.name, length: 256, isNullable: false);
-    st.addStr(episodeUrl.name, length: 256, isNullable: false);
-    st.addStr(id.name, primary: true, isNullable: false);
+    st.addStr(downloadPath.name, length: 0, isNullable: false);
+    st.addStr(episodeUrl.name, length: 0, isNullable: false);
+    st.addStr(id.name, primary: true, length: 36, isNullable: false);
+    st.addStr(details.name, length: 0, isNullable: false);
     return adapter.createTable(st);
   }
 

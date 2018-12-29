@@ -107,16 +107,19 @@ class PodcastPageState extends State<PodcastPage> {
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(widget.url));
   }
 
-  void downloadEpisode(episodeUrl) async {
+  void downloadEpisode(episodeUrl, details) async {
     EpisodeDownloadBean downloadModel= app.models['episode_download'];
     String downloadId = EpisodeDownload.createNewId();
     String downloadPath = join(await app.getApplicationDownloadsPath(), '${downloadId}.mp3');
     EpisodeDownload download = new EpisodeDownload(
-      episodeUrl: episodeUrl,
+      created: DateTime.now(),
+      details: details,
       downloadPath: downloadPath,
+      episodeUrl: episodeUrl,
       id: downloadId,
     );
     await dio.download(episodeUrl, download.downloadPath);
+    await downloadModel.insert(download);
   }
 
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {

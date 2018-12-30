@@ -32,6 +32,31 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Podcast'
+  /api/2/data/episode.json:
+    get:
+      tags:
+        - episode
+      summary: Get data about an episode
+      description: ''
+      operationId: getPodcastEpisode
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: url
+          description: Episode url
+          required: true
+          type: string
+        - in: query
+          name: podcast
+          description: Podcast url
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Episode'
   /api/2/tag/{tag}/{total}.json:
     get:
       tags:
@@ -112,6 +137,25 @@ paths:
             items:
               $ref: '#/definitions/Podcast'
 definitions:
+  Episode:
+    properties:
+      description:
+        type: string
+      mygpo_link:
+        type: string
+      title:
+        type: string
+      podcast_title:
+        type: string
+      podcast_url:
+        type: string
+      released:
+        format: date-time
+        type: string
+      url:
+        type: string
+      website:
+        type: string
   Podcast:
     properties:
       description:

@@ -1,49 +1,54 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'podcast_subscription.dart';
+part of 'episode_download.dart';
 
 // **************************************************************************
 // BeanGenerator
 // **************************************************************************
 
-abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
-  final id = StrField('id');
-  final isSubscribed = BoolField('is_subscribed');
+abstract class _EpisodeDownloadBean implements Bean<EpisodeDownload> {
   final created = DateTimeField('created');
-  final podcastUrl = StrField('podcast_url');
+  final downloadPath = StrField('download_path');
+  final episodeUrl = StrField('episode_url');
+  final id = StrField('id');
+  final details = StrField('details');
   Map<String, Field> _fields;
   Map<String, Field> get fields => _fields ??= {
-        id.name: id,
-        isSubscribed.name: isSubscribed,
         created.name: created,
-        podcastUrl.name: podcastUrl,
+        downloadPath.name: downloadPath,
+        episodeUrl.name: episodeUrl,
+        id.name: id,
+        details.name: details,
       };
-  PodcastSubscription fromMap(Map map) {
-    PodcastSubscription model = PodcastSubscription();
-    model.id = adapter.parseValue(map['id']);
-    model.isSubscribed = adapter.parseValue(map['is_subscribed']);
+  EpisodeDownload fromMap(Map map) {
+    EpisodeDownload model = EpisodeDownload();
     model.created = adapter.parseValue(map['created']);
-    model.podcastUrl = adapter.parseValue(map['podcast_url']);
+    model.downloadPath = adapter.parseValue(map['download_path']);
+    model.episodeUrl = adapter.parseValue(map['episode_url']);
+    model.id = adapter.parseValue(map['id']);
+    model.details = adapter.parseValue(map['details']);
 
     return model;
   }
 
-  List<SetColumn> toSetColumns(PodcastSubscription model,
+  List<SetColumn> toSetColumns(EpisodeDownload model,
       {bool update = false, Set<String> only}) {
     List<SetColumn> ret = [];
 
     if (only == null) {
-      ret.add(id.set(model.id));
-      ret.add(isSubscribed.set(model.isSubscribed));
       ret.add(created.set(model.created));
-      ret.add(podcastUrl.set(model.podcastUrl));
+      ret.add(downloadPath.set(model.downloadPath));
+      ret.add(episodeUrl.set(model.episodeUrl));
+      ret.add(id.set(model.id));
+      ret.add(details.set(model.details));
     } else {
-      if (only.contains(id.name)) ret.add(id.set(model.id));
-      if (only.contains(isSubscribed.name))
-        ret.add(isSubscribed.set(model.isSubscribed));
       if (only.contains(created.name)) ret.add(created.set(model.created));
-      if (only.contains(podcastUrl.name))
-        ret.add(podcastUrl.set(model.podcastUrl));
+      if (only.contains(downloadPath.name))
+        ret.add(downloadPath.set(model.downloadPath));
+      if (only.contains(episodeUrl.name))
+        ret.add(episodeUrl.set(model.episodeUrl));
+      if (only.contains(id.name)) ret.add(id.set(model.id));
+      if (only.contains(details.name)) ret.add(details.set(model.details));
     }
 
     return ret;
@@ -51,20 +56,20 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
 
   Future<void> createTable({bool ifNotExists: false}) async {
     final st = Sql.create(tableName, ifNotExists: ifNotExists);
-    st.addStr(id.name, primary: true, length: 36, isNullable: false);
-    st.addBool(isSubscribed.name, isNullable: false);
     st.addDateTime(created.name, isNullable: false);
-    st.addStr(podcastUrl.name, length: 0, isNullable: false);
+    st.addStr(downloadPath.name, length: 0, isNullable: false);
+    st.addStr(episodeUrl.name, length: 0, isNullable: false);
+    st.addStr(id.name, primary: true, length: 36, isNullable: false);
+    st.addStr(details.name, length: 0, isNullable: false);
     return adapter.createTable(st);
   }
 
-  Future<dynamic> insert(PodcastSubscription model,
-      {bool cascade: false}) async {
+  Future<dynamic> insert(EpisodeDownload model, {bool cascade: false}) async {
     final Insert insert = inserter.setMany(toSetColumns(model));
     return adapter.insert(insert);
   }
 
-  Future<void> insertMany(List<PodcastSubscription> models) async {
+  Future<void> insertMany(List<EpisodeDownload> models) async {
     final List<List<SetColumn>> data =
         models.map((model) => toSetColumns(model)).toList();
     final InsertMany insert = inserters.addAll(data);
@@ -72,13 +77,12 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<dynamic> upsert(PodcastSubscription model,
-      {bool cascade: false}) async {
+  Future<dynamic> upsert(EpisodeDownload model, {bool cascade: false}) async {
     final Upsert upsert = upserter.setMany(toSetColumns(model));
     return adapter.upsert(upsert);
   }
 
-  Future<void> upsertMany(List<PodcastSubscription> models) async {
+  Future<void> upsertMany(List<EpisodeDownload> models) async {
     final List<List<SetColumn>> data = [];
     for (var i = 0; i < models.length; ++i) {
       var model = models[i];
@@ -89,7 +93,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<int> update(PodcastSubscription model,
+  Future<int> update(EpisodeDownload model,
       {bool cascade: false, bool associate: false, Set<String> only}) async {
     final Update update = updater
         .where(this.id.eq(model.id))
@@ -97,7 +101,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return adapter.update(update);
   }
 
-  Future<void> updateMany(List<PodcastSubscription> models) async {
+  Future<void> updateMany(List<EpisodeDownload> models) async {
     final List<List<SetColumn>> data = [];
     final List<Expression> where = [];
     for (var i = 0; i < models.length; ++i) {
@@ -110,7 +114,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<PodcastSubscription> find(String id,
+  Future<EpisodeDownload> find(String id,
       {bool preload: false, bool cascade: false}) async {
     final Find find = finder.where(this.id.eq(id));
     return await findOne(find);
@@ -121,7 +125,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return adapter.remove(remove);
   }
 
-  Future<int> removeMany(List<PodcastSubscription> models) async {
+  Future<int> removeMany(List<EpisodeDownload> models) async {
     final Remove remove = remover;
     for (final model in models) {
       remove.or(this.id.eq(model.id));

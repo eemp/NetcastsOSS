@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+
 import 'package:hear2learn/episode/info.dart';
 import 'package:hear2learn/episode/home.dart';
+import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 
-class EpisodePage extends StatelessWidget {
+class EpisodePage extends StatefulWidget {
   Episode episode;
 
   EpisodePage({
     Key key,
     this.episode,
   }) : super(key: key);
+
+  @override
+  EpisodePageState createState() => EpisodePageState();
+}
+
+class EpisodePageState extends State<EpisodePage> {
+  Episode get episode => widget.episode;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +44,16 @@ class EpisodePage extends StatelessWidget {
             Container(
               child: EpisodeHome(
                 episode: episode,
+                onEpisodeDelete: (episode) async {
+                  await episodeHelpers.deleteEpisode(episode);
+                  await episode.getDownload();
+                  setState(() { /* force most of episode page to update - home, options, player */ });
+                },
+                onEpisodeDownload: (episode) async {
+                  await episodeHelpers.downloadEpisode(episode);
+                  await episode.getDownload();
+                  setState(() { /* force most of episode page to update - home, options, player */ });
+                },
               ),
               margin: EdgeInsets.all(16.0),
             ),
@@ -51,5 +70,3 @@ class EpisodePage extends StatelessWidget {
     );
   }
 }
-
-

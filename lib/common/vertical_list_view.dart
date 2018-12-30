@@ -20,10 +20,12 @@ class VerticalListTile extends StatelessWidget {
       onTap: onTap,
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-        leading: Container(
-          child: image,
-          constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
-        ),
+        leading: image != null
+          ? Container(
+            child: image,
+            constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
+          )
+          : null,
         subtitle: Text(
           subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
         ),

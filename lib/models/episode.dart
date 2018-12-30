@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:hear2learn/app.dart';
+import 'package:hear2learn/models/episode_download.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Episode {
+  final App app = App();
+
   String description;
+  EpisodeDownload download;
   String media;
   String podcastTitle;
   String podcastUrl;
@@ -13,6 +20,8 @@ class Episode {
 
   Episode({
     this.description,
+    this.download,
+    this.media,
     this.podcastTitle,
     this.podcastUrl,
     this.pubDate,
@@ -28,12 +37,34 @@ class Episode {
   }
 
   String getMetaLine() {
-    num sizeInMegabytes = size / 10e6;
+    num sizeInMegabytes = size / 1e6;
     return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + this.getFriendlyDate() + '.';
+  }
+
+  Future<EpisodeDownload> getDownload() async {
+    EpisodeDownloadBean downloadModel = app.models['episode_download'];
+    return downloadModel.findOneWhere(downloadModel.episodeUrl.eq(url))
+      .then((episodeDownload) {
+        download = episodeDownload;
+        return Future.value(episodeDownload);
+      });
   }
 
   @override
   String toString() {
     return 'Episode[description=$description, media=$media, pubDate=$pubDate, size=$size, title=$title, url=$url, ]';
+  }
+
+  String toJson() {
+    return jsonEncode({
+      'description': description,
+      'media': media,
+      'podcastTitle': podcastTitle,
+      'podcastUrl': podcastUrl,
+      'pubDate': pubDate,
+      'size': size,
+      'title': title,
+      'url': url,
+    });
   }
 }

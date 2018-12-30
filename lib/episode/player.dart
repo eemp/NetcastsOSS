@@ -16,6 +16,7 @@ class EpisodePlayer extends StatefulWidget {
 }
 
 class EpisodePlayerState extends State<EpisodePlayer> {
+  Episode get episode => widget.episode;
   AudioPlayer player;
   bool isPlaying = false;
   double value;
@@ -71,30 +72,32 @@ class EpisodePlayerState extends State<EpisodePlayer> {
           margin: EdgeInsets.only(bottom: 32.0),
         ),
         Container(
-          child: position != null
-            ? Row(
-              children: [
-                Container(
-                  child: Text(position.toString().substring(0, position.toString().indexOf('.'))),
+          child: Row(
+            children: [
+              Container(
+                child: Text(
+                  position.toString().indexOf('.') >= 0
+                    ? position.toString().substring(0, position.toString().indexOf('.'))
+                    : '0:00:00'
                 ),
-                Expanded(
-                  child: Slider(
-                    activeColor: Theme.of(context).primaryColor,
-                    min: 0.0,
-                    max: duration.inSeconds.toDouble(),
-                    onChanged: (value) {
-                      player.seek(new Duration(seconds: value.toInt()));
-                    },
-                    value: value ?? 0.0,
-                  ),
+              ),
+              Expanded(
+                child: Slider(
+                  activeColor: Theme.of(context).primaryColor,
+                  min: 0.0,
+                  max: duration.inSeconds.toDouble(),
+                  onChanged: widget.episode.download != null ? (value) {
+                    player.seek(new Duration(seconds: value.toInt()));
+                  } : null,
+                  value: value > 0.0 ? value : 0.0,
                 ),
-                Container(
-                  child: Text(duration.toString().substring(0, duration.toString().indexOf('.'))),
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            )
-          : null,
+              ),
+              Container(
+                child: Text(duration.toString().substring(0, duration.toString().indexOf('.'))),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
           margin: EdgeInsets.all(16.0),
         ),
         Container(
@@ -107,29 +110,30 @@ class EpisodePlayerState extends State<EpisodePlayer> {
               IconButton(
                 icon: Icon(Icons.replay_10),
                 iconSize: 40.0,
-                onPressed: () {
+                onPressed: widget.episode.download != null ? () {
                   player.seek(new Duration(seconds: position.inSeconds - 10));
-                },
+                } : null,
               ),
               RawMaterialButton(
                 shape: new CircleBorder(),
-                fillColor: Theme.of(context).primaryColor,
+                fillColor: widget.episode.download != null ? Theme.of(context).primaryColor : Colors.grey,
                 splashColor: Theme.of(context).splashColor,
                 highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
                 elevation: 10.0,
                 highlightElevation: 5.0,
-                onPressed: () {
+                onPressed: widget.episode.download != null ? () {
                   if(isPlaying) {
                     player.pause();
                   }
                   else {
                     player.play(
-                      this.widget.episode.url,
+                      this.widget.episode.download.downloadPath,
+                      isLocal: true,
                     );
                   }
 
                   setState(() => isPlaying = !isPlaying);
-                },
+                } : null,
                 child: new Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
@@ -142,9 +146,9 @@ class EpisodePlayerState extends State<EpisodePlayer> {
               IconButton(
                 icon: Icon(Icons.forward_30),
                 iconSize: 40.0,
-                onPressed: () {
+                onPressed: widget.episode.download != null ? () {
                   player.seek(new Duration(seconds: position.inSeconds + 30));
-                },
+                } : null,
               ),
               //IconButton(
                 //icon: Icon(Icons.skip_next),

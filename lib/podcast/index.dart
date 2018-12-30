@@ -1,15 +1,18 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
-import 'package:swagger/api.dart';
+import 'package:hear2learn/services/feeds/podcast.dart';
+import 'package:swagger/api.dart' as gPodderApi;
 
 class PodcastData {
-  final Podcast podcast;
+  final gPodderApi.Podcast podcast;
   final PodcastSubscription subscription;
 
   PodcastData({this.podcast, this.subscription});
@@ -29,7 +32,7 @@ class PodcastPage extends StatefulWidget {
 
 class PodcastPageState extends State<PodcastPage> {
   final App app = App();
-  final PodcastApi podcastApiService = new PodcastApi();
+  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
 
   bool isSubscribed;
 
@@ -37,10 +40,16 @@ class PodcastPageState extends State<PodcastPage> {
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
-    Future<Podcast> podcastFuture = podcastApiService.getPodcast(widget.url);
+    Future<gPodderApi.Podcast> podcastFuture = podcastApiService.getPodcast(widget.url);
     Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(widget.url));
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
+
+    Future<List<Episode>> episodesFuture = getPodcastEpisodes(widget.url).then(
+      (episodes) => Future.wait(episodes.map((episode) => episode.getDownload())).then(
+        (downloadsResponse) => Future.value(episodes)
+      )
+    );
 
     return DefaultTabController(
       child: Scaffold(
@@ -70,7 +79,7 @@ class PodcastPageState extends State<PodcastPage> {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: PodcastEpisodesList(podcastUrl: widget.url),
+              child: buildPodcastEpisodesList(episodesFuture),
               margin: EdgeInsets.all(16.0),
             ),
             //Container(
@@ -87,7 +96,7 @@ class PodcastPageState extends State<PodcastPage> {
 
   void onSubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    PodcastSubscription newSubscription = PodcastSubscription(
+    PodcastSubscription newSubscription = new PodcastSubscription(
       created: DateTime.now(),
       isSubscribed: true,
       podcastUrl: widget.url,
@@ -154,6 +163,24 @@ class PodcastPageState extends State<PodcastPage> {
           },
           tooltip: 'Subscribe',
         ) : Container(width: 0.0, height: 0.0);
+      },
+    );
+  }
+
+  Widget buildPodcastEpisodesList(episodesFuture) {
+    return FutureBuilder(
+      future: episodesFuture,
+      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
+        return snapshot.hasData
+          ? PodcastEpisodesList(
+            onEpisodeDelete: episodeHelpers.deleteEpisode,
+            onEpisodeDownload: episodeHelpers.downloadEpisode,
+            episodes: snapshot.data,
+          )
+          : Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
       },
     );
   }

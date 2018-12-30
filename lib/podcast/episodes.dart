@@ -51,7 +51,7 @@ class PodcastEpisodesList extends StatelessWidget {
                   icon: Icon(Icons.delete),
                   onPressed: () async {
                     togglingWidgetPairController.setLoadingValue();
-                    await onEpisodeDelete(episode.url);
+                    await onEpisodeDelete(episode);
                     togglingWidgetPairController.setInitialValue();
                   },
                 ),
@@ -59,7 +59,7 @@ class PodcastEpisodesList extends StatelessWidget {
                   icon: Icon(Icons.get_app),
                   onPressed: () async {
                     togglingWidgetPairController.setLoadingValue();
-                    await onEpisodeDownload(episode.url, episode.toJson());
+                    await onEpisodeDownload(episode);
                     togglingWidgetPairController.setActiveValue();
                   },
                 ),

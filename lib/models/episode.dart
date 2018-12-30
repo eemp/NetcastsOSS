@@ -20,6 +20,7 @@ class Episode {
 
   Episode({
     this.description,
+    this.download,
     this.media,
     this.podcastTitle,
     this.podcastUrl,

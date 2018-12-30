@@ -4,6 +4,7 @@ enum TogglingWidgetPairValue { initial, loading, active }
 
 class TogglingWidgetPair extends StatefulWidget {
   TogglingWidgetPairController controller;
+  //bool debug;
 
   Widget activeWidget;
   Widget loadingWidget;
@@ -13,6 +14,7 @@ class TogglingWidgetPair extends StatefulWidget {
     Key key,
     this.activeWidget,
     this.controller,
+    //this.debug = false,
     this.initialWidget,
     this.loadingWidget,
   }) : super(key: key);
@@ -62,16 +64,18 @@ class TogglingWidgetPairState extends State<TogglingWidgetPair> {
   void initState() {
     super.initState();
     value = controller.value;
-    controller.setListener((nextValue) {
-      this.setState(() {
-        value = controller.value;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     TogglingWidgetPairValue currValue = (value ?? controller.value) ?? TogglingWidgetPairValue.initial;
+
+    controller.setListener((nextValue) {
+      this.setState(() {
+        value = controller.value;
+      });
+    });
+
     return currValue == TogglingWidgetPairValue.loading
         ? widget.loadingWidget
         : currValue == TogglingWidgetPairValue.active

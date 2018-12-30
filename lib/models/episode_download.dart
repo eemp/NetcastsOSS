@@ -37,6 +37,7 @@ class EpisodeDownload {
     var decodedDetails = jsonDecode(details);
     return Episode(
       description: decodedDetails['description'],
+      download: this,
       media: decodedDetails['media'],
       podcastTitle: decodedDetails['podcastTitle'],
       podcastUrl: decodedDetails['podcastUrl'],

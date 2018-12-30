@@ -6,10 +6,14 @@ import 'package:hear2learn/models/episode.dart';
 
 class EpisodeHome extends StatelessWidget {
   Episode episode;
+  Function onEpisodeDelete;
+  Function onEpisodeDownload;
 
   EpisodeHome({
     Key key,
     this.episode,
+    this.onEpisodeDelete,
+    this.onEpisodeDownload,
   }) : super(key: key);
 
   @override
@@ -28,7 +32,11 @@ class EpisodeHome extends StatelessWidget {
               subtitle: episode.getMetaLine(),
               title: episode.title,
             ),
-            EpisodeOptions(),
+            EpisodeOptions(
+              episode: episode,
+              onEpisodeDelete: onEpisodeDelete,
+              onEpisodeDownload: onEpisodeDownload,
+            ),
           ],
         ),
         Container(

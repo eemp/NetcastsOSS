@@ -1,16 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:dio/dio.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/podcast/info.dart';
 import 'package:hear2learn/podcast/episodes.dart';
 import 'package:hear2learn/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
-import 'package:path/path.dart';
 import 'package:swagger/api.dart' as gPodderApi;
 
 class PodcastData {
@@ -34,7 +32,6 @@ class PodcastPage extends StatefulWidget {
 
 class PodcastPageState extends State<PodcastPage> {
   final App app = App();
-  final Dio dio = new Dio();
   final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
 
   bool isSubscribed;
@@ -112,31 +109,6 @@ class PodcastPageState extends State<PodcastPage> {
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(widget.url));
   }
 
-  void downloadEpisode(episodeUrl, details) async {
-    EpisodeDownloadBean downloadModel= app.models['episode_download'];
-    String downloadId = EpisodeDownload.createNewId();
-    String downloadPath = join(await app.getApplicationDownloadsPath(), '${downloadId}.mp3');
-    EpisodeDownload download = new EpisodeDownload(
-      created: DateTime.now(),
-      details: details,
-      downloadPath: downloadPath,
-      episodeUrl: episodeUrl,
-      id: downloadId,
-    );
-    await dio.download(episodeUrl, download.downloadPath);
-    await downloadModel.insert(download);
-  }
-
-  void deleteEpisode(episodeUrl) async {
-    EpisodeDownloadBean downloadModel= app.models['episode_download'];
-    await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(episodeUrl)).then((episodeDownload) {
-      return Future.wait([
-        File(episodeDownload.downloadPath).delete(),
-        downloadModel.removeWhere(downloadModel.episodeUrl.eq(episodeUrl)),
-      ]);
-    });
-  }
-
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {
     return FutureBuilder(
       future: podcastWithSubscriptionFuture,
@@ -201,8 +173,8 @@ class PodcastPageState extends State<PodcastPage> {
       builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
         return snapshot.hasData
           ? PodcastEpisodesList(
-            onEpisodeDelete: this.deleteEpisode,
-            onEpisodeDownload: this.downloadEpisode,
+            onEpisodeDelete: episodeHelpers.deleteEpisode,
+            onEpisodeDownload: episodeHelpers.downloadEpisode,
             episodes: snapshot.data,
           )
           : Padding(

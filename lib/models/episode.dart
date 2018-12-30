@@ -36,7 +36,7 @@ class Episode {
   }
 
   String getMetaLine() {
-    num sizeInMegabytes = size / 10e6;
+    num sizeInMegabytes = size / 1e6;
     return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + this.getFriendlyDate() + '.';
   }
 

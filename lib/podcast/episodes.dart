@@ -42,15 +42,11 @@ class PodcastEpisodesList extends StatelessWidget {
               subtitle: episode.getMetaLine(),
               title: title,
               options: TogglingWidgetPair(
-                controller: togglingWidgetPairController.setValue(
-                  episode.download != null
-                    ? TogglingWidgetPairValue.active
-                    : TogglingWidgetPairValue.initial,
-                ),
+                controller: togglingWidgetPairController,
                 activeWidget: IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () async {
-                    togglingWidgetPairController.setLoadingValue();
+                    //togglingWidgetPairController.setLoadingValue();
                     await onEpisodeDelete(episode);
                     togglingWidgetPairController.setInitialValue();
                   },

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -18,7 +19,10 @@ class PodcastData {
   PodcastData({this.podcast, this.subscription});
 }
 
-class PodcastPage extends StatefulWidget {
+class PodcastPage extends StatelessWidget {
+  final App app = App();
+  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
+
   String url;
 
   PodcastPage({
@@ -27,25 +31,15 @@ class PodcastPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  PodcastPageState createState() => PodcastPageState();
-}
-
-class PodcastPageState extends State<PodcastPage> {
-  final App app = App();
-  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
-
-  bool isSubscribed;
-
-  @override
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
-    Future<gPodderApi.Podcast> podcastFuture = podcastApiService.getPodcast(widget.url);
-    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(widget.url));
+    Future<gPodderApi.Podcast> podcastFuture = podcastApiService.getPodcast(url);
+    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(url));
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
-    Future<List<Episode>> episodesFuture = getPodcastEpisodes(widget.url).then(
+    Future<List<Episode>> episodesFuture = getPodcastEpisodes(url).then(
       (episodes) => Future.wait(episodes.map((episode) => episode.getDownload())).then(
         (downloadsResponse) => Future.value(episodes)
       )
@@ -99,14 +93,14 @@ class PodcastPageState extends State<PodcastPage> {
     PodcastSubscription newSubscription = new PodcastSubscription(
       created: DateTime.now(),
       isSubscribed: true,
-      podcastUrl: widget.url,
+      podcastUrl: url,
     );
     await subscriptionModel.insert(newSubscription);
   }
 
   void onUnsubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(widget.url));
+    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(url));
   }
 
   Widget buildPodcastTitle(podcastWithSubscriptionFuture) {
@@ -143,26 +137,35 @@ class PodcastPageState extends State<PodcastPage> {
     return FutureBuilder(
       future: podcastWithSubscriptionFuture,
       builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
-        bool isCurrentlySubscribed = isSubscribed ?? snapshot.data?.subscription?.isSubscribed ?? false;
-        bool willBeSubscribed = !isCurrentlySubscribed;
+        TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
+          value: snapshot.data?.subscription?.isSubscribed == true
+            ? TogglingWidgetPairValue.active
+            : TogglingWidgetPairValue.initial,
+        );
 
-        return snapshot.hasData ? FloatingActionButton.extended(
-          icon: Icon(isCurrentlySubscribed ? Icons.remove : Icons.add),
-          label: Text(isCurrentlySubscribed ? 'Unsubscribe' : 'Subscribe'),
-          onPressed: () async {
-            if(willBeSubscribed) {
-              await this.onSubscribe();
-            }
-            else {
+        if(!snapshot.hasData) {
+          return Container(width: 0.0, height: 0.0);
+        }
+
+        return TogglingWidgetPair(
+          controller: togglingWidgetPairController,
+          activeWidget: FloatingActionButton.extended(
+            icon: Icon(Icons.remove),
+            label: Text('Unsubscribe'),
+            onPressed: () async {
               await this.onUnsubscribe();
-            }
-
-            setState(() {
-              isSubscribed = willBeSubscribed;
-            });
-          },
-          tooltip: 'Subscribe',
-        ) : Container(width: 0.0, height: 0.0);
+              togglingWidgetPairController.setInitialValue();
+            },
+          ),
+          initialWidget: FloatingActionButton.extended(
+            icon: Icon(Icons.add),
+            label: Text('Subscribe'),
+            onPressed: () async {
+              await this.onSubscribe();
+              togglingWidgetPairController.setActiveValue();
+            },
+          ),
+        );
       },
     );
   }

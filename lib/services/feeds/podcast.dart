@@ -11,7 +11,7 @@ Future<List<Episode>> getPodcastEpisodes(String url) async {
     podcastTitle: feed.title,
     podcastUrl: url,
     pubDate: item.pubDate,
-    size: item.enclosure.length,
+    size: item.enclosure?.length,
     title: item.title,
     url: item.enclosure.url,
   )).toList();

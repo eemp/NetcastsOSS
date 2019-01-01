@@ -1,4 +1,4 @@
-package com.example.hear2learn;
+package io.eemp.hear2learn;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -31,9 +31,6 @@ class Home extends StatelessWidget {
     List<Future<List<Podcast>>> homepageLists = [
       subscriptionsFuture,
       toplistFuture,
-      toplistFuture,
-      toplistFuture,
-      toplistFuture,
     ];
 
     return Scaffold(
@@ -42,9 +39,9 @@ class Home extends StatelessWidget {
       ),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int idx) {
-          return buildHorizontalList(homepageLists[idx], title: titles[idx], debugWithShuffle: idx > 0);
+          return buildHorizontalList(homepageLists[idx], title: titles[idx]);
         },
-        itemCount: 5,
+        itemCount: 2,
         separatorBuilder: (context, index) => Divider(),
         shrinkWrap: true,
       ),

@@ -11,11 +11,12 @@ class WithFadeInImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInImage.memoryNetwork(
+    return FadeInImage.assetNetwork(
       fadeInDuration: Duration(milliseconds: 300),
       fit: BoxFit.fill,
       image: location,
-      placeholder: kTransparentImage,
+      placeholder: 'images/default-fadein-image.jpg',
+      //placeholder: kTransparentImage,
     );
   }
 }

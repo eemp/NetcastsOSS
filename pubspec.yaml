@@ -68,7 +68,14 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - images/default-fadein-image.jpg
+   - images/01--default-fadein-image.jpg
+   - images/02--default-fadein-image.jpg
+   - images/03--default-fadein-image.jpg
+   - images/04--default-fadein-image.jpg
+   - images/05--default-fadein-image.jpg
+   - images/06--default-fadein-image.jpg
+   - images/07--default-fadein-image.jpg
+   - images/08--default-fadein-image.jpg
    - images/drawer-header--balloons.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -8,5 +8,5 @@ A podcast app built in flutter.
 
 ## Getting Started
 
-For help getting started with Flutter, view our online
+For help getting started with Flutter, view the official
 [documentation](https://flutter.io/).

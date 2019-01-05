@@ -89,19 +89,28 @@ class PodcastSearchState extends State<PodcastSearch> {
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             return snapshot.hasData
               ? VerticalListView(
-                children: snapshot.data.map((podcast) => VerticalListTile(
-                  image: WithFadeInImage(location: podcast.scaledLogoUrl),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PodcastPage(
-                        url: podcast.url,
-                      )),
-                    );
-                  },
-                  subtitle: podcast.description,
-                  title: podcast.title,
-                )).toList(),
+                children: snapshot.data.map((podcast) {
+                  Widget image = WithFadeInImage(
+                    heroTag: 'search/${podcast.logoUrl}',
+                    location: podcast.logoUrl,
+                  );
+
+                  return VerticalListTile(
+                    image: WithFadeInImage(location: podcast.scaledLogoUrl),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PodcastPage(
+                          image: image,
+                          logoUrl: podcast.logoUrl,
+                          url: podcast.url,
+                        )),
+                      );
+                    },
+                    subtitle: podcast.description,
+                    title: podcast.title,
+                  );
+                }).toList(),
               )
               : Padding(
                 padding: EdgeInsets.all(32.0),

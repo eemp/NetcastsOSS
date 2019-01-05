@@ -23,7 +23,8 @@ class VerticalListTile extends StatelessWidget {
         leading: image != null
           ? Container(
             child: image,
-            constraints: BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
+            height: 80.0,
+            width: 80.0,
           )
           : null,
         subtitle: Text(

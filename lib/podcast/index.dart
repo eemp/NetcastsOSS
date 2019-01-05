@@ -23,10 +23,14 @@ class PodcastPage extends StatelessWidget {
   final App app = App();
   final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
 
+  Widget image;
+  String logoUrl;
   String url;
 
   PodcastPage({
     Key key,
+    this.image,
+    this.logoUrl,
     this.url,
   }) : super(key: key);
 
@@ -119,16 +123,25 @@ class PodcastPage extends StatelessWidget {
     return FutureBuilder(
       future: podcastWithSubscriptionFuture,
       builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
-        return snapshot.hasData
-          ? PodcastHome(
-            description: snapshot.data.podcast.description.replaceAll("\n", " "),
-            isSubscribed: snapshot.data.subscription?.isSubscribed ?? false,
-            logo_url: snapshot.data.podcast.logoUrl,
-          )
-          : Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Center(child: CircularProgressIndicator()),
-          );
+        if(!snapshot.hasData) {
+          return logoUrl != null
+            ? PodcastHome(
+              image: image,
+              logo_url: logoUrl,
+            )
+            : Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          ;
+        }
+
+        return PodcastHome(
+          description: snapshot.data.podcast.description.replaceAll("\n", " "),
+          image: image,
+          isSubscribed: snapshot.data.subscription?.isSubscribed ?? false,
+          logo_url: snapshot.data.podcast.logoUrl,
+        );
       },
     );
   }

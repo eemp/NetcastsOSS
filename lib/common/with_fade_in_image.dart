@@ -1,7 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WithFadeInImage extends StatelessWidget {
   final List<String> availablePlaceholders = [
@@ -16,23 +16,45 @@ class WithFadeInImage extends StatelessWidget {
   ];
   final Random rng = new Random();
 
+  String heroTag;
   String location;
 
   WithFadeInImage({
     Key key,
     this.location,
+    this.heroTag,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     int randIdx = rng.nextInt(availablePlaceholders.length);
     String randomPlaceholder = availablePlaceholders[randIdx];
-    return FadeInImage.assetNetwork(
-      fadeInDuration: Duration(milliseconds: 300),
-      fit: BoxFit.fill,
-      image: location,
-      placeholder: randomPlaceholder,
-      //placeholder: kTransparentImage,
-    );
+
+    Widget image = location != null
+      ? DecoratedBox(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: CachedNetworkImageProvider(location),
+          ),
+        ),
+      )
+      : DecoratedBox(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(randomPlaceholder),
+            fit: BoxFit.fill,
+          ),
+        ),
+      )
+    ;
+
+    return heroTag != null
+      ? Hero(
+        tag: heroTag,
+        child: image,
+      )
+      : image
+    ;
   }
 }

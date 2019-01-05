@@ -29,7 +29,7 @@ class SubscriptionsPage extends StatelessWidget {
             ? Container(
                 child: VerticalListView(
                   children: snapshot.data.map((podcast) => VerticalListTile(
-                    image: WithFadeInImage(location: podcast.scaledLogoUrl),
+                    image: WithFadeInImage(location: podcast.logoUrl),
                     onTap: () {
                       Navigator.push(
                         context,

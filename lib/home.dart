@@ -3,6 +3,7 @@ import 'package:swagger/api.dart';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/common/horizontal_list_view.dart';
+import 'package:hear2learn/common/with_fade_in_image.dart';
 import 'package:hear2learn/downloads/index.dart';
 import 'package:hear2learn/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -128,20 +129,27 @@ class Home extends StatelessWidget {
       future: toplistFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
         List<HorizontalListTile> tiles = snapshot.hasData
-          ? snapshot.data.map((podcast) =>
-            HorizontalListTile(
-              image: podcast.scaledLogoUrl,
+          ? snapshot.data.map((podcast) {
+            Widget image = WithFadeInImage(
+              heroTag: '${title}/${podcast.logoUrl}',
+              location: podcast.logoUrl,
+            );
+
+            return HorizontalListTile(
+              image: image,
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PodcastPage(
+                    image: image,
+                    logoUrl: podcast.logoUrl,
                     url: podcast.url,
                   )),
                 );
               },
               title: podcast.title,
-            )
-          ).toList()
+            );
+          }).toList()
           : [];
 
         // TODO: REMOVE - temporary MOCK data

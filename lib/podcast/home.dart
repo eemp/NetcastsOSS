@@ -6,6 +6,7 @@ import 'package:hear2learn/podcast/options.dart';
 
 class PodcastHome extends StatelessWidget {
   String description;
+  Widget image;
   bool isSubscribed;
   String logo_url;
   Function onSubscribe;
@@ -14,6 +15,7 @@ class PodcastHome extends StatelessWidget {
   PodcastHome({
     Key key,
     this.description,
+    this.image,
     this.isSubscribed,
     this.logo_url,
     this.onSubscribe,
@@ -25,9 +27,9 @@ class PodcastHome extends StatelessWidget {
     return ListView(
       children: [
         Container(
-          child: WithFadeInImage(
-            location: logo_url,
-          ),
+          child: image,
+          height: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width,
         ),
         //Container(
           //child: PodcastOptions(
@@ -37,9 +39,9 @@ class PodcastHome extends StatelessWidget {
           //),
         //),
         Container(
-          child: Html(
+          child: description != null ? Html(
             data: description,
-          ),
+          ) : null,
           padding: EdgeInsets.only(top: 16.0),
         ),
       ],

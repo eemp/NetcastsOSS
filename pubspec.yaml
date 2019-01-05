@@ -20,6 +20,7 @@ dependencies:
     sdk: flutter
 
   audioplayers: ^0.7.8
+  cached_network_image: ^0.5.1
   dio: ^1.0.13
   dynamic_theme: ^1.0.0
   flutter_html: ^0.8.2

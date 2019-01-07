@@ -37,6 +37,7 @@ class ITunesSearchAPI {
   Future<List<ITunesSearchAPIResult>> search(String query, [ Map<String, String> options ]) async {
     final queryOptions = options ?? defaultQueryOptions;
     final uri = Uri.https(AUTHORITY, PATH, { 'term': query }..addAll(queryOptions));
+    print('Fetching iTunes results from ${uri.toString()}');
     final response = await http.get(uri);
     return compute(parseResults, response.body);
   }
@@ -46,21 +47,25 @@ class ITunesSearchAPIResult {
   final String artistName;
   final String artworkUrl;
   final String collectionName;
+  final String description;
   final String feedUrl;
   List<ITunesSearchAPIGenre> genres;
   final String kind;
   final DateTime releaseDate;
+  final int trackCount;
 
   ITunesSearchAPIResult.fromJson(Map<String, dynamic> json)
     : artistName = json['artistName'],
       artworkUrl = json['artworkUrl600'],
       collectionName = json['collectionName'],
+      description = json['description'],
       feedUrl = json['feedUrl'],
       genres = (json['genres'] as List).asMap().entries.map(
         (entry) => ITunesSearchAPIGenre(id: json['genreIds'][entry.key], name: entry.value)
       ).toList(),
       kind = json['kind'],
-      releaseDate = DateTime.parse(json['releaseDate']);
+      releaseDate = DateTime.parse(json['releaseDate']),
+      trackCount = json['trackCount'];
 }
 
 class ITunesSearchAPIGenre {

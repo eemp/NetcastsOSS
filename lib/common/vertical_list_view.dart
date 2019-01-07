@@ -27,9 +27,11 @@ class VerticalListTile extends StatelessWidget {
             width: 80.0,
           )
           : null,
-        subtitle: Text(
-          subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
-        ),
+        subtitle: subtitle != null
+          ? Text(
+            subtitle, maxLines: 2, overflow: TextOverflow.ellipsis,
+          )
+          : null,
         title: Text(title),
       ),
     );

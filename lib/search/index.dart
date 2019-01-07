@@ -75,6 +75,7 @@ class PodcastSearchState extends State<PodcastSearch> {
               onPressed: () {
                 setState(() {
                   userQuery = '';
+                  results = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
                 });
                 inputController.clear();
                 FocusScope.of(context).requestFocus(inputFocus);

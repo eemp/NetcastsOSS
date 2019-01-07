@@ -22,10 +22,10 @@ class AppWidget extends StatelessWidget {
     return DynamicTheme(
       defaultBrightness: Brightness.light,
       data: (brightness) => ThemeData(
-        accentColor: Colors.blue,
+        accentColor: Colors.pink[900],
         brightness: brightness,
         fontFamily: 'OpenSans',
-        primaryColor: Colors.pink[900],
+        primaryColor: Colors.blueGrey[500],
         primaryTextTheme: Typography(platform: TargetPlatform.android).white,
       ),
       themedWidgetBuilder: (context, theme) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:hear2learn/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
@@ -9,15 +10,18 @@ class Settings extends StatefulWidget {
 }
 
 class SettingsState extends State<Settings> {
+  static final THEME_PREF = 'theme';
+  final App app = App();
   final formKey = new GlobalKey<FormState>();
   final globalKey = new GlobalKey<ScaffoldState>();
 
   List<String> themes = [ 'Dark', 'Light' ];
-  String theme = 'Light';
+  String theme;
 
   @override
   void initState() {
     super.initState();
+    theme = app.prefs.getString(THEME_PREF);
   }
 
   @override
@@ -39,7 +43,7 @@ class SettingsState extends State<Settings> {
                     child: Text(theme),
                     value: theme,
                   )).toList(),
-                  onChanged: (String newTheme) async {
+                  onChanged: (String newTheme) {
                     Brightness brightness = newTheme == 'Dark'
                       ? Brightness.dark
                       : Brightness.light;
@@ -49,8 +53,7 @@ class SettingsState extends State<Settings> {
                       theme = newTheme;
                     });
 
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setString('theme', newTheme);
+                    app.prefs.setString(THEME_PREF, newTheme);
                   },
                   value: theme,
                 ),

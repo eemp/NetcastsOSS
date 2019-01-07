@@ -41,6 +41,7 @@ class PodcastHome extends StatelessWidget {
         Container(
           child: description != null ? Html(
             data: description,
+            defaultTextStyle: Theme.of(context).textTheme.body1,
           ) : null,
           padding: EdgeInsets.only(top: 16.0),
         ),

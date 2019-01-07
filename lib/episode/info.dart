@@ -32,17 +32,18 @@ class EpisodeInfo extends StatelessWidget {
         Container(
           child: Html(
             data: episode.description,
+            defaultTextStyle: Theme.of(context).textTheme.body1,
           ),
           padding: EdgeInsets.only(bottom: 16.0),
         ),
-        Container(
-          child: Text('Topics', style: Theme.of(context).textTheme.subhead),
-          margin: const EdgeInsets.only(bottom: 16.0),
-        ),
-        Container(
-          child: Tags(),
-          margin: const EdgeInsets.only(bottom: 16.0),
-        ),
+        //Container(
+          //child: Text('Topics', style: Theme.of(context).textTheme.subhead),
+          //margin: const EdgeInsets.only(bottom: 16.0),
+        //),
+        //Container(
+          //child: Tags(),
+          //margin: const EdgeInsets.only(bottom: 16.0),
+        //),
       ],
     );
   }

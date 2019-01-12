@@ -22,7 +22,7 @@ class AppWidget extends StatelessWidget {
     return DynamicTheme(
       defaultBrightness: Brightness.light,
       data: (brightness) => ThemeData(
-        accentColor: Colors.pink[900],
+        accentColor: Colors.pink[700],
         brightness: brightness,
         fontFamily: 'OpenSans',
         primaryColor: Colors.blueGrey[500],

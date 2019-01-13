@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
@@ -11,6 +13,7 @@ class App {
   String downloadsPath;
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = new Map<String, dynamic>();
+  AudioPlayer player = new AudioPlayer();
   SharedPreferences prefs;
 
   factory App() {

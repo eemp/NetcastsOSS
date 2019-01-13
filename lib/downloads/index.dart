@@ -19,19 +19,9 @@ class DownloadPageState extends State<DownloadPage> {
   Future<List<Episode>> downloadsFuture;
 
   @override
-  void initState() {
-    super.initState();
-
-    EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    downloadsFuture = downloadModel.getAll().then((downloads) {
-      return downloads.map((download) => download.getEpisodeFromDetails()).toList();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    Future<List<Episode>> downloadsFuture = downloadModel.getAll().then((downloads) {
+    downloadsFuture = downloadModel.getAll().then((downloads) {
       return downloads.map((download) => download.getEpisodeFromDetails()).toList();
     });
 

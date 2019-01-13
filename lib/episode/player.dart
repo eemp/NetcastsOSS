@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodePlayer extends StatefulWidget {
@@ -16,6 +17,7 @@ class EpisodePlayer extends StatefulWidget {
 }
 
 class EpisodePlayerState extends State<EpisodePlayer> {
+  App app = App();
   Episode get episode => widget.episode;
   AudioPlayer player;
   bool isPlaying = false;
@@ -25,16 +27,18 @@ class EpisodePlayerState extends State<EpisodePlayer> {
   @override
   void initState() {
     super.initState();
+
     duration = new Duration(seconds: 0);
-    player = new AudioPlayer();
-    player.completionHandler = () {
+    isPlaying = app.player.state == AudioPlayerState.PLAYING;
+
+    app.player.completionHandler = () {
       setState(() {
         isPlaying = false;
         position = new Duration(seconds: 0);
         value = 0.0;
       });
     };
-    player.durationHandler = (Duration duration) {
+    app.player.durationHandler = (Duration duration) {
       setState(() {
         this.duration = duration;
         if (position != null) {
@@ -42,7 +46,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
         }
       });
     };
-    player.positionHandler = (Duration position) {
+    app.player.positionHandler = (Duration position) {
       setState(() {
         this.position = position;
         value = position.inSeconds.toDouble();
@@ -53,7 +57,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
 
   @override
   deactivate() {
-    player.stop();
+    //app.player.stop();
     super.deactivate();
   }
 
@@ -87,7 +91,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   min: 0.0,
                   max: duration.inSeconds.toDouble(),
                   onChanged: widget.episode.download != null ? (value) {
-                    player.seek(new Duration(seconds: value.toInt()));
+                    app.player.seek(new Duration(seconds: value.toInt()));
                   } : null,
                   value: value > 0.0 ? value : 0.0,
                 ),
@@ -111,7 +115,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                 icon: Icon(Icons.replay_10),
                 iconSize: 40.0,
                 onPressed: widget.episode.download != null ? () {
-                  player.seek(new Duration(seconds: position.inSeconds - 10));
+                  app.player.seek(new Duration(seconds: position.inSeconds - 10));
                 } : null,
               ),
               RawMaterialButton(
@@ -123,10 +127,10 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                 highlightElevation: 5.0,
                 onPressed: widget.episode.download != null ? () {
                   if(isPlaying) {
-                    player.pause();
+                    app.player.pause();
                   }
                   else {
-                    player.play(
+                    app.player.play(
                       this.widget.episode.download.downloadPath,
                       isLocal: true,
                     );
@@ -147,7 +151,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                 icon: Icon(Icons.forward_30),
                 iconSize: 40.0,
                 onPressed: widget.episode.download != null ? () {
-                  player.seek(new Duration(seconds: position.inSeconds + 30));
+                  app.player.seek(new Duration(seconds: position.inSeconds + 30));
                 } : null,
               ),
               //IconButton(

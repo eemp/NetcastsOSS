@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/common/toggling_widget_pair.dart';
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -19,10 +20,7 @@ class PodcastData {
   PodcastData({this.podcast, this.subscription});
 }
 
-class PodcastPage extends StatelessWidget {
-  final App app = App();
-  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
-
+class PodcastPage extends StatefulWidget {
   Widget image;
   String logoUrl;
   String url;
@@ -35,6 +33,19 @@ class PodcastPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  PodcastPageState createState() => PodcastPageState();
+}
+
+class PodcastPageState extends State<PodcastPage> {
+  final App app = App();
+  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
+  Future<List<Episode>> episodesFuture;
+
+  Widget get image => widget.image;
+  String get logoUrl => widget.logoUrl;
+  String get url => widget.url;
+
+  @override
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
@@ -43,7 +54,7 @@ class PodcastPage extends StatelessWidget {
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
-    Future<List<Episode>> episodesFuture = getPodcastEpisodes(url).then(
+    episodesFuture = getPodcastEpisodes(url).then(
       (episodes) => Future.wait(episodes.map((episode) => episode.getDownload())).then(
         (downloadsResponse) => Future.value(episodes)
       )

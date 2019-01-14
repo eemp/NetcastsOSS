@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/episode/info.dart';
-import 'package:hear2learn/episode/home.dart';
+import 'package:hear2learn/widgets/episode/info.dart';
+import 'package:hear2learn/widgets/episode/home.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 

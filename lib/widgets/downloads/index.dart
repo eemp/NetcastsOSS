@@ -5,7 +5,7 @@ import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/episode_tile.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
-import 'package:hear2learn/episode/index.dart';
+import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';

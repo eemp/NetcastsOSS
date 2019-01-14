@@ -7,9 +7,9 @@ import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/podcast/info.dart';
-import 'package:hear2learn/podcast/episodes.dart';
-import 'package:hear2learn/podcast/home.dart';
+import 'package:hear2learn/widgets/podcast/info.dart';
+import 'package:hear2learn/widgets/podcast/episodes.dart';
+import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
 import 'package:swagger/api.dart' as gPodderApi;
 

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/home.dart';
+import 'package:hear2learn/widgets/home.dart';
 import 'package:hear2learn/redux/reducer.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';

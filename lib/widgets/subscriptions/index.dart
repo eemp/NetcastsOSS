@@ -5,7 +5,7 @@ import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/podcast/index.dart';
+import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:swagger/api.dart';
 
 class SubscriptionsPage extends StatefulWidget {

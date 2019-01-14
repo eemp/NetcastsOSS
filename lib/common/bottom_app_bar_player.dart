@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/episode/index.dart';
+import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';

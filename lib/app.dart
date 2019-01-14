@@ -1,20 +1,25 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
   static final App app = new App._internal();
   String downloadsPath;
+  Episode episode;
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = new Map<String, dynamic>();
   AudioPlayer player = new AudioPlayer();
   SharedPreferences prefs;
+  Store store;
 
   factory App() {
     return app;
@@ -22,7 +27,8 @@ class App {
 
   App._internal();
 
-  void init() async {
+  void init(Store appStore) async {
+    store = appStore;
     prefs = await SharedPreferences.getInstance();
 
     localDatabaseAdapter = new LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
@@ -32,6 +38,8 @@ class App {
     await Directory(downloadsPath).create(recursive: true);
 
     await initModels();
+
+    initPlayer();
   }
 
   void initModels() async {
@@ -43,6 +51,29 @@ class App {
       //await model.drop();
       await model.createTable(ifNotExists: true);
     });
+  }
+
+  void initPlayer() {
+    //AudioPlayer.logEnabled = true;
+    app.player.completionHandler = () {
+      store.dispatch(Action(type: ActionType.CLEAR_EPISODE));
+    };
+    app.player.durationHandler = (Duration duration) {
+      store.dispatch(Action(
+        type: ActionType.SET_EPISODE_LENGTH,
+        payload: {
+          'length': duration,
+        },
+      ));
+    };
+    app.player.positionHandler = (Duration position) {
+      store.dispatch(Action(
+        type: ActionType.SET_EPISODE_POSITION,
+        payload: {
+          'position': position,
+        },
+      ));
+    };
   }
 
   Future<String> getApplicationLocalDatabasePath() async {

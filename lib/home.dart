@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/horizontal_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
 import 'package:hear2learn/downloads/index.dart';
@@ -46,6 +47,7 @@ class Home extends StatelessWidget {
         separatorBuilder: (context, index) => Divider(),
         shrinkWrap: true,
       ),
+      bottomNavigationBar: BottomAppBarPlayer(),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the Drawer if there isn't enough vertical

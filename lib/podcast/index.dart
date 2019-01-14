@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -97,6 +97,7 @@ class PodcastPageState extends State<PodcastPage> {
             //),
           ],
         ),
+        bottomNavigationBar: BottomAppBarPlayer(),
         floatingActionButton: buildSubscriptionButton(podcastWithSubscriptionFuture),
       ),
       length: 3,

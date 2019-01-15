@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/horizontal_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
-import 'package:hear2learn/downloads/index.dart';
-import 'package:hear2learn/episode/index.dart';
+import 'package:hear2learn/widgets/downloads/index.dart';
+import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/podcast/index.dart';
+import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:hear2learn/search/index.dart';
-import 'package:hear2learn/settings/index.dart';
-import 'package:hear2learn/subscriptions/index.dart';
+import 'package:hear2learn/widgets/settings/index.dart';
+import 'package:hear2learn/widgets/subscriptions/index.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
@@ -46,6 +47,7 @@ class Home extends StatelessWidget {
         separatorBuilder: (context, index) => Divider(),
         shrinkWrap: true,
       ),
+      bottomNavigationBar: BottomAppBarPlayer(),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the Drawer if there isn't enough vertical

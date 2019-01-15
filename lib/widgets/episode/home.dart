@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hear2learn/common/episode_tile.dart';
-import 'package:hear2learn/episode/options.dart';
-import 'package:hear2learn/episode/player.dart';
+import 'package:hear2learn/widgets/episode/options.dart';
+import 'package:hear2learn/widgets/episode/player.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeHome extends StatelessWidget {

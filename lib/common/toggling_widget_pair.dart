@@ -58,21 +58,13 @@ class TogglingWidgetPairController {
 
 class TogglingWidgetPairState extends State<TogglingWidgetPair> {
   TogglingWidgetPairController get controller => widget.controller;
-  TogglingWidgetPairValue value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = controller.value;
-  }
 
   @override
   Widget build(BuildContext context) {
-    TogglingWidgetPairValue currValue = (value ?? controller.value) ?? TogglingWidgetPairValue.initial;
-
+    TogglingWidgetPairValue currValue = controller.value ?? TogglingWidgetPairValue.initial;
     controller.setListener((nextValue) {
       this.setState(() {
-        value = controller.value;
+        controller.setValue(nextValue);
       });
     });
 

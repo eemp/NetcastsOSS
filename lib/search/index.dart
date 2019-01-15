@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:swagger/api.dart';
 
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
-import 'package:hear2learn/podcast/index.dart';
+import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:hear2learn/services/api/itunes_search.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
@@ -126,6 +127,7 @@ class PodcastSearchState extends State<PodcastSearch> {
         ),
         padding: EdgeInsets.all(16.0),
       ),
+      bottomNavigationBar: BottomAppBarPlayer(),
     );
   }
 }

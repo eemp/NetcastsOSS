@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/podcast/index.dart';
+import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:swagger/api.dart';
 
-class SubscriptionsPage extends StatelessWidget {
+class SubscriptionsPage extends StatefulWidget {
+  @override
+  SubscriptionsPageState createState() => SubscriptionsPageState();
+}
+
+class SubscriptionsPageState extends State<SubscriptionsPage> {
   final App app = App();
   final PodcastApi podcastApiService = new PodcastApi();
+  Future<List<Podcast>> subscriptionsFuture;
 
   @override
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
+    subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
       return Future.wait(response.map((subscription) => podcastApiService.getPodcast(subscription.podcastUrl)));
     });
 
@@ -58,6 +65,7 @@ class SubscriptionsPage extends StatelessWidget {
             );
         },
       ),
+      bottomNavigationBar: BottomAppBarPlayer(),
     );
   }
 }

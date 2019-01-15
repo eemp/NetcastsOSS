@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/episode_tile.dart';
 import 'package:hear2learn/common/vertical_list_view.dart';
 import 'package:hear2learn/common/with_fade_in_image.dart';
-import 'package:hear2learn/episode/index.dart';
+import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
@@ -19,19 +20,9 @@ class DownloadPageState extends State<DownloadPage> {
   Future<List<Episode>> downloadsFuture;
 
   @override
-  void initState() {
-    super.initState();
-
-    EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    downloadsFuture = downloadModel.getAll().then((downloads) {
-      return downloads.map((download) => download.getEpisodeFromDetails()).toList();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    Future<List<Episode>> downloadsFuture = downloadModel.getAll().then((downloads) {
+    downloadsFuture = downloadModel.getAll().then((downloads) {
       return downloads.map((download) => download.getEpisodeFromDetails()).toList();
     });
 
@@ -77,6 +68,7 @@ class DownloadPageState extends State<DownloadPage> {
             );
         },
       ),
+      bottomNavigationBar: BottomAppBarPlayer(),
     );
   }
 }

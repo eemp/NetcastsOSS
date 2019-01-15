@@ -35,7 +35,7 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.8"
+    version: "0.8.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -469,7 +469,7 @@ packages:
     source: hosted
     version: "2.0.1"
   redux:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: redux
       url: "https://pub.dartlang.org"

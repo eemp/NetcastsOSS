@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swagger/api.dart';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/common/bottom_app_bar_player.dart';
@@ -8,9 +7,12 @@ import 'package:hear2learn/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:hear2learn/search/index.dart';
+import 'package:hear2learn/services/api/itunes_search.dart';
+import 'package:hear2learn/services/feeds/podcast.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
 
@@ -18,21 +20,20 @@ const MAX_SHOWCASE_LIST_SIZE = 20;
 
 class Home extends StatelessWidget {
   final App app = App();
-  final PodcastApi podcastApiService = new PodcastApi();
 
   @override
   Widget build(BuildContext context) {
     const titles = [ 'Your Podcasts', 'Top Podcasts', 'New', 'Trending', 'Recommended' ];
-    Future<List<Podcast>> toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
+    //Future<List<Podcast>> toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
 
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
-      return Future.wait(response.map((subscription) => podcastApiService.getPodcast(subscription.podcastUrl)));
+      return Future.wait(response.map((subscription) => getPodcastFromFeed(subscription.podcastUrl)));
     });
 
     List<Future<List<Podcast>>> homepageLists = [
       subscriptionsFuture,
-      toplistFuture,
+      //toplistFuture,
     ];
 
     return Scaffold(
@@ -43,7 +44,7 @@ class Home extends StatelessWidget {
         itemBuilder: (BuildContext context, int idx) {
           return buildHorizontalList(homepageLists[idx], title: titles[idx]);
         },
-        itemCount: 2,
+        itemCount: homepageLists.length,
         separatorBuilder: (context, index) => Divider(),
         shrinkWrap: true,
       ),
@@ -145,6 +146,7 @@ class Home extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => PodcastPage(
                     image: image,
                     logoUrl: podcast.logoUrl,
+                    title: podcast.title,
                     url: podcast.url,
                   )),
                 );

@@ -6,15 +6,15 @@ import 'package:hear2learn/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/widgets/podcast/info.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
-import 'package:swagger/api.dart' as gPodderApi;
 
 class PodcastData {
-  final gPodderApi.Podcast podcast;
+  final Podcast podcast;
   final PodcastSubscription subscription;
 
   PodcastData({this.podcast, this.subscription});
@@ -23,12 +23,14 @@ class PodcastData {
 class PodcastPage extends StatefulWidget {
   Widget image;
   String logoUrl;
+  String title;
   String url;
 
   PodcastPage({
     Key key,
     this.image,
     this.logoUrl,
+    this.title,
     this.url,
   }) : super(key: key);
 
@@ -38,32 +40,29 @@ class PodcastPage extends StatefulWidget {
 
 class PodcastPageState extends State<PodcastPage> {
   final App app = App();
-  final gPodderApi.PodcastApi podcastApiService = new gPodderApi.PodcastApi();
-  Future<List<Episode>> episodesFuture;
 
   Widget get image => widget.image;
   String get logoUrl => widget.logoUrl;
+  String get title => widget.title;
   String get url => widget.url;
 
   @override
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
-    Future<gPodderApi.Podcast> podcastFuture = podcastApiService.getPodcast(url);
+    Future<Podcast> podcastFuture = getPodcastFromFeed(url).then(
+      (podcast) => Future.wait(podcast.episodes.map((episode) => episode.getDownload())).then(
+        (res) => Future.value(podcast)
+      )
+    );
     Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(url));
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
-    episodesFuture = getPodcastEpisodes(url).then(
-      (episodes) => Future.wait(episodes.map((episode) => episode.getDownload())).then(
-        (downloadsResponse) => Future.value(episodes)
-      )
-    );
-
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
-          title: buildPodcastTitle(podcastWithSubscriptionFuture),
+          title: Text(title),
           bottom: TabBar(
             tabs: [
               Tab(
@@ -88,7 +87,7 @@ class PodcastPageState extends State<PodcastPage> {
               margin: EdgeInsets.all(16.0),
             ),
             Container(
-              child: buildPodcastEpisodesList(episodesFuture),
+              child: buildPodcastEpisodesList(podcastFuture),
               margin: EdgeInsets.all(16.0),
             ),
             //Container(
@@ -117,17 +116,6 @@ class PodcastPageState extends State<PodcastPage> {
   void onUnsubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(url));
-  }
-
-  Widget buildPodcastTitle(podcastWithSubscriptionFuture) {
-    return FutureBuilder(
-      future: podcastWithSubscriptionFuture,
-      builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
-        return snapshot.hasData
-          ? Text(snapshot.data.podcast.title)
-          : Text('...');
-      },
-    );
   }
 
   Widget buildPodcastHome(podcastWithSubscriptionFuture) {
@@ -195,15 +183,15 @@ class PodcastPageState extends State<PodcastPage> {
     );
   }
 
-  Widget buildPodcastEpisodesList(episodesFuture) {
+  Widget buildPodcastEpisodesList(podcastFuture) {
     return FutureBuilder(
-      future: episodesFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
+      future: podcastFuture,
+      builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
         return snapshot.hasData
           ? PodcastEpisodesList(
             onEpisodeDelete: episodeHelpers.deleteEpisode,
             onEpisodeDownload: episodeHelpers.downloadEpisode,
-            episodes: snapshot.data,
+            episodes: snapshot.data.episodes,
           )
           : Padding(
             padding: EdgeInsets.all(32.0),

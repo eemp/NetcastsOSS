@@ -23,6 +23,7 @@ dependencies:
   cached_network_image: ^0.5.1
   dio: ^1.0.13
   dynamic_theme: ^1.0.0
+  flutter_cache_manager: ^0.2.0
   flutter_html: ^0.8.2
   flutter_redux: ^0.5.2
   http: '>=0.11.1 <0.12.0'

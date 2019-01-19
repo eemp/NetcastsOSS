@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:hear2learn/common/people.dart';
-import 'package:hear2learn/common/tags.dart';
+import 'package:hear2learn/widgets/common/people.dart';
+import 'package:hear2learn/widgets/common/tags.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeInfo extends StatelessWidget {

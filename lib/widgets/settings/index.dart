@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {

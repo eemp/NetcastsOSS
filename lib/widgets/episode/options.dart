@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/common/toggling_widget_pair.dart';
+import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeOptions extends StatelessWidget {

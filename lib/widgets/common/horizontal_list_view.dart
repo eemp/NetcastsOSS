@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hear2learn/common/with_fade_in_image.dart';
+import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 
 class HorizontalListTile extends StatelessWidget {
   Widget image;

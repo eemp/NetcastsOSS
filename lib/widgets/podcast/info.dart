@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/common/people.dart';
-import 'package:hear2learn/common/tags.dart';
+import 'package:hear2learn/widgets/common/people.dart';
+import 'package:hear2learn/widgets/common/tags.dart';
 
 class PodcastInfo extends StatelessWidget {
   @override

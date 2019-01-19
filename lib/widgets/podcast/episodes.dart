@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/common/episode_tile.dart';
-import 'package:hear2learn/common/toggling_widget_pair.dart';
+import 'package:hear2learn/widgets/common/episode_tile.dart';
+import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 

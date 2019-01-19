@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hear2learn/common/episode_tile.dart';
+import 'package:hear2learn/widgets/common/episode_tile.dart';
 import 'package:hear2learn/widgets/episode/options.dart';
 import 'package:hear2learn/widgets/episode/player.dart';
 import 'package:hear2learn/models/episode.dart';

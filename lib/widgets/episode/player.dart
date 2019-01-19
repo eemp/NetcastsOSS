@@ -61,7 +61,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   ),
                   Expanded(
                     child: Slider(
-                      activeColor: Theme.of(context).primaryColor,
+                      activeColor: Theme.of(context).accentColor,
                       min: 0.0,
                       max: duration?.inSeconds?.toDouble() ?? 0.0,
                       onChanged: episode.download != null ? (value) {
@@ -92,7 +92,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   ),
                   RawMaterialButton(
                     shape: new CircleBorder(),
-                    fillColor: episode.download != null ? Theme.of(context).primaryColor : Colors.grey,
+                    fillColor: episode.download != null ? Theme.of(context).accentColor : Colors.grey,
                     splashColor: Theme.of(context).splashColor,
                     highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
                     elevation: 10.0,

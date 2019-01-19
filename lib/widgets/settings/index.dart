@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/themes.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +17,6 @@ class SettingsState extends State<Settings> {
   final formKey = new GlobalKey<FormState>();
   final globalKey = new GlobalKey<ScaffoldState>();
 
-  List<String> themes = [ 'Dark', 'Light' ];
   String theme;
 
   @override
@@ -40,23 +40,19 @@ class SettingsState extends State<Settings> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   isDense: true,
-                  items: themes.map((String theme) => DropdownMenuItem<String>(
+                  items: ThemeProvider.THEME_LIST.map((String theme) => DropdownMenuItem<String>(
                     child: Text(theme),
                     value: theme,
                   )).toList(),
                   onChanged: (String newTheme) {
-                    Brightness brightness = newTheme == 'Dark'
-                      ? Brightness.dark
-                      : Brightness.light;
-
-                    DynamicTheme.of(context).setBrightness(brightness);
+                    DynamicTheme.of(context).setTheme(newTheme);
                     setState(() {
                       theme = newTheme;
                     });
 
                     app.prefs.setString(THEME_PREF, newTheme);
                   },
-                  value: theme,
+                  value: theme ?? ThemeProvider.DEFAULT_THEME,
                 ),
               ),
               decoration: InputDecoration(

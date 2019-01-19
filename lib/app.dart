@@ -30,6 +30,7 @@ class App {
   void init(Store appStore) async {
     store = appStore;
     prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
 
     localDatabaseAdapter = new LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();

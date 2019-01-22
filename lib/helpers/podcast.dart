@@ -1,0 +1,80 @@
+import 'dart:io';
+
+import 'package:hear2learn/app.dart';
+import 'package:hear2learn/services/api/elastic.dart';
+import 'package:hear2learn/models/podcast.dart';
+import 'package:hear2learn/models/podcast_subscription.dart';
+
+final String PODCAST_TYPE = 'podcast';
+
+Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
+  App app = App();
+  final client = app.elasticClient;
+
+  var query = {
+    'query': {
+      'bool': {
+        'filter': [
+          {
+            'term': {
+              'genres.id': genreId,
+            }
+          }
+        ]
+      }
+    },
+    //'sort': [
+      //'popularity',
+    //],
+  };
+  return client.search(
+    type: PODCAST_TYPE,
+    body: query,
+  ).then((response) => toPodcasts(response));
+}
+
+Future<List<Podcast>> searchPodcastsByTextQuery(textQuery) async {
+  App app = App();
+  final client = app.elasticClient;
+
+  var query = {
+    'query': {
+      'bool': {
+        'should': [
+          {
+            'multi_match': {
+              'fields': [
+                'name^16',
+                'artist.name^8',
+                'genre^8',
+                'description',
+              ],
+              'query': textQuery
+            }
+          }
+        ]
+      }
+    }
+  };
+  return client.search(
+    type: PODCAST_TYPE,
+    body: query,
+  ).then((response) => toPodcasts(response));
+}
+
+void subscribeToPodcast(Podcast podcast) async {
+  final App app = App();
+  PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+  PodcastSubscription newSubscription = new PodcastSubscription(
+    created: DateTime.now(),
+    details: podcast.toJson(),
+    isSubscribed: true,
+    podcastId: podcast.id,
+    podcastUrl: podcast.feed,
+  );
+  await subscriptionModel.insert(newSubscription);
+}
+
+List<Podcast> toPodcasts(ElasticsearchResponse response) {
+  return response.hits.map((hit) => Podcast.fromJson(hit.source)).toList();
+}

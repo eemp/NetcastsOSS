@@ -7,9 +7,10 @@ import 'package:hear2learn/models/podcast.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed/webfeed.dart';
 
-Future<Podcast> getPodcastFromFeed(String url) async {
+Future<Podcast> getPodcastFromFeed({ Podcast podcast, String url }) async {
   //final response = await http.get(url);
   //RssFeed feed = await compute(parseFeed, response.body);
+  url = podcast?.feed ?? url;
 
   CacheManager.showDebugLogs = true;
   final cacheManager = await CacheManager.getInstance();
@@ -25,15 +26,19 @@ Future<Podcast> getPodcastFromFeed(String url) async {
     pubDate: item.pubDate,
     size: item.enclosure?.length,
     title: item.title,
-    url: item.enclosure.url,
+    url: item.enclosure?.url,
   )).toList();
 
-  return Podcast(
+  if(podcast != null) {
+    podcast.episodes = episodes;
+  }
+
+  return podcast ?? Podcast(
+    artworkOrig: feed.image?.url,
     description: feed.description,
     episodes: episodes,
-    logoUrl: feed.image?.url,
-    title: feed.title,
-    url: url,
+    feed: url,
+    name: feed.title,
   );
 }
 

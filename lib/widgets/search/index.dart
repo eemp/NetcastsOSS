@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/helpers/podcast.dart';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
-import 'package:hear2learn/services/api/itunes_search.dart';
 
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
@@ -15,13 +16,12 @@ class PodcastSearch extends StatefulWidget {
 
 class PodcastSearchState extends State<PodcastSearch> {
   final globalKey = new GlobalKey<ScaffoldState>();
-  final ITunesSearchAPI itunes = new ITunesSearchAPI();
 
   final TextEditingController inputController = new TextEditingController();
   FocusNode inputFocus;
   String userQuery = '';
 
-  Future <List<ITunesSearchAPIResult>> results;
+  Future<List<Podcast>> results;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class PodcastSearchState extends State<PodcastSearch> {
     inputFocus = FocusNode();
     userQuery = '';
 
-    results = Future.value(new List<ITunesSearchAPIResult>());
+    results = Future.value(new List<Podcast>());
   }
 
   @override
@@ -65,7 +65,7 @@ class PodcastSearchState extends State<PodcastSearch> {
           onSubmitted: (text) {
             setState(() {
               userQuery = text;
-              results = itunes.search(userQuery);
+              results = searchPodcastsByTextQuery(userQuery);
             });
           },
         ),
@@ -76,7 +76,7 @@ class PodcastSearchState extends State<PodcastSearch> {
               onPressed: () {
                 setState(() {
                   userQuery = '';
-                  results = Future.value(new List<ITunesSearchAPIResult>());
+                  results = Future.value(new List<Podcast>());
                 });
                 inputController.clear();
                 FocusScope.of(context).requestFocus(inputFocus);
@@ -88,13 +88,13 @@ class PodcastSearchState extends State<PodcastSearch> {
       body: Container(
         child: FutureBuilder(
           future: results,
-          builder: (BuildContext context, AsyncSnapshot<List<ITunesSearchAPIResult>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             return snapshot.hasData
               ? VerticalListView(
                 children: snapshot.data.map((podcast) {
                   Widget image = WithFadeInImage(
-                    heroTag: 'search/${podcast.artworkUrl}',
-                    location: podcast.artworkUrl,
+                    heroTag: 'search/${podcast.artwork600}',
+                    location: podcast.artwork600,
                   );
 
                   return VerticalListTile(
@@ -104,17 +104,15 @@ class PodcastSearchState extends State<PodcastSearch> {
                         context,
                         MaterialPageRoute(builder: (context) => PodcastPage(
                           image: image,
-                          logoUrl: podcast.artworkUrl,
-                          title: podcast.collectionName,
-                          url: podcast.feedUrl,
+                          podcast: podcast,
                         )),
                       );
                     },
                     //subtitle: podcast.description,
-                    subtitle: podcast.artistName != podcast.collectionName
-                      ? 'by ${podcast.artistName}, ${podcast.trackCount.toString()} total episodes'
-                      : '${podcast.trackCount.toString()} total episodes',
-                    title: podcast.collectionName,
+                    subtitle: podcast.name != podcast.artist.name
+                      ? 'by ${podcast.artist.name}, ${podcast.episodesCount.toString()} total episodes'
+                      : '${podcast.episodesCount.toString()} total episodes',
+                    title: podcast.name,
                   );
                 }).toList(),
               )

@@ -5,6 +5,7 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
+import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -22,16 +23,12 @@ class PodcastData {
 
 class PodcastPage extends StatefulWidget {
   Widget image;
-  String logoUrl;
-  String title;
-  String url;
+  Podcast podcast;
 
   PodcastPage({
     Key key,
     this.image,
-    this.logoUrl,
-    this.title,
-    this.url,
+    this.podcast,
   }) : super(key: key);
 
   @override
@@ -42,27 +39,26 @@ class PodcastPageState extends State<PodcastPage> {
   final App app = App();
 
   Widget get image => widget.image;
-  String get logoUrl => widget.logoUrl;
-  String get title => widget.title;
-  String get url => widget.url;
+  Podcast get podcast => widget.podcast;
 
   @override
   Widget build(BuildContext context) {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
-    Future<Podcast> podcastFuture = getPodcastFromFeed(url).then(
+    Future<Podcast> podcastFuture = getPodcastFromFeed(podcast: podcast).then(
       (podcast) => Future.wait(podcast.episodes.map((episode) => episode.getDownload())).then(
         (res) => Future.value(podcast)
       )
     );
-    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(url));
+    Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(podcast.feed))
+      .then((response) => response ?? PodcastSubscription(isSubscribed: false));
     Future<PodcastData> podcastWithSubscriptionFuture = Future.wait([podcastFuture, podcastSubscriptionFuture])
       .then((response) => new PodcastData(podcast: response[0], subscription: response[1]));
 
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          title: Text(podcast.name),
           bottom: TabBar(
             tabs: [
               Tab(
@@ -83,7 +79,7 @@ class PodcastPageState extends State<PodcastPage> {
         body: TabBarView(
           children: [
             Container(
-              child: buildPodcastHome(podcastWithSubscriptionFuture),
+              child: buildPodcastHome(podcastSubscriptionFuture),
               margin: EdgeInsets.all(16.0),
             ),
             Container(
@@ -97,68 +93,49 @@ class PodcastPageState extends State<PodcastPage> {
           ],
         ),
         bottomNavigationBar: BottomAppBarPlayer(),
-        floatingActionButton: buildSubscriptionButton(podcastWithSubscriptionFuture),
+        floatingActionButton: buildSubscriptionButton(podcastSubscriptionFuture),
       ),
       length: 3,
     );
   }
 
-  void onSubscribe() async {
-    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    PodcastSubscription newSubscription = new PodcastSubscription(
-      created: DateTime.now(),
-      isSubscribed: true,
-      podcastUrl: url,
-    );
-    await subscriptionModel.insert(newSubscription);
-  }
-
   void onUnsubscribe() async {
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(url));
+    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
   }
 
-  Widget buildPodcastHome(podcastWithSubscriptionFuture) {
-    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+  Widget buildPodcastHome(podcastSubscriptionFuture) {
     return FutureBuilder(
-      future: podcastWithSubscriptionFuture,
-      builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
+      future: podcastSubscriptionFuture,
+      builder: (BuildContext context, AsyncSnapshot<PodcastSubscription> snapshot) {
         if(!snapshot.hasData) {
-          return logoUrl != null
-            ? PodcastHome(
-              image: image,
-              logo_url: logoUrl,
-            )
-            : Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
-            )
-          ;
+          return PodcastHome(
+            description: podcast.description,
+            image: image,
+          );
         }
 
         return PodcastHome(
-          description: snapshot.data.podcast.description.replaceAll("\n", " "),
+          description: podcast.description,
           image: image,
-          isSubscribed: snapshot.data.subscription?.isSubscribed ?? false,
-          logo_url: snapshot.data.podcast.logoUrl,
         );
       },
     );
   }
 
-  Widget buildSubscriptionButton(podcastWithSubscriptionFuture) {
+  Widget buildSubscriptionButton(podcastSubscriptionFuture) {
     return FutureBuilder(
-      future: podcastWithSubscriptionFuture,
-      builder: (BuildContext context, AsyncSnapshot<PodcastData> snapshot) {
-        TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
-          value: snapshot.data?.subscription?.isSubscribed == true
-            ? TogglingWidgetPairValue.active
-            : TogglingWidgetPairValue.initial,
-        );
-
+      future: podcastSubscriptionFuture,
+      builder: (BuildContext context, AsyncSnapshot<PodcastSubscription> snapshot) {
         if(!snapshot.hasData) {
           return Container(width: 0.0, height: 0.0);
         }
+
+        TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
+          value: snapshot.data?.isSubscribed == true
+            ? TogglingWidgetPairValue.active
+            : TogglingWidgetPairValue.initial,
+        );
 
         return TogglingWidgetPair(
           controller: togglingWidgetPairController,
@@ -174,7 +151,7 @@ class PodcastPageState extends State<PodcastPage> {
             icon: Icon(Icons.add),
             label: Text('Subscribe'),
             onPressed: () async {
-              await this.onSubscribe();
+              await subscribeToPodcast(podcast);
               togglingWidgetPairController.setActiveValue();
             },
           ),

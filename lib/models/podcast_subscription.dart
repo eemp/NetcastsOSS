@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:jaguar_orm/jaguar_orm.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,19 +14,30 @@ class PodcastSubscription {
   bool isSubscribed;
   DateTime created;
   @Column(length: 0, isNullable: false)
+  String details;
+  @Column(length: 0, isNullable: false)
+  String podcastId;
+  @Column(length: 0, isNullable: false)
   String podcastUrl;
 
   PodcastSubscription({
     this.created,
+    this.details,
     this.id,
     this.isSubscribed,
+    this.podcastId,
     this.podcastUrl,
   }) {
     this.id ??= uuid.v4();
   }
 
+  Podcast getPodcastFromDetails() {
+    var decodedDetails = jsonDecode(details);
+    return Podcast.fromJson(decodedDetails);
+  }
+
   String toString() {
-    return 'Id = ${id}: Created on ${created.toString()}, isSubscribed = ${isSubscribed.toString()}, podcastUrl: ${podcastUrl}';
+    return 'Id = ${id}: Created on ${created.toString()}, isSubscribed = ${isSubscribed.toString()}, podcastId: ${podcastId}, podcastUrl: ${podcastUrl}, details: ${details}';
   }
 }
 

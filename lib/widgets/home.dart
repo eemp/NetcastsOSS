@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/podcast.dart';
+import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast.dart';
+import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:hear2learn/services/api/elastic.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/horizontal_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
-import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/podcast.dart';
-import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
-import 'package:hear2learn/services/api/itunes_search.dart';
-import 'package:hear2learn/services/feeds/podcast.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
 
@@ -23,16 +23,24 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const titles = [ 'Your Podcasts', 'Top Podcasts', 'New', 'Trending', 'Recommended' ];
-    //Future<List<Podcast>> toplistFuture = podcastApiService.getTopPodcasts(MAX_SHOWCASE_LIST_SIZE, scaleLogo: 200);
-
     PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
-      return Future.wait(response.map((subscription) => getPodcastFromFeed(subscription.podcastUrl)));
+      return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
     });
 
-    List<Future<List<Podcast>>> homepageLists = [
-      subscriptionsFuture,
+    Future<List<Podcast>> topScienceCastsFuture = searchPodcastsByGenre(1315);
+    Future<List<Podcast>> topTechCastsFuture = searchPodcastsByGenre(1318);
+    Future<List<Podcast>> topComedyCastsFuture = searchPodcastsByGenre(1303);
+    Future<List<Podcast>> topBusinessCastsFuture = searchPodcastsByGenre(1321);
+
+
+
+    var homepageLists = [
+      { 'list': subscriptionsFuture, 'title': 'Your Podcasts' },
+      { 'list': topScienceCastsFuture, 'title': 'Science' },
+      { 'list': topTechCastsFuture, 'title': 'Technology' },
+      { 'list': topComedyCastsFuture, 'title': 'Comedy' },
+      { 'list': topBusinessCastsFuture, 'title': 'Business' },
       //toplistFuture,
     ];
 
@@ -42,7 +50,7 @@ class Home extends StatelessWidget {
       ),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int idx) {
-          return buildHorizontalList(homepageLists[idx], title: titles[idx]);
+          return buildHorizontalList(homepageLists[idx]['list'], title: homepageLists[idx]['title']);
         },
         itemCount: homepageLists.length,
         separatorBuilder: (context, index) => Divider(),
@@ -127,15 +135,15 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title, bool debugWithShuffle = false}) {
+  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title}) {
     return FutureBuilder(
       future: toplistFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
         List<HorizontalListTile> tiles = snapshot.hasData
           ? snapshot.data.map((podcast) {
             Widget image = WithFadeInImage(
-              heroTag: '${title}/${podcast.logoUrl}',
-              location: podcast.logoUrl,
+              heroTag: '${title}/${podcast.artwork600}',
+              location: podcast.artwork600,
             );
 
             return HorizontalListTile(
@@ -145,21 +153,14 @@ class Home extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => PodcastPage(
                     image: image,
-                    logoUrl: podcast.logoUrl,
-                    title: podcast.title,
-                    url: podcast.url,
+                    podcast: podcast,
                   )),
                 );
               },
-              title: podcast.title,
+              title: podcast.name,
             );
           }).toList()
           : [];
-
-        // TODO: REMOVE - temporary MOCK data
-        if(debugWithShuffle) {
-          tiles.shuffle();
-        }
 
         return tiles.length > 0
           ? HorizontalListViewCard(

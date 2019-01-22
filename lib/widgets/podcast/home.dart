@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
-import 'package:hear2learn/widgets/podcast/options.dart';
 
 class PodcastHome extends StatelessWidget {
   String description;
   Widget image;
-  bool isSubscribed;
-  String logo_url;
   Function onSubscribe;
   Function onUnsubscribe;
 
@@ -16,8 +13,6 @@ class PodcastHome extends StatelessWidget {
     Key key,
     this.description,
     this.image,
-    this.isSubscribed,
-    this.logo_url,
     this.onSubscribe,
     this.onUnsubscribe,
   }) : super(key: key);
@@ -31,13 +26,6 @@ class PodcastHome extends StatelessWidget {
           height: MediaQuery.of(context).size.width,
           width: MediaQuery.of(context).size.width,
         ),
-        //Container(
-          //child: PodcastOptions(
-            //isSubscribed: isSubscribed,
-            //onSubscribe: onSubscribe,
-            //onUnsubscribe: onUnsubscribe
-          //),
-        //),
         Container(
           child: description != null ? Html(
             data: description,

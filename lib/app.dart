@@ -6,6 +6,7 @@ import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
+import 'package:hear2learn/services/api/elastic.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class App {
   static final App app = new App._internal();
   String downloadsPath;
+  ElasticsearchClient elasticClient;
   Episode episode;
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = new Map<String, dynamic>();
@@ -34,6 +36,11 @@ class App {
 
     localDatabaseAdapter = new LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();
+
+    elasticClient = new ElasticsearchClient(
+      host: 'localhost:9200',
+      index: 'hear2learn',
+    );
 
     downloadsPath = await getApplicationDownloadsPath();
     await Directory(downloadsPath).create(recursive: true);

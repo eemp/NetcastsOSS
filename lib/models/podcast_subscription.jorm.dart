@@ -10,12 +10,16 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
   final id = StrField('id');
   final isSubscribed = BoolField('is_subscribed');
   final created = DateTimeField('created');
+  final details = StrField('details');
+  final podcastId = StrField('podcast_id');
   final podcastUrl = StrField('podcast_url');
   Map<String, Field> _fields;
   Map<String, Field> get fields => _fields ??= {
         id.name: id,
         isSubscribed.name: isSubscribed,
         created.name: created,
+        details.name: details,
+        podcastId.name: podcastId,
         podcastUrl.name: podcastUrl,
       };
   PodcastSubscription fromMap(Map map) {
@@ -23,6 +27,8 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     model.id = adapter.parseValue(map['id']);
     model.isSubscribed = adapter.parseValue(map['is_subscribed']);
     model.created = adapter.parseValue(map['created']);
+    model.details = adapter.parseValue(map['details']);
+    model.podcastId = adapter.parseValue(map['podcast_id']);
     model.podcastUrl = adapter.parseValue(map['podcast_url']);
 
     return model;
@@ -36,12 +42,17 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
       ret.add(id.set(model.id));
       ret.add(isSubscribed.set(model.isSubscribed));
       ret.add(created.set(model.created));
+      ret.add(details.set(model.details));
+      ret.add(podcastId.set(model.podcastId));
       ret.add(podcastUrl.set(model.podcastUrl));
     } else {
       if (only.contains(id.name)) ret.add(id.set(model.id));
       if (only.contains(isSubscribed.name))
         ret.add(isSubscribed.set(model.isSubscribed));
       if (only.contains(created.name)) ret.add(created.set(model.created));
+      if (only.contains(details.name)) ret.add(details.set(model.details));
+      if (only.contains(podcastId.name))
+        ret.add(podcastId.set(model.podcastId));
       if (only.contains(podcastUrl.name))
         ret.add(podcastUrl.set(model.podcastUrl));
     }
@@ -54,6 +65,8 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     st.addStr(id.name, primary: true, length: 36, isNullable: false);
     st.addBool(isSubscribed.name, isNullable: false);
     st.addDateTime(created.name, isNullable: false);
+    st.addStr(details.name, length: 0, isNullable: false);
+    st.addStr(podcastId.name, length: 0, isNullable: false);
     st.addStr(podcastUrl.name, length: 0, isNullable: false);
     return adapter.createTable(st);
   }

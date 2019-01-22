@@ -32,7 +32,7 @@ class PodcastSubscription {
   }
 
   Podcast getPodcastFromDetails() {
-    var decodedDetails = jsonDecode(details);
+    var decodedDetails = json.decode(details);
     return Podcast.fromJson(decodedDetails);
   }
 

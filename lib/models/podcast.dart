@@ -12,6 +12,10 @@ class Artist {
   });
 
   Artist.fromJson(json) {
+    if(json is String) {
+      json = jsonDecode(json);
+    }
+
     this.id = json['id'].toString();
     this.name = json['name'];
   }
@@ -34,6 +38,10 @@ class Genre {
   });
 
   Genre.fromJson(json) {
+    if(json is String) {
+      json = jsonDecode(json);
+    }
+
     this.id = json['id'].toString();
     this.name = json['name'];
   }
@@ -88,16 +96,21 @@ class Podcast {
   });
 
   Podcast.fromJson(json) {
-    //this.artist = Artist.fromJson(json['artist']);
+    if(json is String) {
+      json = jsonDecode(json);
+      json['episodes'] = jsonDecode(json['episodes']);
+    }
+
+    this.artist = Artist.fromJson(json['artist']);
     this.artwork30 = json['artwork30'];
     this.artwork60 = json['artwork60'];
     this.artwork100 = json['artwork100'];
     this.artwork600 = json['artwork600'];
     this.artworkOrig = json['artworkOrig'];
     this.description = json['description'];
-    //this.episodesCount = json['episodes']['count'];
+    this.episodesCount = json['episodes'] != null ? json['episodes']['count'] : 0;
     this.feed = json['feed'];
-    //this.genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
+    this.genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
     this.id = json['id'].toString();
     //this.lastModifiedDate = DateTime(json['last_modified_date']);
     this.name = json['name'];

@@ -50,7 +50,8 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                           )),
                         );
                       },
-                      subtitle: podcast.description,
+                      //subtitle: podcast.description,
+                      subtitle: podcast.getByline(),
                       title: podcast.name,
                     );
                   }).toList(),

@@ -95,6 +95,12 @@ class Podcast {
     this.url, // todo: to be deprecated, removed
   });
 
+  String getByline() {
+    return name != artist?.name
+      ? 'by ${artist.name}, ${episodesCount.toString()} total episodes'
+      : '${episodesCount.toString()} total episodes';
+  }
+
   Podcast.fromJson(json) {
     if(json is String) {
       json = jsonDecode(json);
@@ -108,7 +114,8 @@ class Podcast {
     this.artwork600 = json['artwork600'];
     this.artworkOrig = json['artworkOrig'];
     this.description = json['description'];
-    this.episodesCount = json['episodes'] != null ? json['episodes']['count'] : 0;
+    this.episodesCount = json['episodesCount'] ??
+      (json['episodes'] != null ? json['episodes']['count'] : 0);
     this.feed = json['feed'];
     this.genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
     this.id = json['id'].toString();

@@ -109,9 +109,7 @@ class PodcastSearchState extends State<PodcastSearch> {
                       );
                     },
                     //subtitle: podcast.description,
-                    subtitle: podcast.name != podcast.artist?.name
-                      ? 'by ${podcast.artist.name}, ${podcast.episodesCount.toString()} total episodes'
-                      : '${podcast.episodesCount.toString()} total episodes',
+                    subtitle: podcast.getByline(),
                     title: podcast.name,
                   );
                 }).toList(),

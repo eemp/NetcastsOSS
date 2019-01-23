@@ -15,6 +15,7 @@ Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
     'query': {
       'bool': {
         'filter': [
+          { 'exists': { 'field': 'feed' } },
           {
             'term': {
               'genres.id': genreId,
@@ -40,6 +41,9 @@ Future<List<Podcast>> searchPodcastsByTextQuery(textQuery) async {
   var query = {
     'query': {
       'bool': {
+        'filter': [
+          { 'exists': { 'field': 'feed' } },
+        ],
         'should': [
           {
             'multi_match': {

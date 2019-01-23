@@ -145,6 +145,6 @@ class Podcast {
 
   @override
   String toString() {
-    return 'Podcast[description=$description, episodes=${episodes.toString()}, title=$title, url=$url]';
+    return 'Podcast[id=$id, description=$description, episodes=${episodes.toString()}, feed=$feed, name=$name]';
   }
 }

@@ -19,30 +19,35 @@ import 'package:hear2learn/widgets/subscriptions/index.dart';
 const MAX_SHOWCASE_LIST_SIZE = 20;
 
 class Home extends StatelessWidget {
-  final App app = App();
+  List<Map<String, dynamic>> homepageLists;
 
-  @override
-  Widget build(BuildContext context) {
-    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
-      return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
-    });
-
+  Home() {
+    Future<List<Podcast>> subscriptionsFuture = getSubscriptions();
     Future<List<Podcast>> topScienceCastsFuture = searchPodcastsByGenre(1315);
     Future<List<Podcast>> topTechCastsFuture = searchPodcastsByGenre(1318);
     Future<List<Podcast>> topComedyCastsFuture = searchPodcastsByGenre(1303);
     Future<List<Podcast>> topBusinessCastsFuture = searchPodcastsByGenre(1321);
 
-
-
-    var homepageLists = [
+    homepageLists = [
       { 'list': subscriptionsFuture, 'title': 'Your Podcasts' },
       { 'list': topScienceCastsFuture, 'title': 'Science' },
       { 'list': topTechCastsFuture, 'title': 'Technology' },
       { 'list': topComedyCastsFuture, 'title': 'Comedy' },
       { 'list': topBusinessCastsFuture, 'title': 'Business' },
-      //toplistFuture,
     ];
+  }
+
+  static Future<List<Podcast>> getSubscriptions() {
+    final App app = App();
+    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+    return subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
+      return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    homepageLists[0] = { 'list': getSubscriptions(), 'title': 'Your Podcasts' };
 
     return Scaffold(
       appBar: AppBar(

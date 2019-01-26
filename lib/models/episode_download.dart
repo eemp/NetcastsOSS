@@ -7,7 +7,7 @@ part 'episode_download.jorm.dart';
 
 class EpisodeDownload {
   @IgnoreColumn()
-  static final Uuid uuid = new Uuid();
+  static final Uuid uuid = Uuid();
 
   DateTime created;
   @Column(length: 0, isNullable: false)
@@ -26,15 +26,16 @@ class EpisodeDownload {
     this.episodeUrl,
     this.id,
   }) {
-    this.id ??= uuid.v4();
+    id ??= uuid.v4();
   }
 
+  @override
   String toString() {
-    return 'Id = ${id}: Created on ${created.toString()}, episodeUrl = ${episodeUrl.toString()}, downloadPath: ${downloadPath}, details: ${details}';
+    return 'Id = $id: Created on ${created.toString()}, episodeUrl = ${episodeUrl.toString()}, downloadPath: $downloadPath, details: $details';
   }
 
   Episode getEpisodeFromDetails() {
-    var decodedDetails = jsonDecode(details);
+    final Map<String, dynamic> decodedDetails = jsonDecode(details);
     return Episode(
       description: decodedDetails['description'],
       download: this,
@@ -55,7 +56,9 @@ class EpisodeDownload {
 
 @GenBean()
 class EpisodeDownloadBean extends Bean<EpisodeDownload> with _EpisodeDownloadBean {
+  @override
   String get tableName => 'episode_download';
 
+  // ignore: always_specify_types
   EpisodeDownloadBean(Adapter adapter) : super(adapter);
 }

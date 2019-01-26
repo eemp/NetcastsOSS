@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,24 +15,25 @@ import 'package:hear2learn/widgets/home.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-void main() async {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+Future<void> main() async {
+  SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
 
-  final Store<AppState> store = new Store<AppState>(
+  final Store<AppState> store = Store<AppState>(
     AppReducer,
-    initialState: AppState(),
+    initialState: const AppState(),
+    // ignore: always_specify_types
     middleware: [
       thunkMiddleware,
     ],
   );
 
-  App app = new App();
+  final App app = App();
   await app.init(store);
 
-  List<Podcast> subscriptions = await getSubscriptions();
+  final List<Podcast> subscriptions = await getSubscriptions();
   store.dispatch(Action(
     type: ActionType.UPDATE_SUBSCRIPTIONS,
-    payload: {
+    payload: <String, dynamic>{
       'subscriptions': subscriptions,
     },
   ));
@@ -48,7 +50,7 @@ class AppWidget extends StatelessWidget {
   final Store<AppState> store;
   final String title;
 
-  AppWidget({
+  const AppWidget({
     Key key,
     this.store,
     this.title

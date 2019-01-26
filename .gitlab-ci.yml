@@ -7,16 +7,20 @@ before_script:
   - flutter upgrade
 
 stages:
-#  - build
   - test
+#  - build
 
-#build:
-#  stage: build
-#  script:
-#    - flutter build apk
-
+lint:
+  stage: test
+  script:
+    - flutter analyze
 
 tests:
   stage: test
   script:
     - flutter test
+
+#build:
+#  stage: build
+#  script:
+#    - flutter build apk

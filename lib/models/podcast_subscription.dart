@@ -47,5 +47,6 @@ class PodcastSubscriptionBean extends Bean<PodcastSubscription> with _PodcastSub
   @override
   String get tableName => 'podcast_subscription';
 
+  // ignore: always_specify_types
   PodcastSubscriptionBean(Adapter adapter) : super(adapter);
 }

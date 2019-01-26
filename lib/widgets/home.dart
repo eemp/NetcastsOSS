@@ -15,6 +15,11 @@ import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
 import 'package:redux/redux.dart';
 
+const String SCIENCE_GENRE_ID = '1315';
+const String TECH_GENRE_ID = '1318';
+const String COMEDY_GENRE_ID = '1303';
+const String BUSINESS_GENRE_ID = '1321';
+
 class Home extends StatefulWidget {
   @override
   State createState() => HomeState();
@@ -36,10 +41,10 @@ class HomeState extends State<Home> {
   Future<List<Widget>> init() async {
     return <Widget>[
       buildSubscriptionsPreview(),
-      buildHomepageList('Science', await searchPodcastsByGenre(1315)),
-      buildHomepageList('Technology', await searchPodcastsByGenre(1318)),
-      buildHomepageList('Comedy', await searchPodcastsByGenre(1303)),
-      buildHomepageList('Business', await searchPodcastsByGenre(1321)),
+      buildHomepageList('Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
+      buildHomepageList('Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
+      buildHomepageList('Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
+      buildHomepageList('Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
     ];
   }
 

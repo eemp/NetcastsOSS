@@ -1,11 +1,12 @@
-import 'dart:io';
+// ignore_for_file: always_specify_types
+import 'dart:async';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/api/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 
-final String PODCAST_TYPE = 'podcast';
+const String PODCAST_TYPE = 'podcast';
 
 Future<List<Podcast>> getSubscriptions() {
   final App app = App();
@@ -16,11 +17,11 @@ Future<List<Podcast>> getSubscriptions() {
   });
 }
 
-Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
+Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
   final App app = App();
   final client = app.elasticClient;
 
-  var query = {
+  final query = {
     'query': {
       'bool': {
         'filter': [
@@ -43,11 +44,11 @@ Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
   ).then((response) => toPodcasts(response));
 }
 
-Future<List<Podcast>> searchPodcastsByTextQuery(textQuery) async {
-  App app = App();
+Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery) async {
+  final App app = App();
   final client = app.elasticClient;
 
-  var query = {
+  final query = {
     'query': {
       'bool': {
         'filter': [
@@ -77,8 +78,8 @@ Future<List<Podcast>> searchPodcastsByTextQuery(textQuery) async {
 
 Future<void> subscribeToPodcast(Podcast podcast) async {
   final App app = App();
-  PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-  PodcastSubscription newSubscription = new PodcastSubscription(
+  final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+  final PodcastSubscription newSubscription = PodcastSubscription(
     created: DateTime.now(),
     details: podcast.toJson(),
     isSubscribed: true,

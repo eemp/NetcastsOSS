@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:hear2learn/app.dart';
@@ -31,23 +32,20 @@ class Episode {
   });
 
   String getFriendlyDate() {
-    String shortFormat = 'EEE, dd MMM yyyy';
-    DateFormat podcastDateFormat = DateFormat(shortFormat);
+    const String shortFormat = 'EEE, dd MMM yyyy';
+    final DateFormat podcastDateFormat = DateFormat(shortFormat);
     return timeago.format(podcastDateFormat.parseLoose(pubDate.substring(0, shortFormat.length)));
   }
 
   String getMetaLine() {
-    num sizeInMegabytes = size / 1e6;
-    return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + this.getFriendlyDate() + '.';
+    final num sizeInMegabytes = size / 1e6;
+    return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + getFriendlyDate() + '.';
   }
 
   Future<EpisodeDownload> getDownload() async {
-    EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    return downloadModel.findOneWhere(downloadModel.episodeUrl.eq(url))
-      .then((episodeDownload) {
-        download = episodeDownload;
-        return Future.value(episodeDownload);
-      });
+    final EpisodeDownloadBean downloadModel = app.models['episode_download'];
+    download = await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(url));
+    return download;
   }
 
   @override
@@ -56,7 +54,7 @@ class Episode {
   }
 
   String toJson() {
-    return jsonEncode({
+    return jsonEncode(<String, dynamic>{
       'description': description,
       'media': media,
       'podcastTitle': podcastTitle,

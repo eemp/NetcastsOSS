@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 
 class PodcastHome extends StatelessWidget {
-  String description;
-  Widget image;
-  Function onSubscribe;
-  Function onUnsubscribe;
+  final String description;
+  final Widget image;
+  final Function onSubscribe;
+  final Function onUnsubscribe;
 
-  PodcastHome({
+  const PodcastHome({
     Key key,
     this.description,
     this.image,
@@ -20,7 +19,7 @@ class PodcastHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [
+      children: <Widget>[
         Container(
           child: image,
           height: MediaQuery.of(context).size.width,
@@ -31,7 +30,7 @@ class PodcastHome extends StatelessWidget {
             data: description,
             defaultTextStyle: Theme.of(context).textTheme.body1,
           ) : null,
-          padding: EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 16.0),
         ),
       ],
     );

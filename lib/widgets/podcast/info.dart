@@ -7,7 +7,7 @@ class PodcastInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [
+      children: <Widget>[
         Container(
           child: Text('People', style: Theme.of(context).textTheme.subhead),
           margin: const EdgeInsets.only(bottom: 16.0),

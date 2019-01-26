@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
@@ -20,30 +21,30 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
-      return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
-    });
+    final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+    final Future<List<Podcast>> subscriptionsFuture = subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then(
+      (List<PodcastSubscription> response) =>
+        Future.wait(response.map((PodcastSubscription subscription) => Future<Podcast>.value(subscription.getPodcastFromDetails())))
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Podcasts')
+        title: const Text('Your Podcasts'),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Podcast>>(
         future: subscriptionsFuture,
         builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
           if(!snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
+            return Container(
+              child: const Center(child: CircularProgressIndicator()),
             );
           }
 
           return snapshot.data.isNotEmpty
             ? Container(
                 child: VerticalListView(
-                  children: snapshot.data.map((podcast) {
-                    Widget image = WithFadeInImage(
+                  children: snapshot.data.map((Podcast podcast) {
+                    final Widget image = WithFadeInImage(
                       heroTag: 'subscriptions/${podcast.artwork600}',
                       location: podcast.artwork600,
                     );
@@ -52,10 +53,12 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PodcastPage(
-                            image: image,
-                            podcast: podcast,
-                          )),
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => PodcastPage(
+                              image: image,
+                              podcast: podcast,
+                            )
+                          ),
                         );
                       },
                       //subtitle: podcast.description,
@@ -64,7 +67,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                     );
                   }).toList(),
                 ),
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
               )
               : PlaceholderScreen(
                 icon: Icons.subscriptions,

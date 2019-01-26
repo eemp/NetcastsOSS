@@ -75,7 +75,7 @@ Future<List<Podcast>> searchPodcastsByTextQuery(textQuery) async {
   ).then((response) => toPodcasts(response));
 }
 
-void subscribeToPodcast(Podcast podcast) async {
+Future<void> subscribeToPodcast(Podcast podcast) async {
   final App app = App();
   PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
   PodcastSubscription newSubscription = new PodcastSubscription(

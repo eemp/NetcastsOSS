@@ -11,15 +11,15 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';
 
 class EpisodePlayer extends StatefulWidget {
-  Episode episode;
+  final Episode episode;
 
-  EpisodePlayer({
+  const EpisodePlayer({
     Key key,
     this.episode,
   }) : super(key: key);
 
   @override
-  EpisodePlayerState createState() => new EpisodePlayerState();
+  EpisodePlayerState createState() => EpisodePlayerState();
 }
 
 class EpisodePlayerState extends State<EpisodePlayer> {

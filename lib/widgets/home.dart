@@ -2,11 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/podcast.dart';
-import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
-import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/horizontal_list_view.dart';
@@ -28,7 +25,8 @@ class HomeState extends State<Home> {
 
   @override
   void initState() {
-    init().then((results) {
+    super.initState();
+    init().then((List<Widget> results) {
       setState(() {
         homepageLists = results;
       });
@@ -36,7 +34,7 @@ class HomeState extends State<Home> {
   }
 
   Future<List<Widget>> init() async {
-    return [
+    return <Widget>[
       buildSubscriptionsPreview(),
       buildHomepageList('Science', await searchPodcastsByGenre(1315)),
       buildHomepageList('Technology', await searchPodcastsByGenre(1318)),
@@ -46,16 +44,18 @@ class HomeState extends State<Home> {
   }
 
   Widget buildSubscriptionsPreview() {
-    const MAX_SHOWCASE_ITEMS = 12;
+    const int MAX_SHOWCASE_ITEMS = 12;
     return StoreConnector<AppState, List<Podcast>>(
-      converter: (store) => store.state.subscriptions,
-      builder: (context, subscriptions) {
+      converter: (Store<AppState> store) => store.state.subscriptions,
+      builder: (BuildContext context, List<Podcast> subscriptions) {
         return HomepageList(
           onMoreClick: subscriptions.length > MAX_SHOWCASE_ITEMS
             ? () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => SubscriptionsPage(),
+                ),
               );
             }
             : null,
@@ -89,7 +89,7 @@ class HomeState extends State<Home> {
             return homepageLists[idx];
           },
           itemCount: homepageLists.length,
-          separatorBuilder: (context, index) => Divider(),
+          separatorBuilder: (BuildContext context, int index) => Divider(),
           shrinkWrap: true,
         )
         : Container(height: 0, width: 0),
@@ -101,7 +101,7 @@ class HomeState extends State<Home> {
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
-          children: [
+          children: <Widget>[
             Container(
               child: DrawerHeader(
                 //child: Text('Hear2Learn'),
@@ -112,6 +112,7 @@ class HomeState extends State<Home> {
                     image: ExactAssetImage('images/drawer-header--balloons.jpg'),
                   ),
                 ),
+                child: null,
               ),
             ),
             ListTile(
@@ -119,7 +120,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => Home()),
                 );
               },
               title: const Text('Home'),
@@ -129,7 +130,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PodcastSearch()),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => PodcastSearch()),
                 );
               },
               title: const Text('Explore'),
@@ -140,7 +141,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => SubscriptionsPage()),
                 );
               },
               title: const Text('Your Podcasts'),
@@ -150,7 +151,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DownloadPage()),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => DownloadPage()),
                 );
               },
               title: const Text('Downloads'),
@@ -161,7 +162,7 @@ class HomeState extends State<Home> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Settings()),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => Settings()),
                 );
               },
               title: const Text('Settings'),
@@ -177,7 +178,7 @@ class HomepageList extends StatelessWidget {
   final Function onMoreClick;
   final PodcastsShowcaseList showcase;
 
-  HomepageList({
+  const HomepageList({
     Key key,
     this.onMoreClick,
     this.showcase,
@@ -189,7 +190,7 @@ class HomepageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<HorizontalListTile> tiles = showcase.list?.map((podcast) {
+    final List<HorizontalListTile> tiles = showcase.list?.map((Podcast podcast) {
       final Widget image = WithFadeInImage(
         heroTag: '${showcase.title}/${podcast.artwork600}',
         location: podcast.artwork600,
@@ -200,7 +201,7 @@ class HomepageList extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PodcastPage(
+            MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
               image: image,
               podcast: podcast,
             )),
@@ -208,7 +209,7 @@ class HomepageList extends StatelessWidget {
         },
         title: podcast.name,
       );
-    })?.toList() ?? [];
+    })?.toList() ?? <HorizontalListTile>[];
 
     return tiles.isNotEmpty
       ? HorizontalListViewCard(
@@ -230,13 +231,14 @@ class PodcastsShowcaseList {
   });
 
   static Future<PodcastsShowcaseList> toFuturePodcastsShowcaseList(String title, Future<List<Podcast>> futurePodcasts) {
-    return futurePodcasts.then((list) => new PodcastsShowcaseList(
+    return futurePodcasts.then((List<Podcast> list) => PodcastsShowcaseList(
       list: list,
       title: title,
     ));
   }
 
+  @override
   String toString() {
-    return 'list: ${list.toString()}, title: ${title}';
+    return 'list: ${list.toString()}, title: $title';
   }
 }

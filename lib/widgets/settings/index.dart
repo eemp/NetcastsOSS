@@ -4,18 +4,17 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/themes.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   @override
-  SettingsState createState() => new SettingsState();
+  SettingsState createState() => SettingsState();
 }
 
 class SettingsState extends State<Settings> {
-  static final THEME_PREF = 'theme';
+  static const String THEME_PREF = 'theme';
   final App app = App();
-  final formKey = new GlobalKey<FormState>();
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   String theme;
 
@@ -28,14 +27,14 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: globalKey,
+      key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Form(
         key: formKey,
         child: ListView(
-          children: [
+          children: <Widget>[
             InputDecorator(
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -57,12 +56,12 @@ class SettingsState extends State<Settings> {
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                icon: Icon(Icons.color_lens),
+                icon: const Icon(Icons.color_lens),
                 labelText: 'Theme',
               ),
             ),
           ],
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
         ),
       ),
       bottomNavigationBar: BottomAppBarPlayer(),

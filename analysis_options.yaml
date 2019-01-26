@@ -32,8 +32,10 @@ analyzer:
     - 'bin/cache/**'
     # the following two are relative to the stocks example and the flutter package respectively
     # see https://github.com/dart-lang/sdk/issues/28463
+    - 'gpodder_client/**'
     - 'lib/i18n/stock_messages_*.dart'
     - 'lib/src/http/**'
+    - 'tmp/**'
 
 linter:
   rules:
@@ -114,7 +116,6 @@ linter:
     # - parameter_assignments # we do this commonly
     - prefer_adjacent_string_concatenation
     - prefer_asserts_in_initializer_lists
-    - prefer_bool_in_asserts
     - prefer_collection_literals
     - prefer_conditional_assignment
     - prefer_const_constructors
@@ -143,7 +144,7 @@ linter:
     # - public_member_api_docs # enabled on a case-by-case basis; see e.g. packages/analysis_options.yaml
     - recursive_getters
     - slash_for_doc_comments
-    - sort_constructors_first
+    # - sort_constructors_first
     - sort_pub_dependencies
     - sort_unnamed_constructors_first
     - super_goes_last

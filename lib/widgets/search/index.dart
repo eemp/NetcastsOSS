@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/helpers/podcast.dart';
@@ -8,17 +9,17 @@ import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 
-const MAX_SHOWCASE_LIST_SIZE = 20;
+const int MAX_SHOWCASE_LIST_SIZE = 20;
 
 class PodcastSearch extends StatefulWidget {
   @override
-  PodcastSearchState createState() => new PodcastSearchState();
+  PodcastSearchState createState() => PodcastSearchState();
 }
 
 class PodcastSearchState extends State<PodcastSearch> {
-  final globalKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
 
-  final TextEditingController inputController = new TextEditingController();
+  final TextEditingController inputController = TextEditingController();
   FocusNode inputFocus;
   String userQuery = '';
 
@@ -31,7 +32,7 @@ class PodcastSearchState extends State<PodcastSearch> {
     inputFocus = FocusNode();
     userQuery = '';
 
-    results = Future.value(new List<Podcast>());
+    results = Future<List<Podcast>>.value(<Podcast>[]);
   }
 
   @override
@@ -50,57 +51,56 @@ class PodcastSearchState extends State<PodcastSearch> {
           autofocus: true,
           controller: inputController,
           focusNode: inputFocus,
-          style: new TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
-          decoration: new InputDecoration(
-            prefixIcon: new Icon(Icons.search, color: Colors.white),
-            hintText: "Search for podcasts...",
-            hintStyle: new TextStyle(color: Colors.white)
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search, color: Colors.white),
+            hintText: 'Search for podcasts...',
+            hintStyle: const TextStyle(color: Colors.white)
           ),
-          onChanged: (text) {
+          onChanged: (String text) {
             setState(() {
               userQuery = text;
             });
           },
-          onSubmitted: (text) {
+          onSubmitted: (String text) {
             setState(() {
               userQuery = text;
               results = searchPodcastsByTextQuery(userQuery);
             });
           },
         ),
-        actions: !userQuery.isEmpty
-          ? [
+        actions: userQuery.isNotEmpty
+          ? <Widget>[
             IconButton(
-              icon: Icon(Icons.close, color: Colors.white),
+              icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () {
                 setState(() {
                   userQuery = '';
-                  results = Future.value(new List<Podcast>());
+                  results = Future<List<Podcast>>.value(<Podcast>[]);
                 });
                 inputController.clear();
                 FocusScope.of(context).requestFocus(inputFocus);
               },
             ),
           ]
-          : [],
+          : <Widget>[],
       ),
       body: Container(
-        child: FutureBuilder(
+        child: FutureBuilder<List<Podcast>>(
           future: results,
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             if(!snapshot.hasData) {
-              return Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Center(child: CircularProgressIndicator()),
+              return Container(
+                child: const Center(child: CircularProgressIndicator()),
               );
             }
 
             return snapshot.data.isNotEmpty
               ? VerticalListView(
-                children: snapshot.data.map((podcast) {
-                  Widget image = WithFadeInImage(
+                children: snapshot.data.map((Podcast podcast) {
+                  final Widget image = WithFadeInImage(
                     heroTag: 'search/${podcast.artwork600}',
                     location: podcast.artwork600,
                   );
@@ -110,7 +110,7 @@ class PodcastSearchState extends State<PodcastSearch> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PodcastPage(
+                        MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
                           image: image,
                           podcast: podcast,
                         )),
@@ -129,7 +129,7 @@ class PodcastSearchState extends State<PodcastSearch> {
               );
           },
         ),
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
       ),
       bottomNavigationBar: BottomAppBarPlayer(),
     );

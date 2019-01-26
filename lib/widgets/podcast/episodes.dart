@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/widgets/common/episode_tile.dart';
@@ -7,11 +6,11 @@ import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class PodcastEpisodesList extends StatelessWidget {
-  Function onEpisodeDelete;
-  Function onEpisodeDownload;
-  List<Episode> episodes;
+  final Function onEpisodeDelete;
+  final Function onEpisodeDownload;
+  final List<Episode> episodes;
 
-  PodcastEpisodesList({
+  const PodcastEpisodesList({
     Key key,
     this.onEpisodeDelete,
     this.onEpisodeDownload,
@@ -24,10 +23,10 @@ class PodcastEpisodesList extends StatelessWidget {
       child: ListView.separated(
         itemCount: episodes.length,
         itemBuilder: (BuildContext context, int idx) {
-          Episode episode = episodes[idx];
-          String title = episode.title;
+          final Episode episode = episodes[idx];
+          final String title = episode.title;
 
-          TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
+          final TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
             value: episode.download != null ? TogglingWidgetPairValue.active : TogglingWidgetPairValue.initial,
           );
 
@@ -35,7 +34,7 @@ class PodcastEpisodesList extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EpisodePage(episode: episode)),
+                MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: episode)),
               );
             },
             child: EpisodeTile(
@@ -44,7 +43,7 @@ class PodcastEpisodesList extends StatelessWidget {
               options: TogglingWidgetPair(
                 controller: togglingWidgetPairController,
                 activeWidget: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () async {
                     //togglingWidgetPairController.setLoadingValue();
                     await onEpisodeDelete(episode);
@@ -52,21 +51,22 @@ class PodcastEpisodesList extends StatelessWidget {
                   },
                 ),
                 initialWidget: IconButton(
-                  icon: Icon(Icons.get_app),
+                  icon: const Icon(Icons.get_app),
                   onPressed: () async {
                     togglingWidgetPairController.setLoadingValue();
                     await onEpisodeDownload(episode);
                     togglingWidgetPairController.setActiveValue();
                   },
                 ),
-                loadingWidget: IconButton(
+                loadingWidget: const IconButton(
                   icon: CircularProgressIndicator(value: null),
+                  onPressed: null,
                 ),
               ),
             ),
           );
         },
-        separatorBuilder: (context, index) => Divider(),
+        separatorBuilder: (BuildContext context, int index) => Divider(),
         shrinkWrap: true,
       ),
     );

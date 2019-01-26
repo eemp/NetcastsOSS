@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PodcastOptions extends StatefulWidget {
-  bool isSubscribed;
-  Function onSubscribe;
-  Function onUnsubscribe;
+  final bool isSubscribed;
+  final Function onSubscribe;
+  final Function onUnsubscribe;
 
-  PodcastOptions({
+  const PodcastOptions({
     Key key,
     this.isSubscribed,
     this.onSubscribe,
@@ -22,13 +22,13 @@ class PodcastOptionsState extends State<PodcastOptions> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Container(
           child: IconButton(
             icon: Icon(isSubscribed ?? widget.isSubscribed ? Icons.done : Icons.add),
             iconSize: 24.0,
             onPressed: () async {
-              bool willBeSubscribed = !(isSubscribed ?? widget.isSubscribed);
+              final bool willBeSubscribed = !(isSubscribed ?? widget.isSubscribed);
               if(willBeSubscribed) {
                 await widget.onSubscribe();
               }

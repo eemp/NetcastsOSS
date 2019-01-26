@@ -48,14 +48,18 @@ class AppWidget extends StatelessWidget {
   final Store<AppState> store;
   final String title;
 
-  AppWidget({Key key, this.store, this.title}) : super(key: key);
+  AppWidget({
+    Key key,
+    this.store,
+    this.title
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultThemeName: ThemeProvider.DEFAULT_THEME,
       themeBuilder: ThemeProvider(),
-      widgetBuilder: (context, theme) {
+      widgetBuilder: (BuildContext context, ThemeData theme) {
         return StoreProvider<AppState>(
           store: store,
           child: MaterialApp(

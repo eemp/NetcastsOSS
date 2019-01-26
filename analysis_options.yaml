@@ -36,6 +36,7 @@ analyzer:
     - 'lib/i18n/stock_messages_*.dart'
     - 'lib/src/http/**'
     - 'tmp/**'
+    - '**.jorm.**'
 
 linter:
   rules:

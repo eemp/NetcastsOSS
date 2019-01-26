@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 
 class HorizontalListTile extends StatelessWidget {
-  Widget image;
-  Function onTap;
-  String title;
+  final Widget image;
+  final Function onTap;
+  final String title;
 
-  HorizontalListTile({
+  const HorizontalListTile({
     Key key,
     this.image,
     this.onTap,
@@ -19,7 +18,7 @@ class HorizontalListTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         child: Column(
-          children: [
+          children: <Widget>[
             Container(
               child: image,
               height: 100.0,
@@ -28,12 +27,12 @@ class HorizontalListTile extends StatelessWidget {
             Flexible(
               child: Container(
                 child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
-                padding: EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 8.0),
               ),
             ),
           ],
         ),
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
         width: 110.0,
       ),
     );
@@ -41,9 +40,9 @@ class HorizontalListTile extends StatelessWidget {
 }
 
 class HorizontalListView extends StatelessWidget {
-  List<Widget> children;
+  final List<Widget> children;
 
-  HorizontalListView({
+  const HorizontalListView({
     Key key,
     this.children,
   }) : super(key: key);
@@ -52,19 +51,19 @@ class HorizontalListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       scrollDirection: Axis.horizontal,
-      physics: PageScrollPhysics(),
+      physics: const PageScrollPhysics(),
       children: children,
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
     );
   }
 }
 
 class HorizontalListViewCard extends StatelessWidget {
-  List<Widget> children;
-  String title;
-  Function onMoreClick;
+  final List<Widget> children;
+  final String title;
+  final Function onMoreClick;
 
-  HorizontalListViewCard({
+  const HorizontalListViewCard({
     Key key,
     this.children,
     this.onMoreClick,
@@ -75,10 +74,10 @@ class HorizontalListViewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: [
+        children: <Widget>[
           Container(
             child: Row(
-              children: [
+              children: <Widget>[
                 Text(title, style: Theme.of(context).textTheme.subhead),
                 onMoreClick != null ? InkWell(
                   child: Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
@@ -87,7 +86,7 @@ class HorizontalListViewCard extends StatelessWidget {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
           ),
           Container(
             child: HorizontalListView(

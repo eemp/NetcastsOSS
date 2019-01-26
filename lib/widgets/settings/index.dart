@@ -64,7 +64,7 @@ class SettingsState extends State<Settings> {
           padding: const EdgeInsets.all(16.0),
         ),
       ),
-      bottomNavigationBar: BottomAppBarPlayer(),
+      bottomNavigationBar: const BottomAppBarPlayer(),
     );
   }
 }

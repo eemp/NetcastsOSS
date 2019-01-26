@@ -4,26 +4,24 @@ import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeOptions extends StatelessWidget {
-  Episode episode;
-  Function onEpisodeDelete;
-  Function onEpisodeDownload;
-  TogglingWidgetPairController togglingWidgetPairController;
+  final Episode episode;
+  final Function onEpisodeDelete;
+  final Function onEpisodeDownload;
 
-  EpisodeOptions({
+  const EpisodeOptions({
     Key key,
     this.episode,
     this.onEpisodeDelete,
     this.onEpisodeDownload,
-  }) : super(key: key) {
-    togglingWidgetPairController = TogglingWidgetPairController(
-      value: episode.download != null ? TogglingWidgetPairValue.active : TogglingWidgetPairValue.initial,
-    );
-  }
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
+      value: episode.download != null ? TogglingWidgetPairValue.active : TogglingWidgetPairValue.initial,
+    );
     return Row(
-      children: [
+      children: <Widget>[
         Container(
           child: TogglingWidgetPair(
             //debug: true,
@@ -34,7 +32,7 @@ class EpisodeOptions extends StatelessWidget {
             ),
             activeWidget: RaisedButton(
               child: Row(
-                children: [
+                children: const <Widget>[
                   Icon(Icons.delete),
                   Text('Delete'),
                 ],
@@ -47,7 +45,7 @@ class EpisodeOptions extends StatelessWidget {
             ),
             initialWidget: RaisedButton(
               child: Row(
-                children: [
+                children: const <Widget>[
                   Icon(Icons.get_app),
                   Text('Download'),
                 ],
@@ -60,11 +58,12 @@ class EpisodeOptions extends StatelessWidget {
             ),
             loadingWidget: RaisedButton(
               child: Row(
-                children: [
+                children: const <Widget>[
                   Icon(Icons.more_horiz),
                   Text('Downloading'),
                 ],
               ),
+              onPressed: null,
             ),
           ),
         ),

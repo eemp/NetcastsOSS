@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 enum TogglingWidgetPairValue { initial, loading, active }
 
 class TogglingWidgetPair extends StatefulWidget {
-  TogglingWidgetPairController controller;
+  final TogglingWidgetPairController controller;
   //bool debug;
 
-  Widget activeWidget;
-  Widget loadingWidget;
-  Widget initialWidget;
+  final Widget activeWidget;
+  final Widget loadingWidget;
+  final Widget initialWidget;
 
-  TogglingWidgetPair({
+  const TogglingWidgetPair({
     Key key,
     this.activeWidget,
     this.controller,
@@ -31,7 +31,7 @@ class TogglingWidgetPairController {
     this.value,
   });
 
-  void setListener(newListener) {
+  void setListener(Function newListener) {
     listener = newListener;
   }
 
@@ -61,9 +61,9 @@ class TogglingWidgetPairState extends State<TogglingWidgetPair> {
 
   @override
   Widget build(BuildContext context) {
-    TogglingWidgetPairValue currValue = controller.value ?? TogglingWidgetPairValue.initial;
-    controller.setListener((nextValue) {
-      this.setState(() {
+    final TogglingWidgetPairValue currValue = controller.value ?? TogglingWidgetPairValue.initial;
+    controller.setListener((TogglingWidgetPairValue nextValue) {
+      setState(() {
         controller.setValue(nextValue);
       });
     });

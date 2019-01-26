@@ -4,11 +4,11 @@
 import 'package:flutter/material.dart';
 
 class CircleButton extends StatelessWidget {
-  double size;
-  GestureTapCallback onTap;
-  Icon icon;
+  final double size;
+  final GestureTapCallback onTap;
+  final Icon icon;
 
-  CircleButton({
+  const CircleButton({
     Key key,
     this.icon,
     this.onTap,
@@ -17,12 +17,12 @@ class CircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new InkResponse(
+    return InkResponse(
       onTap: onTap,
-      child: new Container(
+      child: Container(
         width: size,
         height: size,
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           shape: BoxShape.circle,
         ),

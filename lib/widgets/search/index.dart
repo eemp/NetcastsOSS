@@ -122,7 +122,7 @@ class PodcastSearchState extends State<PodcastSearch> {
                   );
                 }).toList(),
               )
-              : PlaceholderScreen(
+              : const PlaceholderScreen(
                 icon: Icons.search,
                 subtitle: 'Search for podcasts by keywords above.',
                 title: 'No podcasts to show',
@@ -131,7 +131,7 @@ class PodcastSearchState extends State<PodcastSearch> {
         ),
         padding: const EdgeInsets.all(16.0),
       ),
-      bottomNavigationBar: BottomAppBarPlayer(),
+      bottomNavigationBar: const BottomAppBarPlayer(),
     );
   }
 }

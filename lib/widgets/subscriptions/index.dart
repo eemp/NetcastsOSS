@@ -69,14 +69,14 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                 ),
                 padding: const EdgeInsets.all(16.0),
               )
-              : PlaceholderScreen(
+              : const PlaceholderScreen(
                 icon: Icons.subscriptions,
                 subtitle: 'Subscribe to podcasts and find them here.',
                 title: 'No podcasts subscriptions yet',
               );
         },
       ),
-      bottomNavigationBar: BottomAppBarPlayer(),
+      bottomNavigationBar: const BottomAppBarPlayer(),
     );
   }
 }

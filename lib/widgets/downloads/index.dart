@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
@@ -5,9 +6,8 @@ import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/episode_tile.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/common/vertical_list_view.dart';
-import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
-import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
+import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
 
@@ -22,45 +22,44 @@ class DownloadPageState extends State<DownloadPage> {
 
   @override
   Widget build(BuildContext context) {
-    EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    downloadsFuture = downloadModel.getAll().then((downloads) {
-      return downloads.map((download) => download.getEpisodeFromDetails()).toList();
+    final EpisodeDownloadBean downloadModel = app.models['episode_download'];
+    downloadsFuture = downloadModel.getAll().then((List<EpisodeDownload> downloads) {
+      return downloads.map((EpisodeDownload download) => download.getEpisodeFromDetails()).toList();
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Downloads')
+        title: const Text('Downloads')
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Episode>>(
         future: downloadsFuture,
         builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
           if(!snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
+            return Container(
+              child: const Center(child: CircularProgressIndicator()),
             );
           }
 
           return snapshot.data.isNotEmpty
             ? Container(
                 child: VerticalListView(
-                  children: snapshot.data.map((episode) => GestureDetector(
+                  children: snapshot.data.map((Episode episode) => GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EpisodePage(episode: episode)),
+                        MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: episode)),
                       );
                     },
                     child: EpisodeTile(
                       subtitle: episode.podcastTitle,
                       title: episode.title,
                       options: IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () async {
-                          await episodeHelpers.deleteEpisode(episode);
+                          await episode_helpers.deleteEpisode(episode);
                           setState(() {
-                            downloadsFuture = downloadModel.getAll().then((downloads) {
-                              return downloads.map((download) => download.getEpisodeFromDetails()).toList();
+                            downloadsFuture = downloadModel.getAll().then((List<EpisodeDownload> downloads) {
+                              return downloads.map((EpisodeDownload download) => download.getEpisodeFromDetails()).toList();
                             });
                           });
                         },
@@ -68,16 +67,16 @@ class DownloadPageState extends State<DownloadPage> {
                     ),
                   )).toList(),
                 ),
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
               )
-              : PlaceholderScreen(
+              : const PlaceholderScreen(
                 icon: Icons.get_app,
                 subtitle: 'Download episodes and manage them here.',
                 title: 'No downloads yet',
               );
         },
       ),
-      bottomNavigationBar: BottomAppBarPlayer(),
+      bottomNavigationBar: const BottomAppBarPlayer(),
     );
   }
 }

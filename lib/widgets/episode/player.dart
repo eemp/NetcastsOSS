@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -8,7 +7,6 @@ import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:redux/redux.dart';
 
 class EpisodePlayer extends StatefulWidget {
   final Episode episode;
@@ -29,16 +27,16 @@ class EpisodePlayerState extends State<EpisodePlayer> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, QueuedEpisode>(
       converter: queuedEpisodeSelector,
-      builder: (context, queuedEpisode) {
-        Duration duration = queuedEpisode.duration;
-        Episode episode = queuedEpisode.episode ?? widget.episode;
-        bool isPlaying = queuedEpisode.isPlaying;
-        Function onPause = queuedEpisode.onPause;
-        Function onPlay = queuedEpisode.onPlay;
-        Duration position = queuedEpisode.position;
+      builder: (BuildContext context, QueuedEpisode queuedEpisode) {
+        final Duration duration = queuedEpisode.duration;
+        final Episode episode = queuedEpisode.episode ?? widget.episode;
+        final bool isPlaying = queuedEpisode.isPlaying;
+        final Function onPause = queuedEpisode.onPause;
+        final Function onPlay = queuedEpisode.onPlay;
+        final Duration position = queuedEpisode.position;
 
         return Column(
-          children: [
+          children: <Widget>[
             Container(
               child: RichText(
                 text: TextSpan(
@@ -47,14 +45,14 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              margin: EdgeInsets.only(bottom: 32.0),
+              margin: const EdgeInsets.only(bottom: 32.0),
             ),
             Container(
               child: Row(
-                children: [
+                children: <Widget>[
                   Container(
                     child: Text(
-                      position.toString().indexOf('.') >= 0
+                      position.toString().contains('.')
                         ? position.toString().substring(0, position.toString().indexOf('.'))
                         : '0:00:00'
                     ),
@@ -64,7 +62,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
                       max: duration?.inSeconds?.toDouble() ?? 0.0,
-                      onChanged: episode.download != null ? (value) {
+                      onChanged: episode.download != null ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
                       value: position?.inSeconds?.toDouble() ?? 0.0,
@@ -73,25 +71,25 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   Container(
                     child: ( duration?.toString()?.indexOf('.') ?? -1 ) >= 0
                       ? Text(duration.toString().substring(0, duration.toString().indexOf('.')))
-                      : Text('0:00:00'),
+                      : const Text('0:00:00'),
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               ),
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
             ),
             Container(
               child: Row(
-                children: [
+                children: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.replay_10),
+                    icon: const Icon(Icons.replay_10),
                     iconSize: 40.0,
                     onPressed: episode.download != null ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds - 10));
                     } : null,
                   ),
                   RawMaterialButton(
-                    shape: new CircleBorder(),
+                    shape: const CircleBorder(),
                     fillColor: episode.download != null ? Theme.of(context).accentColor : Colors.grey,
                     splashColor: Theme.of(context).splashColor,
                     highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
@@ -105,8 +103,8 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                         onPlay(widget.episode);
                       }
                     } : null,
-                    child: new Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         isPlaying ? Icons.pause : Icons.play_arrow,
                         color: Colors.white,
@@ -115,16 +113,16 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.forward_30),
+                    icon: const Icon(Icons.forward_30),
                     iconSize: 40.0,
                     onPressed: episode.download != null ? () {
-                      seekInEpisode(new Duration(seconds: position.inSeconds + 30));
+                      seekInEpisode(Duration(seconds: position.inSeconds + 30));
                     } : null,
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               ),
-              margin: EdgeInsets.only(bottom: 8.0),
+              margin: const EdgeInsets.only(bottom: 8.0),
             ),
           ],
         );

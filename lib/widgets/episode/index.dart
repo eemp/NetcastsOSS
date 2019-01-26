@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
-import 'package:hear2learn/helpers/episode.dart' as episodeHelpers;
+import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodePage extends StatefulWidget {
-  Episode episode;
+  final Episode episode;
 
-  EpisodePage({
+  const EpisodePage({
     Key key,
     this.episode,
   }) : super(key: key);
@@ -27,7 +27,7 @@ class EpisodePageState extends State<EpisodePage> {
         appBar: AppBar(
           title: Text('Episode of ' + episode.podcastTitle),
           bottom: TabBar(
-            tabs: [
+            tabs: const <Widget>[
               Tab(
                 icon: Icon(Icons.music_video),
                 text: 'Episode',
@@ -40,28 +40,28 @@ class EpisodePageState extends State<EpisodePage> {
           ),
         ),
         body: TabBarView(
-          children: [
+          children: <Widget>[
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onEpisodeDelete: (episode) async {
-                  await episodeHelpers.deleteEpisode(episode);
+                onEpisodeDelete: (Episode episode) async {
+                  await episode_helpers.deleteEpisode(episode);
                   await episode.getDownload();
                   setState(() { /* force most of episode page to update - home, options, player */ });
                 },
-                onEpisodeDownload: (episode) async {
-                  await episodeHelpers.downloadEpisode(episode);
+                onEpisodeDownload: (Episode episode) async {
+                  await episode_helpers.downloadEpisode(episode);
                   await episode.getDownload();
                   setState(() { /* force most of episode page to update - home, options, player */ });
                 },
               ),
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
             ),
             Container(
               child: EpisodeInfo(
                 episode: episode,
               ),
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
             ),
           ],
         ),

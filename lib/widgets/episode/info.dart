@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:hear2learn/widgets/common/people.dart';
-import 'package:hear2learn/widgets/common/tags.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeInfo extends StatelessWidget {
-  Episode episode;
+  final Episode episode;
 
-  EpisodeInfo({
+  const EpisodeInfo({
     Key key,
     this.episode,
   }) : super(key: key);
@@ -16,7 +14,7 @@ class EpisodeInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [
+      children: <Widget>[
         //Container(
           //child: Text('People', style: Theme.of(context).textTheme.subhead),
           //margin: const EdgeInsets.only(bottom: 16.0),
@@ -34,7 +32,7 @@ class EpisodeInfo extends StatelessWidget {
             data: episode.description,
             defaultTextStyle: Theme.of(context).textTheme.body1,
           ),
-          padding: EdgeInsets.only(bottom: 16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
         ),
         //Container(
           //child: Text('Topics', style: Theme.of(context).textTheme.subhead),

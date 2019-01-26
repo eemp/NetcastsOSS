@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class VerticalListTile extends StatelessWidget {
-  Widget image;
-  Function onTap;
-  String subtitle;
-  String title;
+  final Widget image;
+  final Function onTap;
+  final String subtitle;
+  final String title;
 
-  VerticalListTile({
+  const VerticalListTile({
     Key key,
     this.image,
     this.onTap,
@@ -19,7 +19,7 @@ class VerticalListTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
         leading: image != null
           ? Container(
             child: image,
@@ -37,9 +37,9 @@ class VerticalListTile extends StatelessWidget {
 }
 
 class VerticalListView extends StatelessWidget {
-  List<Widget> children;
+  final List<Widget> children;
 
-  VerticalListView({
+  const VerticalListView({
     Key key,
     this.children,
   }) : super(key: key);
@@ -48,10 +48,10 @@ class VerticalListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: children.length,
-      itemBuilder: (context, idx) {
+      itemBuilder: (BuildContext context, int idx) {
         return children[idx];
       },
-      separatorBuilder: (context, idx) => Divider(),
+      separatorBuilder: (BuildContext context, int idx) => Divider(),
     );
   }
 }

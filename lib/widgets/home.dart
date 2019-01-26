@@ -93,7 +93,7 @@ class HomeState extends State<Home> {
           shrinkWrap: true,
         )
         : Container(height: 0, width: 0),
-      bottomNavigationBar: BottomAppBarPlayer(),
+      bottomNavigationBar: const BottomAppBarPlayer(),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the Drawer if there isn't enough vertical

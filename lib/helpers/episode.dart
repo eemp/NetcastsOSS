@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 
 final Dio dio = new Dio();
 
-void downloadEpisode(episode) async {
+Future<void> downloadEpisode(episode) async {
   App app = App();
   EpisodeDownloadBean downloadModel = app.models['episode_download'];
   String downloadId = EpisodeDownload.createNewId();
@@ -25,7 +25,7 @@ void downloadEpisode(episode) async {
   episode.download = download;
 }
 
-void deleteEpisode(episode) async {
+Future<void> deleteEpisode(episode) async {
   App app = App();
   EpisodeDownloadBean downloadModel = app.models['episode_download'];
   await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(episode.url)).then((episodeDownload) {

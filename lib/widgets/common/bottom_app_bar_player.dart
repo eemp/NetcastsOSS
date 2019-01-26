@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/app.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
-import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:redux/redux.dart';
 
 class BottomAppBarPlayer extends StatelessWidget {
-  App app = App();
-  Duration duration, position;
-  Episode episode;
-  bool isPlaying = false;
-  String mode = 'default';
-  double value;
+  final Episode episode;
+  final String mode;
 
-  BottomAppBarPlayer({
+  const BottomAppBarPlayer({
     Key key,
     this.episode,
-    this.mode,
+    this.mode = 'default',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, QueuedEpisode>(
       converter: queuedEpisodeSelector,
-      builder: (context, queuedEpisode) {
+      builder: (BuildContext context, QueuedEpisode queuedEpisode) {
         return queuedEpisode.episode != null
           ? BottomAppBar(
             child: ListTile(
               leading: Stack(
-                children: [
+                children: <Widget>[
                   Positioned.fill(
                     child: CircularProgressIndicator(
                       strokeWidth: 3.0,
@@ -44,8 +36,8 @@ class BottomAppBarPlayer extends StatelessWidget {
                   IconButton(
                     highlightColor: Colors.transparent,
                     icon: queuedEpisode.isPlaying
-                      ? Icon(Icons.pause)
-                      : Icon(Icons.play_arrow),
+                      ? const Icon(Icons.pause)
+                      : const Icon(Icons.play_arrow),
                     onPressed: () {
                       if(queuedEpisode.isPlaying) {
                         queuedEpisode.onPause();
@@ -61,7 +53,7 @@ class BottomAppBarPlayer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EpisodePage(episode: queuedEpisode.episode)),
+                  MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: queuedEpisode.episode)),
                 );
               },
               subtitle: Text(queuedEpisode.episode.podcastTitle),

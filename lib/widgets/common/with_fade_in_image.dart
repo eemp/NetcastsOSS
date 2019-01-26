@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class WithFadeInImage extends StatelessWidget {
-  final List<String> availablePlaceholders = [
+  final List<String> availablePlaceholders = <String>[
    'images/01--default-fadein-image.jpg',
    'images/02--default-fadein-image.jpg',
    'images/03--default-fadein-image.jpg',
@@ -14,10 +14,10 @@ class WithFadeInImage extends StatelessWidget {
    'images/07--default-fadein-image.jpg',
    'images/08--default-fadein-image.jpg',
   ];
-  final Random rng = new Random();
+  final Random rng = Random();
 
-  String heroTag;
-  String location;
+  final String heroTag;
+  final String location;
 
   WithFadeInImage({
     Key key,
@@ -27,10 +27,10 @@ class WithFadeInImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int randIdx = rng.nextInt(availablePlaceholders.length);
-    String randomPlaceholder = availablePlaceholders[randIdx];
+    final int randIdx = rng.nextInt(availablePlaceholders.length);
+    final String randomPlaceholder = availablePlaceholders[randIdx];
 
-    Widget image = location != null
+    final Widget image = location != null
       ? DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(

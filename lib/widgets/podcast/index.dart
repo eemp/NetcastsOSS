@@ -91,7 +91,7 @@ class PodcastPageState extends State<PodcastPage> {
             //),
           ],
         ),
-        bottomNavigationBar: BottomAppBarPlayer(),
+        bottomNavigationBar: const BottomAppBarPlayer(),
         floatingActionButton: buildSubscriptionButton(podcastSubscriptionFuture),
       ),
       length: 3,

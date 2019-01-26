@@ -5,11 +5,11 @@ import 'package:hear2learn/widgets/episode/player.dart';
 import 'package:hear2learn/models/episode.dart';
 
 class EpisodeHome extends StatelessWidget {
-  Episode episode;
-  Function onEpisodeDelete;
-  Function onEpisodeDownload;
+  final Episode episode;
+  final Function onEpisodeDelete;
+  final Function onEpisodeDownload;
 
-  EpisodeHome({
+  const EpisodeHome({
     Key key,
     this.episode,
     this.onEpisodeDelete,
@@ -19,9 +19,9 @@ class EpisodeHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Column(
-          children: [
+          children: <Widget>[
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
@@ -44,13 +44,13 @@ class EpisodeHome extends StatelessWidget {
             color: Theme.of(context).dividerColor,
             height: 8.0,
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
         ),
         Container(
           child: EpisodePlayer(
             episode: episode,
           ),
-          padding: EdgeInsets.only(bottom: 16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
         ),
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

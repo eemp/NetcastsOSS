@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class EpisodeTile extends StatelessWidget {
-  Image image;
-  String subtitle;
-  String title;
-  Widget options;
+  final Image image;
+  final String subtitle;
+  final String title;
+  final Widget options;
 
-  EpisodeTile({
+  const EpisodeTile({
     Key key,
     this.image,
     this.options,

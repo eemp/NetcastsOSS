@@ -5,7 +5,7 @@ class PlaceholderScreen extends StatelessWidget {
   final String subtitle;
   final String title;
 
-  PlaceholderScreen({
+  const PlaceholderScreen({
     Key key,
     this.icon,
     this.subtitle,
@@ -16,14 +16,14 @@ class PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: LayoutBuilder(
-        builder: (context, constraint) => Stack(
-          children: [
+        builder: (BuildContext context, BoxConstraints constraints) => Stack(
+          children: <Widget>[
             Center(
-              child: Icon(icon, color: Colors.grey[200], size: constraint.biggest.width)
+              child: Icon(icon, color: Colors.grey[200], size: constraints.biggest.width)
             ),
             Center(
               child: Column(
-                children: [
+                children: <Widget>[
                   Text(title, style: Theme.of(context).textTheme.title),
                   Text(subtitle, style: Theme.of(context).textTheme.subtitle),
                 ],

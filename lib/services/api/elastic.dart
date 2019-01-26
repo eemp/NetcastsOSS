@@ -47,8 +47,8 @@ class ElasticsearchResponse {
 
   ElasticsearchResponse.fromJson(Map<String, dynamic> json) {
     if(json['hits'] != null) {
-      final List<Map<String, dynamic>> rawHits = json['hits']['hits'];
-      hits = rawHits.map((Map<String, dynamic> result) => Hit.fromJson(result)).toList();
+      final List<dynamic> rawHits = json['hits']['hits'];
+      hits = rawHits.map((dynamic result) => Hit.fromJson(result)).toList();
       total = json['hits']['total'];
     }
   }

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "push-mappings": "./scripts/push-mappings.sh && ./scripts/reindex-docs.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

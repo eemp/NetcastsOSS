@@ -2,9 +2,8 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:redux/redux.dart';
 
-AppState AppReducer(AppState state, dynamic action) {
+AppState reducer(AppState state, dynamic action) {
   return AppState(
     episodeLength: episodeLengthReducer(state.episodeLength, action),
     isPlaying: isPlayingReducer(state.isPlaying, action),
@@ -14,7 +13,9 @@ AppState AppReducer(AppState state, dynamic action) {
   );
 }
 
-bool isPlayingReducer(state, dynamic action) {
+const Function AppReducer = reducer;
+
+bool isPlayingReducer(bool state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return false;
@@ -28,7 +29,7 @@ bool isPlayingReducer(state, dynamic action) {
   }
 }
 
-Episode playEpisodeReducer(state, dynamic action) {
+Episode playEpisodeReducer(Episode state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return null;
@@ -39,7 +40,7 @@ Episode playEpisodeReducer(state, dynamic action) {
   }
 }
 
-Duration episodeLengthReducer(state, dynamic action) {
+Duration episodeLengthReducer(Duration state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return null;
@@ -50,7 +51,7 @@ Duration episodeLengthReducer(state, dynamic action) {
   }
 }
 
-Duration positionInEpisodeReducer(state, dynamic action) {
+Duration positionInEpisodeReducer(Duration state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return null;
@@ -61,7 +62,7 @@ Duration positionInEpisodeReducer(state, dynamic action) {
   }
 }
 
-List<Podcast> subscriptionsReducer(state, dynamic action) {
+List<Podcast> subscriptionsReducer(List<Podcast> state, dynamic action) {
   switch(action.type) {
     case ActionType.UPDATE_SUBSCRIPTIONS:
       return action.payload['subscriptions'];

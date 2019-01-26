@@ -1,4 +1,4 @@
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -13,8 +13,8 @@ QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
     onPause: () {
       store.dispatch(pauseEpisode());
     },
-    onPlay: (episode) {
-      Duration position = store.state.positionInEpisode;
+    onPlay: (Episode episode) {
+      final Duration position = store.state.positionInEpisode;
       if(position == null) {
         store.dispatch(playEpisode(episode));
       }

@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:jaguar_query_sqflite/jaguar_query_sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 
 class LocalDatabaseAdapter {
   final String path;
@@ -16,7 +15,7 @@ class LocalDatabaseAdapter {
     if (_cache.containsKey(path)) {
       return _cache[path];
     } else {
-      final adapter = LocalDatabaseAdapter._internal(path);
+      final LocalDatabaseAdapter adapter = LocalDatabaseAdapter._internal(path);
       _cache[path] = adapter;
       return adapter;
     }
@@ -24,8 +23,8 @@ class LocalDatabaseAdapter {
 
   LocalDatabaseAdapter._internal(this.path);
 
-  void init() async {
-    adapter = new SqfliteAdapter(this.path);
+  Future<void> init() async {
+    adapter = SqfliteAdapter(path);
     await adapter.connect();
   }
 }

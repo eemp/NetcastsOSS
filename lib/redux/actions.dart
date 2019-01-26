@@ -1,10 +1,10 @@
-import 'package:flutter_redux/flutter_redux.dart';
+import 'dart:async';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/podcast.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
 enum ActionType {
   CLEAR_EPISODE,
@@ -28,7 +28,7 @@ class Action {
 }
 
 Action pauseEpisode() {
-  App app = App();
+  final App app = App();
 
   app.player.pause();
   return Action(
@@ -36,8 +36,8 @@ Action pauseEpisode() {
   );
 }
 
-Action playEpisode(episode) {
-  App app = App();
+Action playEpisode(Episode episode) {
+  final App app = App();
 
   app.player.play(
     episode.download.downloadPath,
@@ -45,14 +45,14 @@ Action playEpisode(episode) {
   );
   return Action(
     type: ActionType.PLAY_EPISODE,
-    payload: {
+    payload: <String, dynamic>{
       'episode': episode,
     },
   );
 }
 
 Action resumeEpisode() {
-  App app = App();
+  final App app = App();
 
   app.player.resume();
   return Action(
@@ -60,24 +60,24 @@ Action resumeEpisode() {
   );
 }
 
-Action seekInEpisode(position) {
-  App app = App();
+Action seekInEpisode(Duration position) {
+  final App app = App();
 
   app.player.seek(position);
   return Action(
     type: ActionType.SET_EPISODE_POSITION,
-    payload: {
+    payload: <String, dynamic>{
       'position': position,
     },
   );
 }
 
-void updateSubscriptions(Store<AppState> store) async {
+Future<void> updateSubscriptions(Store<AppState> store) async {
   final List<Podcast> subscriptions = await getSubscriptions();
   store.dispatch(
     Action(
       type: ActionType.UPDATE_SUBSCRIPTIONS,
-      payload: {
+      payload: <String, dynamic>{
         'subscriptions': subscriptions,
       },
     )

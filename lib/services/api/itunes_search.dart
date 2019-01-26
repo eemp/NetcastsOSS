@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 
 class ITunesSearchAPI {
-  static final AUTHORITY = 'itunes.apple.com';
-  static final PATH = '/search';
+  static const String AUTHORITY = 'itunes.apple.com';
+  static const String PATH = '/search';
 
   String country;
   String entity;
@@ -22,7 +23,7 @@ class ITunesSearchAPI {
     this.limit = 20,
     this.media = 'podcast',
   }) {
-    defaultQueryOptions = {
+    defaultQueryOptions = <String, String>{
       'country': country,
       'entity': entity,
       'lang': lang,
@@ -35,11 +36,9 @@ class ITunesSearchAPI {
   ///
   /// Future<dynamic> results = api.search(query, media: 'podcast', ...);
   Future<List<ITunesSearchAPIResult>> search(String query, [ Map<String, String> options ]) async {
-    final queryOptions = options ?? defaultQueryOptions;
-    final uri = Uri.https(AUTHORITY, PATH, { 'term': query }..addAll(queryOptions));
-    print('Fetching iTunes results from ${uri.toString()}');
-    final response = await http.get(uri);
-    return compute(parseResults, response.body);
+    final Map<String, String> queryOptions = options ?? defaultQueryOptions;
+    final Uri uri = Uri.https(AUTHORITY, PATH, <String, String>{ 'term': query }..addAll(queryOptions));
+    return compute(parseResults, (await http.get(uri)).body);
   }
 }
 
@@ -60,9 +59,9 @@ class ITunesSearchAPIResult {
       collectionName = json['collectionName'],
       description = json['description'],
       feedUrl = json['feedUrl'],
-      genres = (json['genres'] as List).asMap().entries.map(
-        (entry) => ITunesSearchAPIGenre(id: json['genreIds'][entry.key], name: entry.value)
-      ).toList(),
+      //genres = (json['genres'] as List).asMap().entries.map(
+        //(Map<String, String> entry) => ITunesSearchAPIGenre(id: json['genreIds'][entry.key], name: entry.value)
+      //).toList(),
       kind = json['kind'],
       releaseDate = DateTime.parse(json['releaseDate']),
       trackCount = json['trackCount'];
@@ -78,7 +77,8 @@ class ITunesSearchAPIGenre {
   });
 }
 
-List<ITunesSearchAPIResult> parseResults(responseBody) {
-  final parsedContent = json.decode(responseBody);
-  return (parsedContent['results'] as List).map((result) => ITunesSearchAPIResult.fromJson(result)).toList();
+List<ITunesSearchAPIResult> parseResults(String responseBody) {
+  final Map<String, dynamic> parsedContent = json.decode(responseBody);
+  final List<Map<String, dynamic>> results = parsedContent['results'];
+  return results.map((Map<String, dynamic> result) => ITunesSearchAPIResult.fromJson(result)).toList();
 }

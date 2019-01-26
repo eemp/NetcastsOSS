@@ -11,17 +11,17 @@ class Artist {
     this.name,
   });
 
-  Artist.fromJson(json) {
+  Artist.fromJson(dynamic json) {
     if(json is String) {
       json = jsonDecode(json);
     }
 
-    this.id = json['id'].toString();
-    this.name = json['name'];
+    id = json['id'].toString();
+    name = json['name'];
   }
 
   String toJson() {
-    return jsonEncode({
+    return jsonEncode(<String, String>{
       'id': id,
       'name': name,
     });
@@ -37,17 +37,17 @@ class Genre {
     this.name,
   });
 
-  Genre.fromJson(json) {
+  Genre.fromJson(dynamic json) {
     if(json is String) {
       json = jsonDecode(json);
     }
 
-    this.id = json['id'].toString();
-    this.name = json['name'];
+    id = json['id'].toString();
+    name = json['name'];
   }
 
   String toJson() {
-    return jsonEncode({
+    return jsonEncode(<String, String>{
       'id': id,
       'name': name,
     });
@@ -68,12 +68,12 @@ class Podcast {
   List<Genre> genres;
   String id;
   DateTime lastModifiedDate;
-  String logoUrl; // TODO: to be deprecated, removed
+  String logoUrl; // TODO(eemp): to be deprecated, removed
   String name;
   int popularity;
-  String title; // TODO: to be deprecated, removed
+  String title; // TODO(eemp): to be deprecated, removed
   DateTime releaseDate;
-  String url; // TODO: to be deprecated, removed
+  String url; // TODO(eemp): to be deprecated, removed
 
   Podcast({
     this.artwork30,
@@ -87,7 +87,7 @@ class Podcast {
     this.feed,
     this.id,
     this.lastModifiedDate,
-    this.logoUrl, // TODO: to be deprecated, removed
+    this.logoUrl, // TODO(eemp): to be deprecated, removed
     this.name,
     this.popularity,
     this.releaseDate,
@@ -101,32 +101,33 @@ class Podcast {
       : '${episodesCount.toString()} total episodes';
   }
 
-  Podcast.fromJson(json) {
+  Podcast.fromJson(dynamic json) {
     if(json is String) {
       json = jsonDecode(json);
       json['episodes'] = jsonDecode(json['episodes']);
     }
 
-    this.artist = Artist.fromJson(json['artist']);
-    this.artwork30 = json['artwork30'];
-    this.artwork60 = json['artwork60'];
-    this.artwork100 = json['artwork100'];
-    this.artwork600 = json['artwork600'];
-    this.artworkOrig = json['artworkOrig'];
-    this.description = json['description'];
-    this.episodesCount = json['episodesCount'] ??
+    artist = Artist.fromJson(json['artist']);
+    artwork30 = json['artwork30'];
+    artwork60 = json['artwork60'];
+    artwork100 = json['artwork100'];
+    artwork600 = json['artwork600'];
+    artworkOrig = json['artworkOrig'];
+    description = json['description'];
+    episodesCount = json['episodesCount'] ??
       (json['episodes'] != null ? json['episodes']['count'] : 0);
-    this.feed = json['feed'];
-    this.genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
-    this.id = json['id'].toString();
-    //this.lastModifiedDate = DateTime(json['last_modified_date']);
-    this.name = json['name'];
-    //this.popularity = json['popularity'];
-    //this.releaseDate = DateTime(json['release_date']);
+    feed = json['feed'];
+    id = json['id'].toString();
+    //lastModifiedDate = DateTime(json['last_modified_date']);
+    name = json['name'];
+    //popularity = json['popularity'];
+    //releaseDate = DateTime(json['release_date']);
+
+    //genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
   }
 
   String toJson() {
-    return jsonEncode({
+    return jsonEncode(<String, dynamic>{
       'artist': artist,
       'artwork30': artwork30,
       'artwork60': artwork60,

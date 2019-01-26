@@ -7,7 +7,7 @@ part 'podcast_subscription.jorm.dart';
 
 class PodcastSubscription {
   @IgnoreColumn()
-  final Uuid uuid = new Uuid();
+  final Uuid uuid = Uuid();
 
   @PrimaryKey(length: 36)
   String id;
@@ -28,21 +28,23 @@ class PodcastSubscription {
     this.podcastId,
     this.podcastUrl,
   }) {
-    this.id ??= uuid.v4();
+    id ??= uuid.v4();
   }
 
   Podcast getPodcastFromDetails() {
-    var decodedDetails = json.decode(details);
+    final Map<String, dynamic> decodedDetails = json.decode(details);
     return Podcast.fromJson(decodedDetails);
   }
 
+  @override
   String toString() {
-    return 'Id = ${id}: Created on ${created.toString()}, isSubscribed = ${isSubscribed.toString()}, podcastId: ${podcastId}, podcastUrl: ${podcastUrl}, details: ${details}';
+    return 'Id = $id: Created on ${created.toString()}, isSubscribed = ${isSubscribed.toString()}, podcastId: $podcastId, podcastUrl: $podcastUrl, details: $details';
   }
 }
 
 @GenBean()
 class PodcastSubscriptionBean extends Bean<PodcastSubscription> with _PodcastSubscriptionBean {
+  @override
   String get tableName => 'podcast_subscription';
 
   PodcastSubscriptionBean(Adapter adapter) : super(adapter);

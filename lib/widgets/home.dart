@@ -1,66 +1,85 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/services/api/elastic.dart';
+import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/horizontal_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
-import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
+import 'package:redux/redux.dart';
 
-const MAX_SHOWCASE_LIST_SIZE = 20;
+class Home extends StatefulWidget {
+  @override
+  State createState() => HomeState();
+}
 
-class Home extends StatelessWidget {
-  List<Map<String, dynamic>> homepageLists;
+class HomeState extends State<Home> {
+  List<Widget> homepageLists;
 
-  Home() {
-    Future<List<Podcast>> subscriptionsFuture = getSubscriptions();
-    Future<List<Podcast>> topScienceCastsFuture = searchPodcastsByGenre(1315);
-    Future<List<Podcast>> topTechCastsFuture = searchPodcastsByGenre(1318);
-    Future<List<Podcast>> topComedyCastsFuture = searchPodcastsByGenre(1303);
-    Future<List<Podcast>> topBusinessCastsFuture = searchPodcastsByGenre(1321);
+  @override
+  void initState() {
+    init().then((results) {
+      setState(() {
+        homepageLists = results;
+      });
+    });
+  }
 
-    homepageLists = [
-      { 'list': subscriptionsFuture, 'title': 'Your Podcasts' },
-      { 'list': topScienceCastsFuture, 'title': 'Science' },
-      { 'list': topTechCastsFuture, 'title': 'Technology' },
-      { 'list': topComedyCastsFuture, 'title': 'Comedy' },
-      { 'list': topBusinessCastsFuture, 'title': 'Business' },
+  Future<List<Widget>> init() async {
+    return [
+      buildSubscriptionsPreview(),
+      buildHomepageList('Science', await searchPodcastsByGenre(1315)),
+      buildHomepageList('Technology', await searchPodcastsByGenre(1318)),
+      buildHomepageList('Comedy', await searchPodcastsByGenre(1303)),
+      buildHomepageList('Business', await searchPodcastsByGenre(1321)),
     ];
   }
 
-  static Future<List<Podcast>> getSubscriptions() {
-    final App app = App();
-    PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    return subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
-      return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
-    });
+  Widget buildSubscriptionsPreview() {
+    return StoreConnector<AppState, List<Podcast>>(
+      converter: (store) => store.state.subscriptions,
+      builder: (context, subscriptions) {
+        return HomepageList(showcase: PodcastsShowcaseList(
+          list: subscriptions,
+          title: 'Your Podcasts',
+        ));
+      },
+    );
+  }
+
+  Widget buildHomepageList(String title, List<Podcast> podcasts) {
+    return HomepageList(showcase: PodcastsShowcaseList(
+      list: podcasts,
+      title: title,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    homepageLists[0] = { 'list': getSubscriptions(), 'title': 'Your Podcasts' };
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
-      body: ListView.separated(
-        itemBuilder: (BuildContext context, int idx) {
-          return buildHorizontalList(homepageLists[idx]['list'], title: homepageLists[idx]['title']);
-        },
-        itemCount: homepageLists.length,
-        separatorBuilder: (context, index) => Divider(),
-        shrinkWrap: true,
-      ),
+      body: homepageLists != null
+        ? ListView.separated(
+          itemBuilder: (BuildContext context, int idx) {
+            return homepageLists[idx];
+          },
+          itemCount: homepageLists.length,
+          separatorBuilder: (context, index) => Divider(),
+          shrinkWrap: true,
+        )
+        : Container(height: 0, width: 0),
       bottomNavigationBar: BottomAppBarPlayer(),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -83,104 +102,131 @@ class Home extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
+              leading: const Icon(Icons.home),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
                 );
               },
-              title: Text('Home'),
+              title: const Text('Home'),
             ),
             ListTile(
-              leading: Icon(Icons.explore),
+              leading: const Icon(Icons.explore),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PodcastSearch()),
                 );
               },
-              title: Text('Explore'),
+              title: const Text('Explore'),
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.apps),
+              leading: const Icon(Icons.apps),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SubscriptionsPage()),
                 );
               },
-              title: Text('Your Podcasts'),
+              title: const Text('Your Podcasts'),
             ),
             ListTile(
-              leading: Icon(Icons.subscriptions),
+              leading: const Icon(Icons.subscriptions),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DownloadPage()),
                 );
               },
-              title: Text('Downloads'),
+              title: const Text('Downloads'),
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.settings),
+              leading: const Icon(Icons.settings),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Settings()),
                 );
               },
-              title: Text('Settings'),
+              title: const Text('Settings'),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget buildHorizontalList(Future<List<Podcast>> toplistFuture, {String title}) {
-    return FutureBuilder(
-      future: toplistFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-        List<HorizontalListTile> tiles = snapshot.hasData
-          ? snapshot.data.map((podcast) {
-            Widget image = WithFadeInImage(
-              heroTag: '${title}/${podcast.artwork600}',
-              location: podcast.artwork600,
-            );
+class HomepageList extends StatelessWidget {
+  final PodcastsShowcaseList showcase;
 
-            return HorizontalListTile(
+  HomepageList({
+    Key key,
+    this.showcase,
+  }) : super(key: key);
+
+  bool isNotEmpty() {
+    return showcase.list.isNotEmpty;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<HorizontalListTile> tiles = showcase.list?.map((podcast) {
+      final Widget image = WithFadeInImage(
+        heroTag: '${showcase.title}/${podcast.artwork600}',
+        location: podcast.artwork600,
+      );
+
+      return HorizontalListTile(
+        image: image,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PodcastPage(
               image: image,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PodcastPage(
-                    image: image,
-                    podcast: podcast,
-                  )),
-                );
-              },
-              title: podcast.name,
-            );
-          }).toList()
-          : [];
+              podcast: podcast,
+            )),
+          );
+        },
+        title: podcast.name,
+      );
+    })?.toList() ?? [];
 
-        return tiles.length > 0
-          ? HorizontalListViewCard(
-            children: tiles,
-            onMoreClick: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SubscriptionsPage()),
-              );
-            },
-            title: title != null ? title : 'Top Podcasts',
-          )
-          : Container(width: 0.0, height: 0.0);
-      },
-    );
+    return tiles.isNotEmpty
+      ? HorizontalListViewCard(
+        children: tiles,
+        onMoreClick: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+          );
+        },
+        title: showcase.title,
+      )
+      : Container(height: 0.0, width: 0.0);
   }
 }
 
+class PodcastsShowcaseList {
+  List<Podcast> list;
+  String title;
+
+  PodcastsShowcaseList({
+    this.list,
+    this.title,
+  });
+
+  static Future<PodcastsShowcaseList> toFuturePodcastsShowcaseList(String title, Future<List<Podcast>> futurePodcasts) {
+    return futurePodcasts.then((list) => new PodcastsShowcaseList(
+      list: list,
+      title: title,
+    ));
+  }
+
+  String toString() {
+    return 'list: ${list.toString()}, title: ${title}';
+  }
+}

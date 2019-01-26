@@ -1,4 +1,5 @@
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';
@@ -9,6 +10,7 @@ AppState AppReducer(AppState state, dynamic action) {
     isPlaying: isPlayingReducer(state.isPlaying, action),
     playingEpisode: playEpisodeReducer(state.playingEpisode, action),
     positionInEpisode: positionInEpisodeReducer(state.positionInEpisode, action),
+    subscriptions: subscriptionsReducer(state.subscriptions, action),
   );
 }
 
@@ -54,6 +56,15 @@ Duration positionInEpisodeReducer(state, dynamic action) {
       return null;
     case ActionType.SET_EPISODE_POSITION:
       return action.payload['position'];
+    default:
+      return state;
+  }
+}
+
+List<Podcast> subscriptionsReducer(state, dynamic action) {
+  switch(action.type) {
+    case ActionType.UPDATE_SUBSCRIPTIONS:
+      return action.payload['subscriptions'];
     default:
       return state;
   }

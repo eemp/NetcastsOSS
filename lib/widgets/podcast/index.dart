@@ -9,6 +9,7 @@ import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/podcast/info.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
@@ -145,6 +146,12 @@ class PodcastPageState extends State<PodcastPage> {
             onPressed: () async {
               await this.onUnsubscribe();
               togglingWidgetPairController.setInitialValue();
+              app.store.dispatch(Action(
+                type: ActionType.UPDATE_SUBSCRIPTIONS,
+                payload: {
+                  'subscriptions': await getSubscriptions(),
+                },
+              ));
             },
           ),
           initialWidget: FloatingActionButton.extended(
@@ -153,6 +160,12 @@ class PodcastPageState extends State<PodcastPage> {
             onPressed: () async {
               await subscribeToPodcast(podcast);
               togglingWidgetPairController.setActiveValue();
+              app.store.dispatch(Action(
+                type: ActionType.UPDATE_SUBSCRIPTIONS,
+                payload: {
+                  'subscriptions': await getSubscriptions(),
+                },
+              ));
             },
           ),
         );

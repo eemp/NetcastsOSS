@@ -7,8 +7,17 @@ import 'package:hear2learn/models/podcast_subscription.dart';
 
 final String PODCAST_TYPE = 'podcast';
 
+Future<List<Podcast>> getSubscriptions() {
+  final App app = App();
+  final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+
+  return subscriptionModel.findWhere(subscriptionModel.isSubscribed.eq(true)).then((response) {
+    return Future.wait(response.map((subscription) => Future.value(subscription.getPodcastFromDetails())));
+  });
+}
+
 Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
-  App app = App();
+  final App app = App();
   final client = app.elasticClient;
 
   var query = {
@@ -24,9 +33,9 @@ Future<List<Podcast>> searchPodcastsByGenre(genreId) async {
         ]
       }
     },
-    //'sort': [
-      //'popularity',
-    //],
+    'sort': [
+      'popularity',
+    ],
   };
   return client.search(
     type: PODCAST_TYPE,

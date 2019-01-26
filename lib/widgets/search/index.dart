@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
@@ -89,7 +90,14 @@ class PodcastSearchState extends State<PodcastSearch> {
         child: FutureBuilder(
           future: results,
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-            return snapshot.hasData
+            if(!snapshot.hasData) {
+              return Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            return snapshot.data.isNotEmpty
               ? VerticalListView(
                 children: snapshot.data.map((podcast) {
                   Widget image = WithFadeInImage(
@@ -114,9 +122,10 @@ class PodcastSearchState extends State<PodcastSearch> {
                   );
                 }).toList(),
               )
-              : Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Center(child: CircularProgressIndicator()),
+              : PlaceholderScreen(
+                icon: Icons.search,
+                subtitle: 'Search for podcasts by keywords above.',
+                title: 'No podcasts to show',
               );
           },
         ),

@@ -80,10 +80,10 @@ class HorizontalListViewCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(title, style: Theme.of(context).textTheme.subhead),
-                InkWell(
+                onMoreClick != null ? InkWell(
                   child: Text('MORE', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold)),
                   onTap: onMoreClick,
-                ),
+                ) : Container(height: 0.0, width: 0.0),
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),

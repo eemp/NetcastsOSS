@@ -46,22 +46,35 @@ class HomeState extends State<Home> {
   }
 
   Widget buildSubscriptionsPreview() {
+    const MAX_SHOWCASE_ITEMS = 12;
     return StoreConnector<AppState, List<Podcast>>(
       converter: (store) => store.state.subscriptions,
       builder: (context, subscriptions) {
-        return HomepageList(showcase: PodcastsShowcaseList(
-          list: subscriptions,
-          title: 'Your Podcasts',
-        ));
+        return HomepageList(
+          onMoreClick: subscriptions.length > MAX_SHOWCASE_ITEMS
+            ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SubscriptionsPage()),
+              );
+            }
+            : null,
+          showcase: PodcastsShowcaseList(
+            list: subscriptions,
+            title: 'Your Podcasts',
+          )
+        );
       },
     );
   }
 
   Widget buildHomepageList(String title, List<Podcast> podcasts) {
-    return HomepageList(showcase: PodcastsShowcaseList(
-      list: podcasts,
-      title: title,
-    ));
+    return HomepageList(
+      showcase: PodcastsShowcaseList(
+        list: podcasts,
+        title: title,
+      )
+    );
   }
 
   @override
@@ -123,7 +136,7 @@ class HomeState extends State<Home> {
             ),
             Divider(),
             ListTile(
-              leading: const Icon(Icons.apps),
+              leading: const Icon(Icons.subscriptions),
               onTap: () {
                 Navigator.push(
                   context,
@@ -133,7 +146,7 @@ class HomeState extends State<Home> {
               title: const Text('Your Podcasts'),
             ),
             ListTile(
-              leading: const Icon(Icons.subscriptions),
+              leading: const Icon(Icons.get_app),
               onTap: () {
                 Navigator.push(
                   context,
@@ -161,10 +174,12 @@ class HomeState extends State<Home> {
 }
 
 class HomepageList extends StatelessWidget {
+  final Function onMoreClick;
   final PodcastsShowcaseList showcase;
 
   HomepageList({
     Key key,
+    this.onMoreClick,
     this.showcase,
   }) : super(key: key);
 
@@ -198,12 +213,7 @@ class HomepageList extends StatelessWidget {
     return tiles.isNotEmpty
       ? HorizontalListViewCard(
         children: tiles,
-        onMoreClick: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SubscriptionsPage()),
-          );
-        },
+        onMoreClick: onMoreClick,
         title: showcase.title,
       )
       : Container(height: 0.0, width: 0.0);

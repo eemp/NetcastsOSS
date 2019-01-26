@@ -4,6 +4,7 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
@@ -31,7 +32,14 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
       body: FutureBuilder(
         future: subscriptionsFuture,
         builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-          return snapshot.hasData
+          if(!snapshot.hasData) {
+            return Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          return snapshot.data.isNotEmpty
             ? Container(
                 child: VerticalListView(
                   children: snapshot.data.map((podcast) {
@@ -58,10 +66,11 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                 ),
                 padding: EdgeInsets.all(16.0),
               )
-            : Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
-            );
+              : PlaceholderScreen(
+                icon: Icons.subscriptions,
+                subtitle: 'Subscribe to podcasts and find them here.',
+                title: 'No podcasts subscriptions yet',
+              );
         },
       ),
       bottomNavigationBar: BottomAppBarPlayer(),

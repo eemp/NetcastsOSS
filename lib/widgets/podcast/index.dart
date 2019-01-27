@@ -78,7 +78,11 @@ class PodcastPageState extends State<PodcastPage> {
         body: TabBarView(
           children: <Widget>[
             Container(
-              child: buildPodcastHome(podcastSubscriptionFuture),
+              child: PodcastHome(
+                description: podcast.description,
+                genres: podcast.genres,
+                image: image,
+              ),
               margin: const EdgeInsets.all(16.0),
             ),
             Container(
@@ -101,25 +105,6 @@ class PodcastPageState extends State<PodcastPage> {
   Future<void> onUnsubscribe() async {
     final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
-  }
-
-  Widget buildPodcastHome(Future<PodcastSubscription> podcastSubscriptionFuture) {
-    return FutureBuilder<PodcastSubscription>(
-      future: podcastSubscriptionFuture,
-      builder: (BuildContext context, AsyncSnapshot<PodcastSubscription> snapshot) {
-        if(!snapshot.hasData) {
-          return PodcastHome(
-            description: podcast.description,
-            image: image,
-          );
-        }
-
-        return PodcastHome(
-          description: podcast.description,
-          image: image,
-        );
-      },
-    );
   }
 
   Widget buildSubscriptionButton(Future<PodcastSubscription> podcastSubscriptionFuture) {

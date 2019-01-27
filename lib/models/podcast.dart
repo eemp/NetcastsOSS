@@ -123,7 +123,10 @@ class Podcast {
     //popularity = json['popularity'];
     //releaseDate = DateTime(json['release_date']);
 
-    //genres = (json['genres'] as List).map((genreJson) => Genre.fromJson(genreJson)).toList();
+    final List<dynamic> rawGenres = json['genres'];
+    genres = rawGenres is List
+        ? rawGenres.map((dynamic genreJson) => Genre.fromJson(genreJson)).toList()
+        : <Genre>[];
   }
 
   String toJson() {

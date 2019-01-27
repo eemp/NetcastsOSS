@@ -181,7 +181,7 @@ packages:
   dynamic_theme:
     dependency: "direct main"
     description:
-      path: dynamic_theme
+      path: "packages/dynamic_theme"
       relative: true
     source: path
     version: "1.0.0"
@@ -595,7 +595,7 @@ packages:
   swagger:
     dependency: "direct main"
     description:
-      path: gpodder_client
+      path: "packages/gpodder_client"
       relative: true
     source: path
     version: "1.0.0"

@@ -79,6 +79,6 @@ class ITunesSearchAPIGenre {
 
 List<ITunesSearchAPIResult> parseResults(String responseBody) {
   final Map<String, dynamic> parsedContent = json.decode(responseBody);
-  final List<Map<String, dynamic>> results = parsedContent['results'];
-  return results.map((Map<String, dynamic> result) => ITunesSearchAPIResult.fromJson(result)).toList();
+  final List<dynamic> results = parsedContent['results'];
+  return results.map((dynamic result) => ITunesSearchAPIResult.fromJson(result)).toList();
 }

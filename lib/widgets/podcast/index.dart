@@ -6,8 +6,6 @@ import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/helpers/podcast.dart';
-import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -22,7 +20,7 @@ class PodcastData {
   PodcastData({this.podcast, this.subscription});
 }
 
-class PodcastPage extends StatefulWidget {
+class PodcastPage extends StatelessWidget {
   final Widget image;
   final Podcast podcast;
 
@@ -33,24 +31,11 @@ class PodcastPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  PodcastPageState createState() => PodcastPageState();
-}
-
-class PodcastPageState extends State<PodcastPage> {
-  final App app = App();
-
-  Widget get image => widget.image;
-  Podcast get podcast => widget.podcast;
-
-  @override
   Widget build(BuildContext context) {
+    final App app = App();
     final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
 
-    final Future<Podcast> podcastFuture = getPodcastFromFeed(podcast: podcast).then(
-      (Podcast podcast) => Future.wait(podcast.episodes.map((Episode episode) => episode.getDownload())).then(
-        (List<EpisodeDownload> downloads) => Future<Podcast>.value(podcast)
-      )
-    );
+    final Future<Podcast> podcastFuture = getPodcastFromFeed(podcast: podcast);
     final Future<PodcastSubscription> podcastSubscriptionFuture = subscriptionModel.findOneWhere(subscriptionModel.podcastUrl.eq(podcast.feed))
       .then((PodcastSubscription response) => response ?? PodcastSubscription(isSubscribed: false));
 
@@ -103,11 +88,13 @@ class PodcastPageState extends State<PodcastPage> {
   }
 
   Future<void> onUnsubscribe() async {
+    final App app = App();
     final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
     await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
   }
 
   Widget buildSubscriptionButton(Future<PodcastSubscription> podcastSubscriptionFuture) {
+    final App app = App();
     return FutureBuilder<PodcastSubscription>(
       future: podcastSubscriptionFuture,
       builder: (BuildContext context, AsyncSnapshot<PodcastSubscription> snapshot) {

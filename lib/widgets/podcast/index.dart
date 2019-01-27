@@ -13,13 +13,6 @@ import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
 
-class PodcastData {
-  final Podcast podcast;
-  final PodcastSubscription subscription;
-
-  PodcastData({this.podcast, this.subscription});
-}
-
 class PodcastPage extends StatelessWidget {
   final Widget image;
   final Podcast podcast;
@@ -53,10 +46,6 @@ class PodcastPage extends StatelessWidget {
                 icon: Icon(Icons.list),
                 text: 'Episodes',
               ),
-              //Tab(
-                //icon: Icon(Icons.info),
-                //text: 'Info',
-              //),
             ],
           ),
         ),
@@ -74,10 +63,6 @@ class PodcastPage extends StatelessWidget {
               child: buildPodcastEpisodesList(podcastFuture),
               margin: const EdgeInsets.all(16.0),
             ),
-            //Container(
-              //child: PodcastInfo(),
-              //margin: EdgeInsets.all(16.0),
-            //),
           ],
         ),
         bottomNavigationBar: const BottomAppBarPlayer(),

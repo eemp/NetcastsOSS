@@ -7,6 +7,7 @@ import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/api/elastic.dart';
 import 'package:path/path.dart';
@@ -31,16 +32,16 @@ class App {
 
   App._internal();
 
-  Future<void> init(Store<AppState> appStore) async {
-    store = appStore;
+  Future<void> init({ String elasticHost }) async {
+    store = appStore();
     prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
 
     localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();
 
-    elasticClient = const ElasticsearchClient(
-      host: 'localhost:9200',
+    elasticClient = ElasticsearchClient(
+      host: elasticHost,
       index: 'hear2learn',
     );
 

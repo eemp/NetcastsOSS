@@ -16,11 +16,13 @@ import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
 
 class PodcastPage extends StatefulWidget {
+  final bool directToEpisodes;
   final Widget image;
   final Podcast podcast;
 
   const PodcastPage({
     Key key,
+    this.directToEpisodes = false,
     this.image,
     this.podcast,
   }) : super(key: key);
@@ -32,6 +34,7 @@ class PodcastPage extends StatefulWidget {
 class PodcastPageState extends State<PodcastPage> {
   final App app = App();
 
+  bool get directToEpisodes => widget.directToEpisodes;
   Widget get image => widget.image;
   Podcast get podcast => widget.podcast;
 
@@ -83,13 +86,9 @@ class PodcastPageState extends State<PodcastPage> {
         bottomNavigationBar: const BottomAppBarPlayer(),
         floatingActionButton: buildSubscriptionButton(podcastSubscriptionFuture),
       ),
-      length: 3,
+      initialIndex: directToEpisodes ? 1 : 0,
+      length: 2,
     );
-  }
-
-  Future<void> onUnsubscribe() async {
-    final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
-    await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
   }
 
   Widget buildSubscriptionButton(Future<PodcastSubscription> podcastSubscriptionFuture) {
@@ -112,7 +111,7 @@ class PodcastPageState extends State<PodcastPage> {
             icon: const Icon(Icons.remove),
             label: const Text('Unsubscribe'),
             onPressed: () async {
-              await onUnsubscribe();
+              await unsubscribeFromPodcast(podcast);
               togglingWidgetPairController.setInitialValue();
               app.store.dispatch(Action(
                 type: ActionType.UPDATE_SUBSCRIPTIONS,

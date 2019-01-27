@@ -61,6 +61,7 @@ class HomeState extends State<Home> {
               );
             }
             : null,
+          directToEpisodes: true,
           title: 'Your Podcasts',
         );
       },

@@ -55,6 +55,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                           context,
                           MaterialPageRoute<void>(
                             builder: (BuildContext context) => PodcastPage(
+                              directToEpisodes: true,
                               image: image,
                               podcast: podcast,
                             )

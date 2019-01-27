@@ -6,12 +6,14 @@ import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 
 class HomepageList extends StatelessWidget {
+  final bool directToEpisodes;
   final List<Podcast> list;
   final Function onMoreClick;
   final String title;
 
   const HomepageList({
     Key key,
+    this.directToEpisodes = false,
     this.list,
     this.onMoreClick,
     this.title,
@@ -31,6 +33,7 @@ class HomepageList extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
+              directToEpisodes: directToEpisodes,
               image: image,
               podcast: podcast,
             )),

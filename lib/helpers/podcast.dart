@@ -89,6 +89,12 @@ Future<void> subscribeToPodcast(Podcast podcast) async {
   await subscriptionModel.insert(newSubscription);
 }
 
+Future<void> unsubscribeFromPodcast(Podcast podcast) async {
+  final App app = App();
+  final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
+  await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
+}
+
 List<Podcast> toPodcasts(ElasticsearchResponse response) {
   return response.hits.map((hit) => Podcast.fromJson(hit.source)).toList();
 }

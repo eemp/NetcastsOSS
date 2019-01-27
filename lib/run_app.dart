@@ -10,7 +10,7 @@ import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/themes.dart';
-import 'package:hear2learn/widgets/home.dart';
+import 'package:hear2learn/widgets/home/index.dart';
 import 'package:redux/redux.dart';
 
 Future<void> start() async {

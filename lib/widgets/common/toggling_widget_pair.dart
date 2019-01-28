@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/helpers/dash.dart' as dash;
+
 enum TogglingWidgetPairValue { initial, loading, active }
 
 class TogglingWidgetPair extends StatefulWidget {
   final TogglingWidgetPairController controller;
-  //bool debug;
 
   final Widget activeWidget;
-  final Widget loadingWidget;
+  final dynamic loadingWidget;
   final Widget initialWidget;
 
   const TogglingWidgetPair({
     Key key,
     this.activeWidget,
     this.controller,
-    //this.debug = false,
     this.initialWidget,
     this.loadingWidget,
   }) : super(key: key);
@@ -26,6 +26,7 @@ class TogglingWidgetPair extends StatefulWidget {
 class TogglingWidgetPairController {
   Function listener;
   TogglingWidgetPairValue value;
+  double progressValue;
 
   TogglingWidgetPairController({
     this.value,
@@ -35,8 +36,9 @@ class TogglingWidgetPairController {
     listener = newListener;
   }
 
-  TogglingWidgetPairController setValue(TogglingWidgetPairValue newValue) {
+  TogglingWidgetPairController setValues(TogglingWidgetPairValue newValue, {double updatedProgressValue}) {
     value = newValue;
+    progressValue = updatedProgressValue;
     return this;
   }
 
@@ -54,6 +56,11 @@ class TogglingWidgetPairController {
     value = TogglingWidgetPairValue.active;
     listener(value);
   }
+
+  void setProgressValue(double updatedProgressValue) {
+    progressValue = updatedProgressValue;
+    listener(value, progressValue: progressValue);
+  }
 }
 
 class TogglingWidgetPairState extends State<TogglingWidgetPair> {
@@ -62,14 +69,18 @@ class TogglingWidgetPairState extends State<TogglingWidgetPair> {
   @override
   Widget build(BuildContext context) {
     final TogglingWidgetPairValue currValue = controller.value ?? TogglingWidgetPairValue.initial;
-    controller.setListener((TogglingWidgetPairValue nextValue) {
+    controller.setListener((TogglingWidgetPairValue nextValue, {double progressValue}) {
       setState(() {
-        controller.setValue(nextValue);
+        controller.setValues(nextValue, updatedProgressValue: progressValue);
       });
     });
 
-    return currValue == TogglingWidgetPairValue.loading
+    final Function loadingWidget = widget.loadingWidget is Function
         ? widget.loadingWidget
+        : ({ double progressValue }) => widget.loadingWidget;
+
+    return currValue == TogglingWidgetPairValue.loading
+        ? dash.apply(loadingWidget, <dynamic>[], <String, dynamic>{ 'progressValue': controller.progressValue })
         : currValue == TogglingWidgetPairValue.active
           ? widget.activeWidget
           : widget.initialWidget;

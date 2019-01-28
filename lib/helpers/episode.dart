@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 
 final Dio dio = Dio();
 
-Future<void> downloadEpisode(Episode episode) async {
+Future<void> downloadEpisode(Episode episode, {OnDownloadProgress onProgress}) async {
   final App app = App();
   final EpisodeDownloadBean downloadModel = app.models['episode_download'];
   final String downloadId = EpisodeDownload.createNewId();
@@ -21,7 +21,7 @@ Future<void> downloadEpisode(Episode episode) async {
     episodeUrl: episode.url,
     id: downloadId,
   );
-  await dio.download(episode.url, download.downloadPath);
+  await dio.download(episode.url, download.downloadPath, onProgress: onProgress);
   await downloadModel.insert(download);
   episode.download = download;
 }

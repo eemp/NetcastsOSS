@@ -25,11 +25,7 @@ class EpisodeOptions extends StatelessWidget {
         Container(
           child: TogglingWidgetPair(
             //debug: true,
-            controller: togglingWidgetPairController.setValue(
-              episode.download != null
-                ? TogglingWidgetPairValue.active
-                : TogglingWidgetPairValue.initial,
-            ),
+            controller: togglingWidgetPairController,
             activeWidget: RaisedButton(
               child: Row(
                 children: const <Widget>[

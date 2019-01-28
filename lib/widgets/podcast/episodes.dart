@@ -54,12 +54,14 @@ class PodcastEpisodesList extends StatelessWidget {
                   icon: const Icon(Icons.get_app),
                   onPressed: () async {
                     togglingWidgetPairController.setLoadingValue();
-                    await onEpisodeDownload(episode);
+                    await onEpisodeDownload(episode, onProgress: (int received, int total) {
+                      togglingWidgetPairController.setProgressValue(received/total);
+                    });
                     togglingWidgetPairController.setActiveValue();
                   },
                 ),
-                loadingWidget: const IconButton(
-                  icon: CircularProgressIndicator(value: null),
+                loadingWidget: ({ double progressValue }) => IconButton(
+                  icon: CircularProgressIndicator(value: progressValue),
                   onPressed: null,
                 ),
               ),

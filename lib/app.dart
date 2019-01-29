@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
@@ -65,25 +66,41 @@ class App {
   }
 
   void initPlayer() {
+    final Function throttledDurationHandler = dash.throttle(
+      (Duration duration) {
+        store.dispatch(Action(
+          type: ActionType.SET_EPISODE_LENGTH,
+          payload: <String, dynamic>{
+            'length': duration,
+          },
+        ));
+      },
+      Duration(milliseconds: 1000)
+    );
+    final Function throttledPositionHandler = dash.throttle(
+      (Duration position) {
+        store.dispatch(Action(
+          type: ActionType.SET_EPISODE_POSITION,
+          payload: <String, dynamic>{
+            'position': position,
+          },
+        ));
+      },
+      Duration(milliseconds: 1000)
+    );
+
+
     //AudioPlayer.logEnabled = true;
     app.player.completionHandler = () {
       store.dispatch(Action(type: ActionType.CLEAR_EPISODE));
     };
     app.player.durationHandler = (Duration duration) {
-      store.dispatch(Action(
-        type: ActionType.SET_EPISODE_LENGTH,
-        payload: <String, dynamic>{
-          'length': duration,
-        },
-      ));
+      final List<dynamic> throttledUpdateArgs = <dynamic>[ duration ];
+      throttledDurationHandler(throttledUpdateArgs);
     };
     app.player.positionHandler = (Duration position) {
-      store.dispatch(Action(
-        type: ActionType.SET_EPISODE_POSITION,
-        payload: <String, dynamic>{
-          'position': position,
-        },
-      ));
+      final List<dynamic> throttledUpdateArgs = <dynamic>[ position ];
+      throttledPositionHandler(throttledUpdateArgs);
     };
   }
 

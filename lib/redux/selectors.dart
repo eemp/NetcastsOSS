@@ -1,3 +1,4 @@
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -23,4 +24,21 @@ QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
       }
     },
   );
+}
+
+Function getEpisodeSelector(Episode episode) {
+  return (Store<AppState> store) {
+    final AppState state = store.state;
+    final Episode download = state.downloads != null
+      ? dash.find(state.downloads, (Episode download) => download.url == episode.url)
+      : null
+      ;
+    final Episode pendingDownload = state.pendingDownloads != null
+      ? dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url)
+      : null
+      ;
+    //final String downloadPath = download?.downloadPath;
+    //final double progress = pendingDownload?.progress;
+    return download ?? pendingDownload ?? episode;
+  };
 }

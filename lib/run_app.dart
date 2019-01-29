@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/helpers/podcast.dart';
-import 'package:hear2learn/models/podcast.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/themes.dart';
@@ -16,13 +15,9 @@ import 'package:redux/redux.dart';
 Future<void> start() async {
   final App app = App();
 
-  final List<Podcast> subscriptions = await getSubscriptions();
-  app.store.dispatch(Action(
-    type: ActionType.UPDATE_SUBSCRIPTIONS,
-    payload: <String, dynamic>{
-      'subscriptions': subscriptions,
-    },
-  ));
+  app.store.dispatch(updateSubscriptions);
+  app.store.dispatch(updateDownloads);
+  app.store.dispatch(setPendingDownloads(<Episode>[]));
 
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
 

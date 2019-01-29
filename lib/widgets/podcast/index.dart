@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
-import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
@@ -151,8 +150,12 @@ class PodcastPageState extends State<PodcastPage> {
         }
 
         return PodcastEpisodesList(
-          onEpisodeDelete: episode_helpers.deleteEpisode,
-          onEpisodeDownload: episode_helpers.downloadEpisode,
+          onEpisodeDelete: (Episode episode) {
+            app.store.dispatch(deleteEpisode(episode));
+          },
+          onEpisodeDownload: (Episode episode) {
+            app.store.dispatch(downloadEpisode(episode));
+          },
           episodes: snapshot.data.episodes,
         );
       },

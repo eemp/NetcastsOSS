@@ -9,6 +9,14 @@ import 'package:path/path.dart';
 
 final Dio dio = Dio();
 
+Future<List<Episode>> getDownloads() async {
+  final App app = App();
+  final EpisodeDownloadBean downloadModel = app.models['episode_download'];
+  return downloadModel.getAll().then((List<EpisodeDownload> downloads) {
+    return downloads.map((EpisodeDownload download) => download.getEpisodeFromDetails()).toList();
+  });
+}
+
 Future<void> downloadEpisode(Episode episode, {OnDownloadProgress onProgress}) async {
   final App app = App();
   final EpisodeDownloadBean downloadModel = app.models['episode_download'];
@@ -23,7 +31,8 @@ Future<void> downloadEpisode(Episode episode, {OnDownloadProgress onProgress}) a
   );
   await dio.download(episode.url, download.downloadPath, onProgress: onProgress);
   await downloadModel.insert(download);
-  episode.download = download;
+  episode.downloadPath = downloadPath;
+  episode.progress = null;
 }
 
 Future<void> deleteEpisode(Episode episode) async {
@@ -32,5 +41,5 @@ Future<void> deleteEpisode(Episode episode) async {
   final EpisodeDownload episodeDownload = await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(episode.url));
   await File(episodeDownload.downloadPath).delete();
   await downloadModel.removeWhere(downloadModel.episodeUrl.eq(episode.url));
-  episode.download = null;
+  episode.downloadPath = null;
 }

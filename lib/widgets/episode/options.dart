@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/widgets/common/toggling_widget_pair.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/redux/selectors.dart';
+import 'package:hear2learn/redux/state.dart';
 
 class EpisodeOptions extends StatelessWidget {
   final Episode episode;
@@ -17,72 +19,64 @@ class EpisodeOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TogglingWidgetPairController togglingWidgetPairController = TogglingWidgetPairController(
-      value: episode.download != null ? TogglingWidgetPairValue.active : TogglingWidgetPairValue.initial,
-    );
     return Row(
       children: <Widget>[
         Container(
-          child: TogglingWidgetPair(
-            //debug: true,
-            controller: togglingWidgetPairController,
-            activeWidget: RaisedButton(
-              child: Row(
-                children: const <Widget>[
-                  Icon(Icons.delete),
-                  Text('Delete'),
-                ],
-              ),
-              onPressed: () async {
-                togglingWidgetPairController.setLoadingValue();
-                await onEpisodeDelete(episode);
-                togglingWidgetPairController.setInitialValue();
-              },
-            ),
-            initialWidget: RaisedButton(
-              child: Row(
-                children: const <Widget>[
-                  Icon(Icons.get_app),
-                  Text('Download'),
-                ],
-              ),
-              onPressed: () async {
-                togglingWidgetPairController.setLoadingValue();
-                await onEpisodeDownload(episode);
-                togglingWidgetPairController.setActiveValue();
-              },
-            ),
-            loadingWidget: RaisedButton(
-              child: Row(
-                children: const <Widget>[
-                  Icon(Icons.more_horiz),
-                  Text('Downloading'),
-                ],
-              ),
-              onPressed: null,
-            ),
+          child: StoreConnector<AppState, Episode>(
+            converter: getEpisodeSelector(episode),
+            builder: episodeOptionsBuilder,
           ),
         ),
-        //Container(
-          //child: IconButton(
-            //icon: Icon(Icons.playlist_add),
-            //iconSize: 24.0,
-          //),
-        //),
-        //Container(
-          //child: IconButton(
-            //icon: Icon(Icons.favorite_border),
-            //iconSize: 24.0,
-          //),
-        //),
-        //Container(
-          //child: IconButton(
-            //icon: Icon(Icons.share),
-            //iconSize: 24.0,
-          //),
-        //),
       ],
       //mainAxisAlignment: MainAxisAlignment.spaceAround,
+    );
+  }
+
+  Widget episodeOptionsBuilder(BuildContext context, Episode episode) {
+    return episode.downloadPath != null
+      ? buildDeleteOption(episode)
+      : episode.progress != null
+        ? buildDownloadProgress(episode)
+        : buildDownloadOption(episode);
+  }
+
+  Widget buildDeleteOption(Episode episode) {
+    return RaisedButton(
+      child: Row(
+        children: const <Widget>[
+          Icon(Icons.delete),
+          Text('Delete'),
+        ],
+      ),
+      onPressed: () {
+        onEpisodeDelete(episode);
+      },
+    );
+  }
+
+  Widget buildDownloadOption(Episode episode) {
+    return RaisedButton(
+      child: Row(
+        children: const <Widget>[
+          Icon(Icons.get_app),
+          Text('Download'),
+        ],
+      ),
+      onPressed: () {
+        onEpisodeDownload(episode);
+      },
+    );
+  }
+
+  Widget buildDownloadProgress(Episode episode) {
+    return RaisedButton(
+      child: Row(
+        children: <Widget>[
+          const Icon(Icons.more_horiz),
+          Text('Downloaded ${(episode.progress * 100).truncateToDouble().toString()}%'),
+        ],
+      ),
+      onPressed: null,
     );
   }
 }

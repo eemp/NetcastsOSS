@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/app.dart';
+import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
-import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
-import 'package:hear2learn/models/episode.dart';
 
 class EpisodePage extends StatefulWidget {
   final Episode episode;
@@ -18,6 +19,8 @@ class EpisodePage extends StatefulWidget {
 }
 
 class EpisodePageState extends State<EpisodePage> {
+  final App app = App();
+
   Episode get episode => widget.episode;
 
   @override
@@ -44,15 +47,11 @@ class EpisodePageState extends State<EpisodePage> {
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onEpisodeDelete: (Episode episode) async {
-                  await episode_helpers.deleteEpisode(episode);
-                  await episode.getDownload();
-                  setState(() { /* force most of episode page to update - home, options, player */ });
+                onEpisodeDelete: (Episode episode) {
+                  app.store.dispatch(deleteEpisode(episode));
                 },
-                onEpisodeDownload: (Episode episode) async {
-                  await episode_helpers.downloadEpisode(episode);
-                  await episode.getDownload();
-                  setState(() { /* force most of episode page to update - home, options, player */ });
+                onEpisodeDownload: (Episode episode) {
+                  app.store.dispatch(downloadEpisode(episode));
                 },
               ),
               margin: const EdgeInsets.all(16.0),

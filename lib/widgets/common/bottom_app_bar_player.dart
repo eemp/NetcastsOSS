@@ -30,7 +30,8 @@ class BottomAppBarPlayer extends StatelessWidget {
                   Positioned.fill(
                     child: CircularProgressIndicator(
                       strokeWidth: 3.0,
-                      value: queuedEpisode.position.inSeconds.toDouble() / queuedEpisode.duration.inSeconds.toDouble(),
+                      value: (queuedEpisode.position?.inSeconds?.toDouble() ?? 0)
+                        / (queuedEpisode.duration?.inSeconds?.toDouble() ?? 1),
                     ),
                   ),
                   IconButton(

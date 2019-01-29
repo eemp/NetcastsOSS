@@ -11,9 +11,11 @@ class Episode {
 
   String description;
   EpisodeDownload download;
+  String downloadPath;
   String media;
   String podcastTitle;
   String podcastUrl;
+  double progress;
   String pubDate;
   int size;
   String title;
@@ -22,9 +24,11 @@ class Episode {
   Episode({
     this.description,
     this.download,
+    this.downloadPath,
     this.media,
     this.podcastTitle,
     this.podcastUrl,
+    this.progress,
     this.pubDate,
     this.size,
     this.title,

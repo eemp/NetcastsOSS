@@ -39,6 +39,7 @@ class EpisodeDownload {
     return Episode(
       description: decodedDetails['description'],
       download: this,
+      downloadPath: downloadPath,
       media: decodedDetails['media'],
       podcastTitle: decodedDetails['podcastTitle'],
       podcastUrl: decodedDetails['podcastUrl'],

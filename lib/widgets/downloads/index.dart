@@ -72,7 +72,7 @@ class DownloadPageState extends State<DownloadPage> {
               : const PlaceholderScreen(
                 icon: Icons.get_app,
                 subtitle: 'Download episodes and manage them here.',
-                title: 'No downloads yet',
+                title: 'No downloads available',
               );
         },
       ),

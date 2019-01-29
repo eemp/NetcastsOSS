@@ -35,6 +35,9 @@ class EpisodePlayerState extends State<EpisodePlayer> {
         final Function onPlay = queuedEpisode.onPlay;
         final Duration position = queuedEpisode.position;
 
+        final bool showPlayer = episode.downloadPath != null
+          || episode.url == queuedEpisode.episode?.url;
+
         return Column(
           children: <Widget>[
             Container(
@@ -62,7 +65,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
                       max: duration?.inSeconds?.toDouble() ?? 0.0,
-                      onChanged: episode.download != null ? (double value) {
+                      onChanged: showPlayer ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
                       value: position?.inSeconds?.toDouble() ?? 0.0,
@@ -84,18 +87,18 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.replay_10),
                     iconSize: 40.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: showPlayer ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds - 10));
                     } : null,
                   ),
                   RawMaterialButton(
                     shape: const CircleBorder(),
-                    fillColor: episode.download != null ? Theme.of(context).accentColor : Colors.grey,
+                    fillColor: showPlayer ? Theme.of(context).accentColor : Colors.grey,
                     splashColor: Theme.of(context).splashColor,
                     highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
                     elevation: 10.0,
                     highlightElevation: 5.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: showPlayer ? () {
                       if(isPlaying) {
                         onPause();
                       }
@@ -115,7 +118,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.forward_30),
                     iconSize: 40.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: showPlayer ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds + 30));
                     } : null,
                   ),

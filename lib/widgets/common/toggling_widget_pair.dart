@@ -29,6 +29,7 @@ class TogglingWidgetPairController {
   double progressValue;
 
   TogglingWidgetPairController({
+    this.progressValue,
     this.value,
   });
 

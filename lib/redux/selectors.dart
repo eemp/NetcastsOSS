@@ -1,5 +1,6 @@
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -41,4 +42,12 @@ Function getEpisodeSelector(Episode episode) {
     //final double progress = pendingDownload?.progress;
     return download ?? pendingDownload ?? episode;
   };
+}
+
+List<Episode> downloadsSelector(Store<AppState> store) {
+  return store.state.downloads;
+}
+
+List<Podcast> subscriptionsSelector(Store<AppState> store) {
+  return store.state.subscriptions;
 }

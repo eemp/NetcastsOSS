@@ -30,16 +30,8 @@ QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
 Function getEpisodeSelector(Episode episode) {
   return (Store<AppState> store) {
     final AppState state = store.state;
-    final Episode download = state.downloads != null
-      ? dash.find(state.downloads, (Episode download) => download.url == episode.url)
-      : null
-      ;
-    final Episode pendingDownload = state.pendingDownloads != null
-      ? dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url)
-      : null
-      ;
-    //final String downloadPath = download?.downloadPath;
-    //final double progress = pendingDownload?.progress;
+    final Episode download = dash.find(state.downloads, (Episode download) => download.url == episode.url);
+    final Episode pendingDownload = dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url);
     return download ?? pendingDownload ?? episode;
   };
 }
@@ -50,4 +42,11 @@ List<Episode> downloadsSelector(Store<AppState> store) {
 
 List<Podcast> subscriptionsSelector(Store<AppState> store) {
   return store.state.subscriptions;
+}
+
+Function getSubscriptionSelector(Podcast potentialSubscription) {
+  return (Store<AppState> store) {
+    final AppState state = store.state;
+    return dash.find(state.subscriptions, (Podcast podcast) => podcast.feed == potentialSubscription.feed);
+  };
 }

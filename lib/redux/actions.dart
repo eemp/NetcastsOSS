@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
-import 'package:hear2learn/helpers/podcast.dart';
+import 'package:hear2learn/helpers/podcast.dart' as podcast_helpers;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -82,8 +82,23 @@ Action seekInEpisode(Duration position) {
   );
 }
 
+ThunkAction<AppState> subscribeToPodcast(Podcast podcast) {
+  return (Store<AppState> store) async {
+    await podcast_helpers.subscribeToPodcast(podcast);
+    store.dispatch(updateSubscriptions);
+  };
+}
+
+ThunkAction<AppState> unsubscribeFromPodcast(Podcast podcast) {
+  return (Store<AppState> store) async {
+    await podcast_helpers.unsubscribeFromPodcast(podcast);
+    store.dispatch(updateSubscriptions);
+  };
+}
+
+
 Future<void> updateSubscriptions(Store<AppState> store) async {
-  final List<Podcast> subscriptions = await getSubscriptions();
+  final List<Podcast> subscriptions = await podcast_helpers.getSubscriptions();
   store.dispatch(
     setSubscriptions(subscriptions)
   );

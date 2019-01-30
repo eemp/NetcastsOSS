@@ -22,7 +22,7 @@ class PodcastPage extends StatelessWidget {
 
   PodcastPage({
     Key key,
-    this.directToEpisodes,
+    this.directToEpisodes = false,
     this.image,
     this.podcast,
   }) : super(key: key) {

@@ -51,7 +51,7 @@ class VerticalListView extends StatelessWidget {
       itemBuilder: (BuildContext context, int idx) {
         return children[idx];
       },
-      separatorBuilder: (BuildContext context, int idx) => Divider(),
+      separatorBuilder: (BuildContext context, int idx) => const Divider(),
     );
   }
 }

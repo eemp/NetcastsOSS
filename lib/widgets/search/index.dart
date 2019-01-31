@@ -54,10 +54,10 @@ class PodcastSearchState extends State<PodcastSearch> {
           style: const TextStyle(
             color: Colors.white,
           ),
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search, color: Colors.white),
+          decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.search, color: Colors.white),
             hintText: 'Search for podcasts...',
-            hintStyle: const TextStyle(color: Colors.white)
+            hintStyle: TextStyle(color: Colors.white)
           ),
           onChanged: (String text) {
             setState(() {

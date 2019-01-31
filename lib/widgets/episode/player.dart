@@ -28,22 +28,22 @@ class EpisodePlayerState extends State<EpisodePlayer> {
     return StoreConnector<AppState, QueuedEpisode>(
       converter: queuedEpisodeSelector,
       builder: (BuildContext context, QueuedEpisode queuedEpisode) {
-        final Duration duration = queuedEpisode.duration;
-        final Episode episode = queuedEpisode.episode ?? widget.episode;
-        final bool isPlaying = queuedEpisode.isPlaying;
-        final Function onPause = queuedEpisode.onPause;
-        final Function onPlay = queuedEpisode.onPlay;
-        final Duration position = queuedEpisode.position;
-
-        final bool showPlayer = episode.downloadPath != null
-          || episode.url == queuedEpisode.episode?.url;
+        final bool canPlay = widget.episode.downloadPath != null;
+        final bool isPlaying = queuedEpisode.isPlaying
+          && widget.episode.url == queuedEpisode.episode?.url;
+        final bool isQueued = widget.episode.url == queuedEpisode.episode?.url;
+        //print('isPlaying = ${isPlaying.toString()}, queuedEpisode.isPlaying = ${queuedEpisode.isPlaying.toString()}, ${widget.episode.toString()}, ${queuedEpisode.episode.toString()}');
+        final Duration duration = isQueued ? queuedEpisode.duration : null;
+        final Function onPause = canPlay ? queuedEpisode.onPause : null;
+        final Function onPlay = canPlay ? queuedEpisode.onPlay : null;
+        final Duration position = isQueued ? queuedEpisode.position : null;
 
         return Column(
           children: <Widget>[
             Container(
               child: RichText(
                 text: TextSpan(
-                  text: episode.title,
+                  text: widget.episode.title,
                   style: Theme.of(context).textTheme.subhead
                 ),
                 textAlign: TextAlign.center,
@@ -65,7 +65,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
                       max: duration?.inSeconds?.toDouble() ?? 0.0,
-                      onChanged: showPlayer ? (double value) {
+                      onChanged: isQueued ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
                       value: position?.inSeconds?.toDouble() ?? 0.0,
@@ -87,18 +87,18 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.replay_10),
                     iconSize: 40.0,
-                    onPressed: showPlayer ? () {
+                    onPressed: canPlay ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds - 10));
                     } : null,
                   ),
                   RawMaterialButton(
                     shape: const CircleBorder(),
-                    fillColor: showPlayer ? Theme.of(context).accentColor : Colors.grey,
+                    fillColor: canPlay ? Theme.of(context).accentColor : Colors.grey,
                     splashColor: Theme.of(context).splashColor,
                     highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
                     elevation: 10.0,
                     highlightElevation: 5.0,
-                    onPressed: showPlayer ? () {
+                    onPressed: canPlay ? () {
                       if(isPlaying) {
                         onPause();
                       }
@@ -118,7 +118,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.forward_30),
                     iconSize: 40.0,
-                    onPressed: showPlayer ? () {
+                    onPressed: canPlay ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds + 30));
                     } : null,
                   ),

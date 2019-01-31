@@ -21,7 +21,7 @@ class AppDrawer extends StatelessWidget {
             child: DrawerHeader(
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                image: DecorationImage(
+                image: const DecorationImage(
                   fit: BoxFit.fill,
                   image: ExactAssetImage('images/drawer-header--balloons.jpg'),
                 ),
@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
             },
             title: const Text('Explore'),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.subscriptions),
             onTap: () {
@@ -70,7 +70,7 @@ class AppDrawer extends StatelessWidget {
             },
             title: const Text('Downloads'),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.settings),
             onTap: () {

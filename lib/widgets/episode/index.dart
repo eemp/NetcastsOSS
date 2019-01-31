@@ -29,8 +29,8 @@ class EpisodePageState extends State<EpisodePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Episode of ' + episode.podcastTitle),
-          bottom: TabBar(
-            tabs: const <Widget>[
+          bottom: const TabBar(
+            tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.music_video),
                 text: 'Episode',

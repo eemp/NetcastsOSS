@@ -87,7 +87,7 @@ class HomeState extends State<Home> {
             return showcases[idx];
           },
           itemCount: showcases.length,
-          separatorBuilder: (BuildContext context, int index) => Divider(),
+          separatorBuilder: (BuildContext context, int index) => const Divider(),
           shrinkWrap: true,
         )
         : Container(height: 0, width: 0),

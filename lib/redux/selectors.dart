@@ -17,7 +17,7 @@ QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
     },
     onPlay: (Episode episode) {
       final Duration position = store.state.positionInEpisode;
-      if(position == null) {
+      if(position == null || store.state.playingEpisode?.url != episode.url) {
         store.dispatch(playEpisode(episode));
       }
       else {

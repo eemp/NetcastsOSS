@@ -35,8 +35,8 @@ class PodcastPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(podcast.name),
-          bottom: TabBar(
-            tabs: const <Widget>[
+          bottom: const TabBar(
+            tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.music_video),
                 text: 'Podcast',

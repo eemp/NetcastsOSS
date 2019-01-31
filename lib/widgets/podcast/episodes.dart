@@ -32,7 +32,7 @@ class PodcastEpisodesList extends StatelessWidget {
             builder: episodeTileBuilder,
           );
         },
-        separatorBuilder: (BuildContext context, int index) => Divider(),
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
         shrinkWrap: true,
       ),
     );

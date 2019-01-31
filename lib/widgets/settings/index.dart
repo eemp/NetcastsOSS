@@ -54,9 +54,9 @@ class SettingsState extends State<Settings> {
                   value: theme ?? ThemeProvider.DEFAULT_THEME,
                 ),
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
-                icon: const Icon(Icons.color_lens),
+                icon: Icon(Icons.color_lens),
                 labelText: 'Theme',
               ),
             ),

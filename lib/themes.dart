@@ -19,18 +19,18 @@ class ThemeProvider {
 
   static const String DARK_THEME = 'Dark';
   static final ThemeData darkThemeData = ThemeData(
-    accentColor: Colors.pink[700],
+    accentColor: Colors.pink[900],
     brightness: Brightness.dark,
     fontFamily: 'OpenSans',
-    primaryColor: Colors.blueGrey[500],
+    primaryColor: Colors.blue[900],
   );
 
   static const String LIGHT_THEME = 'Light';
   static final ThemeData lightThemeData = ThemeData(
-    accentColor: Colors.pink[700],
+    accentColor: Colors.pink[900],
     brightness: Brightness.light,
     fontFamily: 'OpenSans',
-    primaryColor: Colors.blueGrey[500],
+    primaryColor: Colors.blue[900],
   );
 
   static final Map<String, ThemeData> themes = <String, ThemeData>{};

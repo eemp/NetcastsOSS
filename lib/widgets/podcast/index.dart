@@ -82,6 +82,7 @@ class PodcastPage extends StatelessWidget {
 
         return !isSubscribed
           ? FloatingActionButton.extended(
+            backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.add),
             label: const Text('Subscribe'),
             onPressed: () async {
@@ -89,6 +90,7 @@ class PodcastPage extends StatelessWidget {
             },
           )
           : FloatingActionButton.extended(
+            backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.remove),
             label: const Text('Unsubscribe'),
             onPressed: () async {

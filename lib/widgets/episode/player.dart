@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
-class EpisodePlayer extends StatefulWidget {
+class EpisodePlayer extends StatelessWidget {
   final Episode episode;
 
   const EpisodePlayer({
@@ -17,22 +16,14 @@ class EpisodePlayer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  EpisodePlayerState createState() => EpisodePlayerState();
-}
-
-class EpisodePlayerState extends State<EpisodePlayer> {
-  final App app = App();
-
-  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, QueuedEpisode>(
       converter: queuedEpisodeSelector,
       builder: (BuildContext context, QueuedEpisode queuedEpisode) {
-        final bool canPlay = widget.episode.downloadPath != null;
+        final bool canPlay = episode.downloadPath != null;
         final bool isPlaying = queuedEpisode.isPlaying
-          && widget.episode.url == queuedEpisode.episode?.url;
-        final bool isQueued = widget.episode.url == queuedEpisode.episode?.url;
-        //print('isPlaying = ${isPlaying.toString()}, queuedEpisode.isPlaying = ${queuedEpisode.isPlaying.toString()}, ${widget.episode.toString()}, ${queuedEpisode.episode.toString()}');
+          && episode.url == queuedEpisode.episode?.url;
+        final bool isQueued = episode.url == queuedEpisode.episode?.url;
         final Duration duration = isQueued ? queuedEpisode.duration : null;
         final Function onPause = canPlay ? queuedEpisode.onPause : null;
         final Function onPlay = canPlay ? queuedEpisode.onPlay : null;
@@ -43,7 +34,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
             Container(
               child: RichText(
                 text: TextSpan(
-                  text: widget.episode.title,
+                  text: episode.title,
                   style: Theme.of(context).textTheme.subhead
                 ),
                 textAlign: TextAlign.center,
@@ -103,7 +94,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                         onPause();
                       }
                       else {
-                        onPlay(widget.episode);
+                        onPlay(episode);
                       }
                     } : null,
                     child: Padding(

@@ -16,25 +16,14 @@ const String TECH_GENRE_ID = '1318';
 const String COMEDY_GENRE_ID = '1303';
 const String BUSINESS_GENRE_ID = '1321';
 
-class Home extends StatefulWidget {
-  @override
-  State createState() => HomeState();
-}
+class Home extends StatelessWidget {
+  final Future<List<Widget>> showcases = getHomepageLists();
 
-class HomeState extends State<Home> {
-  List<Widget> showcases;
+  Home({
+    Key key,
+  }) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
-    init().then((List<Widget> results) {
-      setState(() {
-        showcases = results;
-      });
-    });
-  }
-
-  Future<List<Widget>> init() async {
+  static Future<List<Widget>> getHomepageLists() async {
     return <Widget>[
       buildSubscriptionsPreview(),
       buildHomepageList('Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
@@ -44,7 +33,37 @@ class HomeState extends State<Home> {
     ];
   }
 
-  Widget buildSubscriptionsPreview() {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: FutureBuilder<List<Widget>>(
+        future: showcases,
+        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+          if(!snapshot.hasData) {
+            return Container(
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          return ListView.separated(
+            itemBuilder: (BuildContext context, int idx) {
+              return snapshot.data[idx];
+            },
+            itemCount: snapshot.data.length,
+            separatorBuilder: (BuildContext context, int index) => const Divider(),
+            shrinkWrap: true,
+          );
+        }
+      ),
+      bottomNavigationBar: const BottomAppBarPlayer(),
+      drawer: AppDrawer(),
+    );
+  }
+
+  static Widget buildSubscriptionsPreview() {
     const int MAX_SHOWCASE_ITEMS = 12;
     return StoreConnector<AppState, List<Podcast>>(
       converter: (Store<AppState> store) => store.state.subscriptions,
@@ -68,31 +87,10 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget buildHomepageList(String title, List<Podcast> podcasts) {
+  static Widget buildHomepageList(String title, List<Podcast> podcasts) {
     return HomepageList(
       list: podcasts,
       title: title,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: showcases != null
-        ? ListView.separated(
-          itemBuilder: (BuildContext context, int idx) {
-            return showcases[idx];
-          },
-          itemCount: showcases.length,
-          separatorBuilder: (BuildContext context, int index) => const Divider(),
-          shrinkWrap: true,
-        )
-        : Container(height: 0, width: 0),
-      bottomNavigationBar: const BottomAppBarPlayer(),
-      drawer: AppDrawer(),
     );
   }
 }

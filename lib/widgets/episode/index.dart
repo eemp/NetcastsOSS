@@ -6,7 +6,7 @@ import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
 
-class EpisodePage extends StatefulWidget {
+class EpisodePage extends StatelessWidget {
   final Episode episode;
 
   const EpisodePage({
@@ -15,16 +15,9 @@ class EpisodePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  EpisodePageState createState() => EpisodePageState();
-}
-
-class EpisodePageState extends State<EpisodePage> {
-  final App app = App();
-
-  Episode get episode => widget.episode;
-
-  @override
   Widget build(BuildContext context) {
+    final App app = App();
+
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(

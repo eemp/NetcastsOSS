@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/widgets/episode/index.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/player_option_with_progress.dart';
+import 'package:hear2learn/widgets/episode/index.dart';
 
 class BottomAppBarPlayer extends StatelessWidget {
   final Episode episode;
@@ -25,31 +26,20 @@ class BottomAppBarPlayer extends StatelessWidget {
         return queuedEpisode.episode != null
           ? BottomAppBar(
             child: ListTile(
-              leading: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3.0,
-                      value: (queuedEpisode.position?.inSeconds?.toDouble() ?? 0)
-                        / (queuedEpisode.duration?.inSeconds?.toDouble() ?? 1),
-                    ),
-                  ),
-                  IconButton(
-                    highlightColor: Colors.transparent,
-                    icon: queuedEpisode.isPlaying
-                      ? const Icon(Icons.pause)
-                      : const Icon(Icons.play_arrow),
-                    onPressed: () {
-                      if(queuedEpisode.isPlaying) {
-                        queuedEpisode.onPause();
-                      }
-                      else {
-                        queuedEpisode.onPlay(queuedEpisode.episode);
-                      }
-                    },
-                    splashColor: Colors.transparent,
-                  ),
-                ],
+              leading: PlayerOptionWithProgress(
+                icon: queuedEpisode.isPlaying
+                  ? const Icon(Icons.pause)
+                  : const Icon(Icons.play_arrow),
+                onPressed: () {
+                  if(queuedEpisode.isPlaying) {
+                    queuedEpisode.onPause();
+                  }
+                  else {
+                    queuedEpisode.onPlay(queuedEpisode.episode);
+                  }
+                },
+                progress: (queuedEpisode.position?.inSeconds?.toDouble() ?? 0)
+                  / (queuedEpisode.duration?.inSeconds?.toDouble() ?? 1),
               ),
               onTap: () {
                 Navigator.push(

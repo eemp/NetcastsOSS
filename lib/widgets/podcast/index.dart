@@ -120,6 +120,15 @@ class PodcastPage extends StatelessWidget {
           onEpisodeDownload: (Episode episode) {
             app.store.dispatch(downloadEpisode(episode));
           },
+          onEpisodePause: () {
+            app.store.dispatch(pauseEpisode());
+          },
+          onEpisodePlay: (Episode episode) {
+            app.store.dispatch(playEpisode(episode));
+          },
+          onEpisodeResume: () {
+            app.store.dispatch(resumeEpisode());
+          },
           episodes: snapshot.data.episodes,
         );
       },

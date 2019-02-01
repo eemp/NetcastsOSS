@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/episode_tile.dart';
+import 'package:hear2learn/widgets/common/player_option_with_progress.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
-import 'package:hear2learn/models/episode.dart';
 
 class PodcastEpisodesList extends StatelessWidget {
   final Function onEpisodeDelete;
   final Function onEpisodeDownload;
+  final Function onEpisodePause;
+  final Function onEpisodePlay;
+  final Function onEpisodeResume;
   final List<Episode> episodes;
 
   const PodcastEpisodesList({
     Key key,
     this.onEpisodeDelete,
     this.onEpisodeDownload,
+    this.onEpisodePause,
+    this.onEpisodePlay,
+    this.onEpisodeResume,
     this.episodes,
   }) : super(key: key);
 
@@ -50,12 +57,41 @@ class PodcastEpisodesList extends StatelessWidget {
         subtitle: episode.getMetaLine(),
         title: episode.title,
         options: episode.downloadPath != null
-          ? buildDeleteOption(episode)
+          ? buildPlayerOption(episode)
           : episode.progress != null
             ? buildDownloadProgress(episode)
             : buildDownloadOption(episode),
       ),
     );
+  }
+
+  Widget buildPlayerOption(Episode episode) {
+    switch(episode.status) {
+      case EpisodeStatus.PAUSED:
+      case EpisodeStatus.PLAYING:
+        return PlayerOptionWithProgress(
+          icon: episode.status == EpisodeStatus.PLAYING
+            ? const Icon(Icons.pause)
+            : const Icon(Icons.play_arrow),
+          onPressed: () {
+            if(episode.status == EpisodeStatus.PLAYING) {
+              onEpisodePause();
+            }
+            else {
+              onEpisodeResume();
+            }
+          },
+          progress: (episode.position?.inSeconds?.toDouble() ?? 0)
+            / (episode.length?.inSeconds?.toDouble() ?? 1),
+        );
+      default:
+        return IconButton(
+          icon: const Icon(Icons.play_arrow),
+          onPressed: () {
+            onEpisodePlay(episode);
+          },
+        );
+    }
   }
 
   Widget buildDeleteOption(Episode episode) {

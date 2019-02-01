@@ -6,18 +6,27 @@ import 'package:hear2learn/models/episode_download.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+enum EpisodeStatus {
+  NONE,
+  PAUSED,
+  PLAYING,
+}
+
 class Episode {
   final App app = App();
 
   String description;
   EpisodeDownload download;
   String downloadPath;
+  Duration length;
   String media;
   String podcastTitle;
   String podcastUrl;
+  Duration position;
   double progress;
   String pubDate;
   int size;
+  EpisodeStatus status;
   String title;
   String url;
 
@@ -25,12 +34,15 @@ class Episode {
     this.description,
     this.download,
     this.downloadPath,
+    this.length,
     this.media,
     this.podcastTitle,
     this.podcastUrl,
+    this.position,
     this.progress,
     this.pubDate,
     this.size,
+    this.status,
     this.title,
     this.url,
   });

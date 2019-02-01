@@ -44,6 +44,7 @@ Episode playEpisodeReducer(Episode state, dynamic action) {
 
 Duration episodeLengthReducer(Duration state, dynamic action) {
   switch(action.type) {
+    case ActionType.PLAY_EPISODE:
     case ActionType.CLEAR_EPISODE:
       return null;
     case ActionType.SET_EPISODE_LENGTH:
@@ -55,6 +56,7 @@ Duration episodeLengthReducer(Duration state, dynamic action) {
 
 Duration positionInEpisodeReducer(Duration state, dynamic action) {
   switch(action.type) {
+    case ActionType.PLAY_EPISODE:
     case ActionType.CLEAR_EPISODE:
       return null;
     case ActionType.SET_EPISODE_POSITION:

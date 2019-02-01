@@ -32,7 +32,20 @@ Function getEpisodeSelector(Episode episode) {
     final AppState state = store.state;
     final Episode download = dash.find(state.downloads, (Episode download) => download.url == episode.url);
     final Episode pendingDownload = dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url);
-    return download ?? pendingDownload ?? episode;
+
+    final Episode selectedEpisode = download ?? pendingDownload ?? episode;
+    selectedEpisode.status = state.playingEpisode?.url != selectedEpisode.url
+      ? EpisodeStatus.NONE
+      : state.isPlaying
+        ? EpisodeStatus.PLAYING
+        : EpisodeStatus.PAUSED
+      ;
+    if(state.playingEpisode?.url == selectedEpisode.url) {
+      selectedEpisode.length = state.episodeLength;
+      selectedEpisode.position = state.positionInEpisode;
+    }
+
+    return selectedEpisode;
   };
 }
 

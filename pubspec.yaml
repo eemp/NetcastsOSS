@@ -33,6 +33,7 @@ dependencies:
   local_notifications: ^0.0.7
   path: ^1.6.2
   path_provider: ^0.4.1
+  percent_indicator: ^1.0.13
   redux: ^3.0.0
   redux_thunk: ^0.2.1
   shared_preferences: ^0.4.3

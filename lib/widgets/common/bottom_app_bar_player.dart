@@ -5,7 +5,7 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:hear2learn/widgets/common/player_option_with_progress.dart';
+import 'package:hear2learn/widgets/common/circular_progress_with_optional_action.dart';
 import 'package:hear2learn/widgets/episode/index.dart';
 
 class BottomAppBarPlayer extends StatelessWidget {
@@ -26,7 +26,7 @@ class BottomAppBarPlayer extends StatelessWidget {
         return queuedEpisode.episode != null
           ? BottomAppBar(
             child: ListTile(
-              leading: PlayerOptionWithProgress(
+              leading: CircularProgressWithOptionalAction(
                 icon: queuedEpisode.isPlaying
                   ? const Icon(Icons.pause)
                   : const Icon(Icons.play_arrow),

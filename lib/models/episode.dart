@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 enum EpisodeStatus {
+  DOWNLOADED,
+  DOWNLOADING,
   NONE,
   PAUSED,
   PLAYING,

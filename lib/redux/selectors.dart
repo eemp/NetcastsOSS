@@ -34,19 +34,50 @@ Function getEpisodeSelector(Episode episode) {
     final Episode pendingDownload = dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url);
 
     final Episode selectedEpisode = download ?? pendingDownload ?? episode;
-    selectedEpisode.status = state.playingEpisode?.url != selectedEpisode.url
-      ? EpisodeStatus.NONE
-      : state.isPlaying
-        ? EpisodeStatus.PLAYING
-        : EpisodeStatus.PAUSED
+    selectedEpisode.status = isPaused(store, selectedEpisode)
+      ?? isPlaying(store, selectedEpisode)
+      ?? isDownloaded(store, selectedEpisode)
+      ?? isDownloading(store, selectedEpisode)
+      ?? defaultStatus(store, selectedEpisode)
       ;
-    if(state.playingEpisode?.url == selectedEpisode.url) {
+
+    if(selectedEpisode.status == EpisodeStatus.PAUSED || selectedEpisode.status == EpisodeStatus.PLAYING) {
       selectedEpisode.length = state.episodeLength;
       selectedEpisode.position = state.positionInEpisode;
     }
 
     return selectedEpisode;
   };
+}
+
+EpisodeStatus isPaused(Store<AppState> store, Episode episode) {
+  final AppState state = store.state;
+  return (state.playingEpisode?.url == episode.url && !state.isPlaying)
+    ? EpisodeStatus.PAUSED
+    : null;
+}
+
+EpisodeStatus isPlaying(Store<AppState> store, Episode episode) {
+  final AppState state = store.state;
+  return (state.playingEpisode?.url == episode.url && state.isPlaying)
+    ? EpisodeStatus.PLAYING
+    : null;
+}
+
+EpisodeStatus isDownloaded(Store<AppState> store, Episode episode) {
+  return (episode.downloadPath != null)
+    ? EpisodeStatus.DOWNLOADED
+    : null;
+}
+
+EpisodeStatus isDownloading(Store<AppState> store, Episode episode) {
+  return (episode.progress != null)
+    ? EpisodeStatus.DOWNLOADING
+    : null;
+}
+
+EpisodeStatus defaultStatus(Store<AppState> store, Episode episode) {
+  return EpisodeStatus.NONE;
 }
 
 List<Episode> downloadsSelector(Store<AppState> store) {

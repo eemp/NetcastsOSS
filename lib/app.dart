@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:local_notifications/local_notifications.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_download.dart';
@@ -18,6 +19,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
   static final App app = App._internal();
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    id: 'default_notification',
+    name: 'Default',
+    description: 'Grant this app the ability to show notifications',
+    importance: AndroidNotificationChannelImportance.HIGH,
+  );
   String downloadsPath;
   ElasticsearchClient elasticClient;
   Episode episode;
@@ -51,6 +58,8 @@ class App {
 
     await initModels();
 
+    await initNotifications();
+
     initPlayer();
   }
 
@@ -63,6 +72,10 @@ class App {
       //await model.drop();
       await model.createTable(ifNotExists: true);
     });
+  }
+
+  Future<void> initNotifications() async {
+    await LocalNotifications.createAndroidNotificationChannel(channel: channel);
   }
 
   void initPlayer() {
@@ -114,5 +127,35 @@ class App {
     const String DIR_NAME = 'downloads';
     final Directory dbDir = await getApplicationDocumentsDirectory();
     return join(dbDir.path, DIR_NAME);
+  }
+
+  Future<void> createNotification({
+    String actionText,
+    Function callback,
+    String content,
+    bool isOngoing = false,
+    bool launchesApp = false,
+    String payload,
+    String title,
+  }) async {
+    //await LocalNotifications.removeNotification(0);
+    await LocalNotifications.createNotification(
+      actions: <NotificationAction>[
+        NotificationAction(
+          actionText: actionText,
+          callback: callback,
+          callbackName: 'onNotificationActionClick',
+          payload: payload,
+          launchesApp: launchesApp,
+        ),
+      ],
+      androidSettings: AndroidSettings(
+        channel: channel,
+        isOngoing: isOngoing,
+      ),
+      content: content,
+      id: 0,
+      title: title,
+    );
   }
 }

@@ -9,6 +9,9 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
+const String PAUSE_BUTTON = '⏸️';
+const String PLAY_BUTTON = '▶️';
+
 enum ActionType {
   CLEAR_EPISODE,
   PAUSE_EPISODE,
@@ -37,37 +40,75 @@ class Action {
   });
 }
 
-Action pauseEpisode() {
-  final App app = App();
+ThunkAction<AppState> pauseEpisode() {
+  return (Store<AppState> store) async {
+    final App app = App();
 
-  app.player.pause();
-  return Action(
-    type: ActionType.PAUSE_EPISODE,
-  );
+    app.player.pause();
+    await app.createNotification(
+      actionText: '$PLAY_BUTTON Resume',
+      callback: (String payload) {
+        store.dispatch(resumeEpisode());
+      },
+      content: store.state.playingEpisode.title,
+      payload: 'playAction',
+      title: store.state.playingEpisode.podcastTitle,
+    );
+
+    store.dispatch(Action(
+      type: ActionType.PAUSE_EPISODE,
+    ));
+  };
 }
 
-Action playEpisode(Episode episode) {
-  final App app = App();
+ThunkAction<AppState> playEpisode(Episode episode) {
+  return (Store<AppState> store) async {
+    final App app = App();
 
-  app.player.play(
-    episode.downloadPath,
-    isLocal: true,
-  );
-  return Action(
-    type: ActionType.PLAY_EPISODE,
-    payload: <String, dynamic>{
-      'episode': episode,
-    },
-  );
+    app.player.play(
+      episode.downloadPath,
+      isLocal: true,
+    );
+    await app.createNotification(
+      actionText: '$PAUSE_BUTTON Pause',
+      callback: (String payload) {
+        store.dispatch(pauseEpisode());
+      },
+      content: episode.title,
+      isOngoing: true,
+      payload: 'pauseAction',
+      title: episode.podcastTitle,
+    );
+
+    store.dispatch(Action(
+      type: ActionType.PLAY_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
+    ));
+  };
 }
 
-Action resumeEpisode() {
-  final App app = App();
+ThunkAction<AppState> resumeEpisode() {
+  return (Store<AppState> store) async {
+    final App app = App();
 
-  app.player.resume();
-  return Action(
-    type: ActionType.RESUME_EPISODE,
-  );
+    app.player.resume();
+    await app.createNotification(
+      actionText: '$PAUSE_BUTTON Pause',
+      callback: (String payload) {
+        store.dispatch(pauseEpisode());
+      },
+      content: store.state.playingEpisode.title,
+      isOngoing: true,
+      payload: 'pauseAction',
+      title: store.state.playingEpisode.podcastTitle,
+    );
+
+    store.dispatch(Action(
+      type: ActionType.RESUME_EPISODE,
+    ));
+  };
 }
 
 Action seekInEpisode(Duration position) {

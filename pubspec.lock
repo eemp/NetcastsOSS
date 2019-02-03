@@ -349,6 +349,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.6+9"
+  local_notifications:
+    dependency: "direct main"
+    description:
+      name: local_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   logging:
     dependency: transitive
     description:

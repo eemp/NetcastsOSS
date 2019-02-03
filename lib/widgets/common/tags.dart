@@ -20,7 +20,6 @@ class Tags extends StatelessWidget {
 
     return Wrap(
       children: genres.map((Genre genre) => Chip(
-        backgroundColor: Theme.of(context).accentColor,
         label: Text(genre.name),
       )).toList(),
       runSpacing: -8.0,

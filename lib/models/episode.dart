@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/models/episode_download.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -18,7 +16,6 @@ class Episode {
   final App app = App();
 
   String description;
-  EpisodeDownload download;
   String downloadPath;
   Duration length;
   String media;
@@ -34,7 +31,6 @@ class Episode {
 
   Episode({
     this.description,
-    this.download,
     this.downloadPath,
     this.length,
     this.media,
@@ -58,12 +54,6 @@ class Episode {
   String getMetaLine() {
     final num sizeInMegabytes = size / 1e6;
     return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + getFriendlyDate() + '.';
-  }
-
-  Future<EpisodeDownload> getDownload() async {
-    final EpisodeDownloadBean downloadModel = app.models['episode_download'];
-    download = await downloadModel.findOneWhere(downloadModel.episodeUrl.eq(url));
-    return download;
   }
 
   @override

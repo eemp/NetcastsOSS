@@ -5,8 +5,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:local_notifications/local_notifications.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/episode_download.dart';
+import 'package:hear2learn/models/episode_action.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:hear2learn/models/user_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
@@ -64,8 +65,9 @@ class App {
   }
 
   Future<void> initModels() async {
-    models['episode_download'] = EpisodeDownloadBean(localDatabaseAdapter.adapter);
+    models['episode_action'] = EpisodeActionBean(localDatabaseAdapter.adapter);
     models['podcast_subscription'] = PodcastSubscriptionBean(localDatabaseAdapter.adapter);
+    models['user_episode'] = UserEpisodeBean(localDatabaseAdapter.adapter);
 
     await Future.forEach<dynamic>(models.values, (dynamic model) async {
       //await model.createTable();

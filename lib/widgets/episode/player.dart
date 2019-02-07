@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -21,13 +22,16 @@ class EpisodePlayer extends StatelessWidget {
       converter: queuedEpisodeSelector,
       builder: (BuildContext context, QueuedEpisode queuedEpisode) {
         final bool canPlay = episode.downloadPath != null;
-        final bool isPlaying = queuedEpisode.isPlaying
+        final bool isPlaying = (queuedEpisode.episode?.isPlaying() ?? false)
           && episode.url == queuedEpisode.episode?.url;
         final bool isQueued = episode.url == queuedEpisode.episode?.url;
-        final Duration duration = isQueued ? queuedEpisode.duration : null;
+        final Duration duration = isQueued ? queuedEpisode.episode?.length : null;
         final Function onPause = canPlay ? queuedEpisode.onPause : null;
         final Function onPlay = canPlay ? queuedEpisode.onPlay : null;
-        final Duration position = isQueued ? queuedEpisode.position : null;
+        final Duration position = isQueued ? queuedEpisode.episode?.position : null;
+
+        final double durationInSeconds = duration?.inSeconds?.toDouble() ?? 0.0;
+        final double positionInSeconds = position?.inSeconds?.toDouble() ?? 0.0;
 
         return Column(
           children: <Widget>[
@@ -55,11 +59,11 @@ class EpisodePlayer extends StatelessWidget {
                     child: Slider(
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
-                      max: duration?.inSeconds?.toDouble() ?? 0.0,
+                      max: durationInSeconds,
                       onChanged: isQueued ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
-                      value: position?.inSeconds?.toDouble() ?? 0.0,
+                      value: dash.clamp(0.0, positionInSeconds ?? 0.0, durationInSeconds),
                     ),
                   ),
                   Container(

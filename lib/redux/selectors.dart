@@ -8,15 +8,12 @@ import 'package:redux/redux.dart';
 
 QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
   return QueuedEpisode(
-    duration: store.state.episodeLength,
     episode: store.state.playingEpisode,
-    isPlaying: store.state.isPlaying,
-    position: store.state.positionInEpisode,
     onPause: () {
       store.dispatch(pauseEpisode());
     },
     onPlay: (Episode episode) {
-      final Duration position = store.state.positionInEpisode;
+      final Duration position = store.state.playingEpisode?.position;
       if(position == null || store.state.playingEpisode?.url != episode.url) {
         store.dispatch(playEpisode(episode));
       }
@@ -30,10 +27,9 @@ QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
 Function getEpisodeSelector(Episode episode) {
   return (Store<AppState> store) {
     final AppState state = store.state;
-    final Episode download = dash.find(state.downloads, (Episode download) => download.url == episode.url);
-    final Episode pendingDownload = dash.find(state.pendingDownloads, (Episode download) => download.url == episode.url);
+    final Episode userEpisode = state.userEpisodes[episode.url];
 
-    final Episode selectedEpisode = download ?? pendingDownload ?? episode;
+    final Episode selectedEpisode = userEpisode ?? episode;
     selectedEpisode.status = isPaused(store, selectedEpisode)
       ?? isPlaying(store, selectedEpisode)
       ?? isDownloaded(store, selectedEpisode)
@@ -42,8 +38,8 @@ Function getEpisodeSelector(Episode episode) {
       ;
 
     if(selectedEpisode.status == EpisodeStatus.PAUSED || selectedEpisode.status == EpisodeStatus.PLAYING) {
-      selectedEpisode.length = state.episodeLength;
-      selectedEpisode.position = state.positionInEpisode;
+      selectedEpisode.length = state.playingEpisode.length;
+      selectedEpisode.position = state.playingEpisode.position;
     }
 
     return selectedEpisode;
@@ -52,14 +48,14 @@ Function getEpisodeSelector(Episode episode) {
 
 EpisodeStatus isPaused(Store<AppState> store, Episode episode) {
   final AppState state = store.state;
-  return (state.playingEpisode?.url == episode.url && !state.isPlaying)
+  return (state.playingEpisode?.url == episode.url && state.playingEpisode?.status != EpisodeStatus.PLAYING)
     ? EpisodeStatus.PAUSED
     : null;
 }
 
 EpisodeStatus isPlaying(Store<AppState> store, Episode episode) {
   final AppState state = store.state;
-  return (state.playingEpisode?.url == episode.url && state.isPlaying)
+  return (state.playingEpisode?.url == episode.url && state.playingEpisode?.status == EpisodeStatus.PLAYING)
     ? EpisodeStatus.PLAYING
     : null;
 }
@@ -81,7 +77,7 @@ EpisodeStatus defaultStatus(Store<AppState> store, Episode episode) {
 }
 
 List<Episode> downloadsSelector(Store<AppState> store) {
-  return store.state.downloads;
+  return store.state.userEpisodes.values.where((Episode episode) => episode.downloadPath != null).toList();
 }
 
 List<Podcast> subscriptionsSelector(Store<AppState> store) {

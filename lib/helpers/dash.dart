@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 dynamic apply(Function fn, [List<dynamic> args, Map<String, dynamic> namedArgs]) {
   return Function.apply(
@@ -8,7 +9,7 @@ dynamic apply(Function fn, [List<dynamic> args, Map<String, dynamic> namedArgs])
   );
 }
 
-Map<Symbol, dynamic> symbolizeKeys(Map<String, dynamic> map){
+Map<Symbol, dynamic> symbolizeKeys(Map<String, dynamic> map) {
   final Map<Symbol, dynamic> result = <Symbol, dynamic>{};
   map.forEach((String k, dynamic v) { result[Symbol(k)] = v; });
   return result;
@@ -25,6 +26,12 @@ T find<T>(List<T> list, Function test) {
     : null
     ;
 }
+
+
+double clamp(double a, double val, double b) {
+  return math.max(a, math.min(val, b));
+}
+
 
 Function throttle(Function fn, Duration delay) {
   Timer timer;

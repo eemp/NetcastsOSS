@@ -27,19 +27,19 @@ class BottomAppBarPlayer extends StatelessWidget {
           ? BottomAppBar(
             child: ListTile(
               leading: CircularProgressWithOptionalAction(
-                icon: queuedEpisode.isPlaying
+                icon: queuedEpisode.episode.isPlaying()
                   ? const Icon(Icons.pause)
                   : const Icon(Icons.play_arrow),
                 onPressed: () {
-                  if(queuedEpisode.isPlaying) {
+                  if(queuedEpisode.episode.isPlaying()) {
                     queuedEpisode.onPause();
                   }
                   else {
                     queuedEpisode.onPlay(queuedEpisode.episode);
                   }
                 },
-                progress: (queuedEpisode.position?.inSeconds?.toDouble() ?? 0)
-                  / (queuedEpisode.duration?.inSeconds?.toDouble() ?? 1),
+                progress: (queuedEpisode.episode.position?.inSeconds?.toDouble() ?? 0)
+                  / (queuedEpisode.episode.length?.inSeconds?.toDouble() ?? 1),
               ),
               onTap: () {
                 Navigator.push(

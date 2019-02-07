@@ -16,20 +16,19 @@ Future<List<Episode>> getDownloads() {
 
   return episodeActionModel.findWhere(
     episodeActionModel.type.eq(EpisodeActionType.DOWNLOAD.toString())
-  ).then((response) {
+  ).then((List<EpisodeAction> response) {
     return Future.wait(
       response.map(
-        (download) => Future.value(getUserEpisodeFromUrl(download.url)).then((episode) {
+        (EpisodeAction download) => Future<Episode>.value(getUserEpisodeFromUrl(download.url)).then((Episode episode) {
           episode.downloadPath = download.details;
           return episode;
         })
       )
     );
-  }).then((downloadsList) => List<Episode>.from(downloadsList));
+  }).then((List<Episode> downloadsList) => List<Episode>.from(downloadsList));
 }
 
 Future<Episode> getUserEpisodeFromUrl(String url) async {
-  print('Get user episode: $url');
   final App app = App();
   final UserEpisodeBean userEpisodeModel = app.models['user_episode'];
   final UserEpisode userEpisode = await userEpisodeModel.findOneWhere(

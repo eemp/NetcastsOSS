@@ -5,62 +5,36 @@ import 'package:hear2learn/redux/state.dart';
 
 AppState reducer(AppState state, dynamic action) {
   return AppState(
-    downloads: downloadsReducer(state.downloads, action),
-    episodeLength: episodeLengthReducer(state.episodeLength, action),
-    isPlaying: isPlayingReducer(state.isPlaying, action),
-    pendingDownloads: pendingDownloadsReducer(state.pendingDownloads, action),
     playingEpisode: playEpisodeReducer(state.playingEpisode, action),
-    positionInEpisode: positionInEpisodeReducer(state.positionInEpisode, action),
     subscriptions: subscriptionsReducer(state.subscriptions, action),
+    userEpisodes: userEpisodesReducer(state.userEpisodes, action),
   );
 }
 
 const Function AppReducer = reducer;
 
-bool isPlayingReducer(bool state, dynamic action) {
-  switch(action.type) {
-    case ActionType.CLEAR_EPISODE:
-      return false;
-    case ActionType.PAUSE_EPISODE:
-      return false;
-    case ActionType.PLAY_EPISODE:
-    case ActionType.RESUME_EPISODE:
-      return true;
-    default:
-      return state;
-  }
-}
-
 Episode playEpisodeReducer(Episode state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return null;
+    case ActionType.PAUSE_EPISODE:
+      return state.copyWith(
+        status: EpisodeStatus.PAUSED,
+      );
     case ActionType.PLAY_EPISODE:
       return action.payload['episode'];
-    default:
-      return state;
-  }
-}
-
-Duration episodeLengthReducer(Duration state, dynamic action) {
-  switch(action.type) {
-    case ActionType.PLAY_EPISODE:
-    case ActionType.CLEAR_EPISODE:
-      return null;
+    case ActionType.RESUME_EPISODE:
+      return state.copyWith(
+        status: EpisodeStatus.PLAYING,
+      );
     case ActionType.SET_EPISODE_LENGTH:
-      return action.payload['length'];
-    default:
-      return state;
-  }
-}
-
-Duration positionInEpisodeReducer(Duration state, dynamic action) {
-  switch(action.type) {
-    case ActionType.PLAY_EPISODE:
-    case ActionType.CLEAR_EPISODE:
-      return null;
+      return state?.copyWith(
+        length: action.payload['length'],
+      );
     case ActionType.SET_EPISODE_POSITION:
-      return action.payload['position'];
+      return state?.copyWith(
+        position: action.payload['position'],
+      );
     default:
       return state;
   }
@@ -75,37 +49,35 @@ List<Podcast> subscriptionsReducer(List<Podcast> state, dynamic action) {
   }
 }
 
-List<Episode> downloadsReducer(List<Episode> state, dynamic action) {
+Map<String, Episode> userEpisodesReducer(Map<String, Episode> state, dynamic action) {
   switch(action.type) {
     case ActionType.DELETE_EPISODE:
-      return state.where((Episode download) => download.url != action.payload['episode'].url).toList();
-    case ActionType.FINISH_DOWNLOADING_EPISODE:
-      return state..add(action.payload['episode']);
-    case ActionType.UPDATE_DOWNLOADS:
-      return action.payload['downloads'];
-    default:
-      return state;
-  }
-}
-
-List<Episode> pendingDownloadsReducer(List<Episode> state, dynamic action) {
-  switch(action.type) {
+      final Episode episode = action.payload['episode'];
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${episode.url}': episode.copyWith(
+          downloadPath: null,
+        ),
+      });
     case ActionType.DOWNLOAD_EPISODE:
-      return List<Episode>.from(state)..add(action.payload['episode']);
     case ActionType.FINISH_DOWNLOADING_EPISODE:
       final Episode episode = action.payload['episode'];
-      return state.where((Episode pendingDownload) => pendingDownload.url != episode.url).toList();
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${episode.url}': episode,
+      });
     case ActionType.UPDATE_DOWNLOAD_STATUS:
       final Episode episode = action.payload['episode'];
       final double progress = action.payload['progress'];
-      final int matchingIndex = state.indexWhere((Episode pendingDownload) => pendingDownload.url == episode.url);
-      if(matchingIndex >= 0) {
-        final Episode matchingDownload = state[matchingIndex];
-        matchingDownload.progress = progress;
+      final Episode matchingEpisode = state[episode.url];
+      if(matchingEpisode != null) {
+        matchingEpisode.progress = progress;
       }
       return state;
-    case ActionType.UPDATE_PENDING_DOWNLOADS:
-      return action.payload['downloads'];
+    case ActionType.UPDATE_DOWNLOADS:
+      return state..addEntries(
+        List<Episode>.from(action.payload['downloads']).map(
+          (Episode userEpisode) => MapEntry<String, Episode>(userEpisode.url, userEpisode)
+        ).toList()
+      );
     default:
       return state;
   }

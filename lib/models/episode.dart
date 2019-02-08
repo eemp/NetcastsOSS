@@ -88,6 +88,16 @@ class Episode {
     return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + getFriendlyDate() + '.';
   }
 
+  String getPlayerDetails() {
+    return jsonEncode(<int>[position.inSeconds, length.inSeconds]);
+  }
+
+  void setPlayerDetails(String details) {
+    final List<dynamic> playerDetails = jsonDecode(details);
+    length = Duration(seconds: playerDetails[1]);
+    position = Duration(seconds: playerDetails[0]);
+  }
+
   bool isPlaying() {
     return status == EpisodeStatus.PLAYING;
   }

@@ -27,12 +27,29 @@ class EpisodeAction {
     EpisodeActionType actionType,
     this.created,
     this.details,
+    this.type,
     this.url,
     this.id,
   }) {
     created ??= DateTime.now();
     id ??= uuid.v4();
-    type = actionType.toString();
+    type = actionType != null ? actionType.toString() : type;
+  }
+
+  EpisodeAction copyWith({
+    DateTime created,
+    String details,
+    String id,
+    String type,
+    String url,
+  }) {
+    return EpisodeAction(
+      created: created ?? this.created,
+      details: details ?? this.details,
+      id: id ?? this.id,
+      type: type ?? this.type,
+      url: url ?? this.url,
+    );
   }
 
   @override

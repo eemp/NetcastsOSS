@@ -22,7 +22,9 @@ Episode playEpisodeReducer(Episode state, dynamic action) {
         status: EpisodeStatus.PAUSED,
       );
     case ActionType.PLAY_EPISODE:
-      return action.payload['episode'];
+      return action.payload['episode'].copyWith(
+        status: EpisodeStatus.PLAYING,
+      );
     case ActionType.RESUME_EPISODE:
       return state.copyWith(
         status: EpisodeStatus.PLAYING,

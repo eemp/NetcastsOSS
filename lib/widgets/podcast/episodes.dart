@@ -92,7 +92,7 @@ class PodcastEpisodesList extends StatelessWidget {
   }
 
   double getEpisodeProgress(Episode episode) {
-    if(episode.status == EpisodeStatus.PAUSED || episode.status == EpisodeStatus.PLAYING) {
+    if((episode.position?.inSeconds ?? 0) > 0) {
       return (episode.position?.inSeconds?.toDouble() ?? 0)
         / (episode.length?.inSeconds?.toDouble() ?? 1);
     }

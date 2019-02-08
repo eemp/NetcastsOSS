@@ -10,22 +10,31 @@ import 'package:path/path.dart';
 
 final Dio dio = Dio();
 
-Future<List<Episode>> getDownloads() {
+Future<List<Episode>> getDownloads() async {
+  final App app = App();
+  final UserEpisodeBean userEpisodeModel = app.models['user_episode'];
+
+  final List<UserEpisode> episodes = await userEpisodeModel.getAll();
+  return Future.wait(episodes.map((UserEpisode episode) => getEpisodeWithActions(episode)));
+}
+
+Future<Episode> getEpisodeWithActions(UserEpisode userEpisode) async {
   final App app = App();
   final EpisodeActionBean episodeActionModel = app.models['episode_action'];
 
-  return episodeActionModel.findWhere(
-    episodeActionModel.type.eq(EpisodeActionType.DOWNLOAD.toString())
-  ).then((List<EpisodeAction> response) {
-    return Future.wait(
-      response.map(
-        (EpisodeAction download) => Future<Episode>.value(getUserEpisodeFromUrl(download.url)).then((Episode episode) {
-          episode.downloadPath = download.details;
-          return episode;
-        })
-      )
-    );
-  }).then((List<Episode> downloadsList) => List<Episode>.from(downloadsList));
+  final Episode episode = userEpisode.getEpisodeFromDetails();
+  final List<EpisodeAction> episodeActions = await episodeActionModel.findWhere(
+    episodeActionModel.url.eq(episode.url)
+  );
+  episodeActions.forEach((EpisodeAction action) {
+    if(action.type == EpisodeActionType.DOWNLOAD.toString()) {
+      episode.downloadPath = action.details;
+    }
+    else if(action.type == EpisodeActionType.PLAY.toString()) {
+      episode.setPlayerDetails(action.details);
+    }
+  });
+  return episode;
 }
 
 Future<Episode> getUserEpisodeFromUrl(String url) async {
@@ -63,6 +72,25 @@ Future<void> downloadEpisode(Episode episode, {OnDownloadProgress onProgress}) a
 
   episode.downloadPath = downloadPath;
   episode.progress = null;
+}
+
+Future<void> updateEpisodePosition(Episode episode, Duration position) async {
+  final App app = App();
+  final EpisodeActionBean episodeActionModel = app.models['episode_action'];
+  EpisodeAction episodeAction = await episodeActionModel.findOneWhere(
+    episodeActionModel.url.eq(episode.url)
+      .and(episodeActionModel.type.eq(EpisodeActionType.PLAY.toString()))
+  );
+  if(episodeAction == null) {
+    episodeAction = EpisodeAction(
+      actionType: EpisodeActionType.PLAY,
+      url: episode.url,
+    );
+  }
+
+  await episodeActionModel.upsert(episodeAction.copyWith(
+    details: episode.copyWith(position: position).getPlayerDetails(),
+  ));
 }
 
 Future<void> deleteEpisode(Episode episode) async {

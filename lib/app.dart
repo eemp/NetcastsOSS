@@ -94,12 +94,7 @@ class App {
     );
     final Function throttledPositionHandler = dash.throttle(
       (Duration position) {
-        store.dispatch(Action(
-          type: ActionType.SET_EPISODE_POSITION,
-          payload: <String, dynamic>{
-            'position': position,
-          },
-        ));
+        store.dispatch(updateEpisodePosition(position));
       },
       Duration(milliseconds: 1000)
     );

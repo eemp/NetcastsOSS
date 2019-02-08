@@ -69,6 +69,8 @@ ThunkAction<AppState> playEpisode(Episode episode) {
       episode.downloadPath,
       isLocal: true,
     );
+    app.player.seek(episode.position ?? Duration());
+
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
@@ -115,6 +117,19 @@ Action seekInEpisode(Duration position) {
   final App app = App();
 
   app.player.seek(position);
+  return setEpisodePosition(position);
+}
+
+ThunkAction<AppState> updateEpisodePosition(Duration position) {
+  return (Store<AppState> store) async {
+    if(position.inSeconds % 5 == 0) {
+      await episode_helpers.updateEpisodePosition(store.state.playingEpisode, position);
+    }
+    store.dispatch(setEpisodePosition(position));
+  };
+}
+
+Action setEpisodePosition(Duration position) {
   return Action(
     type: ActionType.SET_EPISODE_POSITION,
     payload: <String, dynamic>{

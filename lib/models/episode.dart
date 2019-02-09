@@ -10,10 +10,13 @@ enum EpisodeStatus {
   NONE,
   PAUSED,
   PLAYING,
+  PLAYED,
 }
 
 class Episode {
   final App app = App();
+
+  static const int END_OF_EPISODE_THRESHOLD = 30;
 
   String description;
   String downloadPath;
@@ -100,6 +103,15 @@ class Episode {
 
   bool isPlaying() {
     return status == EpisodeStatus.PLAYING;
+  }
+
+  bool isPlayedToEnd() {
+    if(length == null || position == null) {
+      return false;
+    }
+
+    final Duration remainder = length - position;
+    return remainder.inSeconds < END_OF_EPISODE_THRESHOLD;
   }
 
   @override

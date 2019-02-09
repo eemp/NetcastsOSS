@@ -5,7 +5,7 @@ import 'package:hear2learn/redux/state.dart';
 
 AppState reducer(AppState state, dynamic action) {
   return AppState(
-    playingEpisode: playEpisodeReducer(state.playingEpisode, action),
+    playingEpisode: playingEpisodeReducer(state.playingEpisode, action),
     subscriptions: subscriptionsReducer(state.subscriptions, action),
     userEpisodes: userEpisodesReducer(state.userEpisodes, action),
   );
@@ -13,13 +13,15 @@ AppState reducer(AppState state, dynamic action) {
 
 const Function AppReducer = reducer;
 
-Episode playEpisodeReducer(Episode state, dynamic action) {
+Episode playingEpisodeReducer(Episode state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
       return null;
     case ActionType.PAUSE_EPISODE:
       return state.copyWith(
-        status: EpisodeStatus.PAUSED,
+        status: state.isPlayedToEnd()
+          ? EpisodeStatus.PLAYED
+          : EpisodeStatus.PAUSED,
       );
     case ActionType.PLAY_EPISODE:
       return action.payload['episode'].copyWith(
@@ -53,6 +55,15 @@ List<Podcast> subscriptionsReducer(List<Podcast> state, dynamic action) {
 
 Map<String, Episode> userEpisodesReducer(Map<String, Episode> state, dynamic action) {
   switch(action.type) {
+    case ActionType.PAUSE_EPISODE:
+      final Episode episode = action.payload['episode'];
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${episode.url}': episode.copyWith(
+          status: episode.isPlayedToEnd()
+            ? EpisodeStatus.PLAYED
+            : EpisodeStatus.PAUSED,
+        ),
+      });
     case ActionType.DELETE_EPISODE:
       final Episode episode = action.payload['episode'];
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{

@@ -54,6 +54,7 @@ class PodcastEpisodesList extends StatelessWidget {
         );
       },
       child: EpisodeTile(
+        emphasis: !episode.isPlayedToEnd(),
         subtitle: episode.getMetaLine(),
         title: episode.title,
         options: buildEpisodeOptions(episode),
@@ -76,6 +77,7 @@ class PodcastEpisodesList extends StatelessWidget {
       EpisodeStatus.NONE: Icon(Icons.get_app),
       EpisodeStatus.PAUSED: Icon(Icons.play_arrow),
       EpisodeStatus.PLAYING: Icon(Icons.pause),
+      EpisodeStatus.PLAYED: Icon(Icons.delete),
     };
     return icons[episode.status];
   }
@@ -86,18 +88,22 @@ class PodcastEpisodesList extends StatelessWidget {
       EpisodeStatus.DOWNLOADING: null,
       EpisodeStatus.NONE: () { onEpisodeDownload(episode); },
       EpisodeStatus.PAUSED: onEpisodeResume,
-      EpisodeStatus.PLAYING: onEpisodePause,
+      EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
+      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
     };
     return actions[episode.status];
   }
 
   double getEpisodeProgress(Episode episode) {
-    if((episode.position?.inSeconds ?? 0) > 0) {
-      return (episode.position?.inSeconds?.toDouble() ?? 0)
-        / (episode.length?.inSeconds?.toDouble() ?? 1);
+    if(episode.status == EpisodeStatus.PLAYED || episode.status == EpisodeStatus.NONE) {
+      return null;
     }
     if(episode.status == EpisodeStatus.DOWNLOADING) {
       return episode.progress;
+    }
+    if((episode.position?.inSeconds ?? 0) > 0) {
+      return (episode.position?.inSeconds?.toDouble() ?? 0)
+        / (episode.length?.inSeconds?.toDouble() ?? 1);
     }
     return null;
   }

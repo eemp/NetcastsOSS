@@ -25,10 +25,10 @@ class EpisodePlayer extends StatelessWidget {
         final bool isPlaying = (queuedEpisode.episode?.isPlaying() ?? false)
           && episode.url == queuedEpisode.episode?.url;
         final bool isQueued = episode.url == queuedEpisode.episode?.url;
-        final Duration duration = isQueued ? queuedEpisode.episode?.length : null;
+        final Duration duration = canPlay ? episode?.length : null;
         final Function onPause = canPlay ? queuedEpisode.onPause : null;
         final Function onPlay = canPlay ? queuedEpisode.onPlay : null;
-        final Duration position = isQueued ? queuedEpisode.episode?.position : null;
+        final Duration position = canPlay ? episode?.position : null;
 
         final double durationInSeconds = duration?.inSeconds?.toDouble() ?? 0.0;
         final double positionInSeconds = position?.inSeconds?.toDouble() ?? 0.0;
@@ -95,7 +95,7 @@ class EpisodePlayer extends StatelessWidget {
                     highlightElevation: 5.0,
                     onPressed: canPlay ? () {
                       if(isPlaying) {
-                        onPause();
+                        onPause(episode);
                       }
                       else {
                         onPlay(episode);

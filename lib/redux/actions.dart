@@ -40,7 +40,7 @@ class Action {
   });
 }
 
-ThunkAction<AppState> pauseEpisode() {
+ThunkAction<AppState> pauseEpisode(Episode episode) {
   return (Store<AppState> store) async {
     final App app = App();
 
@@ -57,6 +57,9 @@ ThunkAction<AppState> pauseEpisode() {
 
     store.dispatch(Action(
       type: ActionType.PAUSE_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
     ));
   };
 }
@@ -74,7 +77,7 @@ ThunkAction<AppState> playEpisode(Episode episode) {
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
-        store.dispatch(pauseEpisode());
+        store.dispatch(pauseEpisode(episode));
       },
       content: episode.title,
       isOngoing: true,
@@ -99,7 +102,7 @@ ThunkAction<AppState> resumeEpisode() {
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
-        store.dispatch(pauseEpisode());
+        store.dispatch(pauseEpisode(store.state.playingEpisode));
       },
       content: store.state.playingEpisode.title,
       isOngoing: true,

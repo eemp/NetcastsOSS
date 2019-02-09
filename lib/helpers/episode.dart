@@ -81,12 +81,10 @@ Future<void> updateEpisodePosition(Episode episode, Duration position) async {
     episodeActionModel.url.eq(episode.url)
       .and(episodeActionModel.type.eq(EpisodeActionType.PLAY.toString()))
   );
-  if(episodeAction == null) {
-    episodeAction = EpisodeAction(
-      actionType: EpisodeActionType.PLAY,
-      url: episode.url,
-    );
-  }
+  episodeAction ??= EpisodeAction(
+    actionType: EpisodeActionType.PLAY,
+    url: episode.url,
+  );
 
   await episodeActionModel.upsert(episodeAction.copyWith(
     details: episode.copyWith(position: position).getPlayerDetails(),

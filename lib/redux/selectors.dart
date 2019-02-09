@@ -9,8 +9,8 @@ import 'package:redux/redux.dart';
 QueuedEpisode queuedEpisodeSelector(Store<AppState> store) {
   return QueuedEpisode(
     episode: store.state.playingEpisode,
-    onPause: () {
-      store.dispatch(pauseEpisode());
+    onPause: (Episode episode) {
+      store.dispatch(pauseEpisode(episode));
     },
     onPlay: (Episode episode) {
       final Duration position = store.state.playingEpisode?.position;
@@ -30,7 +30,8 @@ Function getEpisodeSelector(Episode episode) {
     final Episode userEpisode = state.userEpisodes[episode.url];
 
     final Episode selectedEpisode = userEpisode ?? episode;
-    selectedEpisode.status = isPaused(store, selectedEpisode)
+    selectedEpisode.status = isPlayedToEnd(store, selectedEpisode)
+      ?? isPaused(store, selectedEpisode)
       ?? isPlaying(store, selectedEpisode)
       ?? isDownloaded(store, selectedEpisode)
       ?? isDownloading(store, selectedEpisode)
@@ -44,6 +45,13 @@ Function getEpisodeSelector(Episode episode) {
 
     return selectedEpisode;
   };
+}
+
+EpisodeStatus isPlayedToEnd(Store<AppState> store, Episode episode) {
+  final AppState state = store.state;
+  return (state.playingEpisode?.url != episode.url || state.playingEpisode?.status != EpisodeStatus.PLAYING) && episode.isPlayedToEnd() && episode.downloadPath != null
+    ? EpisodeStatus.PLAYED
+    : null;
 }
 
 EpisodeStatus isPaused(Store<AppState> store, Episode episode) {

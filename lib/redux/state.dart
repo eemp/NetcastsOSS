@@ -5,17 +5,19 @@ class AppState {
   final String playingEpisode;
   final Duration positionInEpisode;
 
-  final Map<String, Episode> userEpisodes;
-
   final List<Podcast> subscriptions;
+
+  Map<String, Episode> userEpisodes;
 
   AppState({
     this.playingEpisode,
     this.positionInEpisode,
     this.subscriptions,
-    // ignore: prefer_collection_literals, non_constant_default_value
-    this.userEpisodes = Map<String, Episode>(),
-  });
+    this.userEpisodes,
+  }) {
+    // ignore: prefer_collection_literals
+    userEpisodes ??= Map<String, Episode>();
+  }
 
   AppState copyWith({
     String playingEpisode,

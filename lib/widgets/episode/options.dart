@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
 class EpisodeOptions extends StatelessWidget {
   final Episode episode;
-  final Function onEpisodeDelete;
-  final Function onEpisodeDownload;
+  final Function onDelete;
+  final Function onDownload;
 
   const EpisodeOptions({
     Key key,
     this.episode,
-    this.onEpisodeDelete,
-    this.onEpisodeDownload,
+    this.onDelete,
+    this.onDownload,
   }) : super(key: key);
 
   @override
@@ -33,9 +34,9 @@ class EpisodeOptions extends StatelessWidget {
   }
 
   Widget episodeOptionsBuilder(BuildContext context, Episode episode) {
-    return episode.downloadPath != null
+    return dash.isNotEmpty(episode.downloadPath)
       ? buildDeleteOption(episode)
-      : episode.progress != null
+      : episode.status == EpisodeStatus.DOWNLOADING
         ? buildDownloadProgress(episode)
         : buildDownloadOption(episode);
   }
@@ -48,9 +49,7 @@ class EpisodeOptions extends StatelessWidget {
           Text('Delete'),
         ],
       ),
-      onPressed: () {
-        onEpisodeDelete(episode);
-      },
+      onPressed: onDelete,
     );
   }
 
@@ -62,9 +61,7 @@ class EpisodeOptions extends StatelessWidget {
           Text('Download'),
         ],
       ),
-      onPressed: () {
-        onEpisodeDownload(episode);
-      },
+      onPressed: onDownload,
     );
   }
 

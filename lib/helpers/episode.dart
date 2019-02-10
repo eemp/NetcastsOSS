@@ -62,13 +62,16 @@ Future<void> downloadEpisode(Episode episode, {OnDownloadProgress onProgress}) a
 
   await dio.download(episode.url, downloadPath, onProgress: onProgress);
 
-  await episodeActionModel.insert(download);
   await userEpisodeModel.insert(
     UserEpisode(
       details: episode.toJson(),
       url: episode.url,
     )
   );
+  await episodeActionModel.removeWhere(
+    episodeActionModel.url.eq(episode.url)
+  );
+  await episodeActionModel.insert(download);
 
   episode.downloadPath = downloadPath;
   episode.progress = null;

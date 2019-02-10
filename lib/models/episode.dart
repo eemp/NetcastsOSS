@@ -11,6 +11,7 @@ enum EpisodeStatus {
   PAUSED,
   PLAYING,
   PLAYED,
+  DELETED,
 }
 
 class Episode {
@@ -43,7 +44,7 @@ class Episode {
     this.progress,
     this.pubDate,
     this.size,
-    this.status,
+    this.status = EpisodeStatus.NONE,
     this.title,
     this.url,
   });
@@ -109,14 +110,13 @@ class Episode {
     if(length == null || position == null) {
       return false;
     }
-
     final Duration remainder = length - position;
     return remainder.inSeconds < END_OF_EPISODE_THRESHOLD;
   }
 
   @override
   String toString() {
-    return 'Episode[description=$description, media=$media, pubDate=$pubDate, size=$size, title=$title, url=$url, ]';
+    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, ]';
   }
 
   String toJson() {

@@ -32,6 +32,13 @@ double clamp(double a, double val, double b) {
   return math.max(a, math.min(val, b));
 }
 
+bool isEmpty(String value) {
+  return value == null || value.isEmpty;
+}
+
+bool isNotEmpty(String value) {
+  return value != null && value.isNotEmpty;
+}
 
 Function throttle(Function fn, Duration delay) {
   Timer timer;

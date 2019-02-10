@@ -7,38 +7,23 @@ AppState reducer(AppState state, dynamic action) {
   return AppState(
     playingEpisode: playingEpisodeReducer(state.playingEpisode, action),
     subscriptions: subscriptionsReducer(state.subscriptions, action),
-    userEpisodes: userEpisodesReducer(state.userEpisodes, action),
+    userEpisodes: userEpisodesReducer(state, action),
   );
 }
 
 const Function AppReducer = reducer;
 
-Episode playingEpisodeReducer(Episode state, dynamic action) {
+String playingEpisodeReducer(String state, dynamic action) {
   switch(action.type) {
     case ActionType.CLEAR_EPISODE:
-      return null;
-    case ActionType.PAUSE_EPISODE:
-      return state.copyWith(
-        status: state.isPlayedToEnd()
-          ? EpisodeStatus.PLAYED
-          : EpisodeStatus.PAUSED,
-      );
+      return '';
+    case ActionType.DELETE_EPISODE:
+      final Episode episode = action.payload['episode'];
+      return episode.url == state ? '' : state;
     case ActionType.PLAY_EPISODE:
-      return action.payload['episode'].copyWith(
-        status: EpisodeStatus.PLAYING,
-      );
+      return action.payload['episode'].url;
     case ActionType.RESUME_EPISODE:
-      return state.copyWith(
-        status: EpisodeStatus.PLAYING,
-      );
-    case ActionType.SET_EPISODE_LENGTH:
-      return state?.copyWith(
-        length: action.payload['length'],
-      );
-    case ActionType.SET_EPISODE_POSITION:
-      return state?.copyWith(
-        position: action.payload['position'],
-      );
+      return state;
     default:
       return state;
   }
@@ -53,44 +38,87 @@ List<Podcast> subscriptionsReducer(List<Podcast> state, dynamic action) {
   }
 }
 
-Map<String, Episode> userEpisodesReducer(Map<String, Episode> state, dynamic action) {
+Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
+  final Map<String, Episode> state = appState.userEpisodes;
+  final Episode playingEpisode = state[appState.playingEpisode];
+
   switch(action.type) {
-    case ActionType.PAUSE_EPISODE:
+    case ActionType.DOWNLOAD_EPISODE:
+    case ActionType.UPDATE_DOWNLOAD_STATUS:
       final Episode episode = action.payload['episode'];
+      final double progress = action.payload['progress'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
-        '${episode.url}': episode.copyWith(
-          status: episode.isPlayedToEnd()
-            ? EpisodeStatus.PLAYED
-            : EpisodeStatus.PAUSED,
+        '${matchingEpisode.url}': matchingEpisode.copyWith(
+          progress: progress ?? 0.0,
+          status: EpisodeStatus.DOWNLOADING,
+        ),
+      });
+    case ActionType.FINISH_DOWNLOADING_EPISODE:
+      final Episode episode = action.payload['episode'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${episode.url}': matchingEpisode.copyWith(
+          position: Duration(),
+          progress: 1.0,
+          status: EpisodeStatus.DOWNLOADED,
         ),
       });
     case ActionType.DELETE_EPISODE:
       final Episode episode = action.payload['episode'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
-        '${episode.url}': episode.copyWith(
-          downloadPath: null,
+        '${matchingEpisode.url}': matchingEpisode.copyWith(
+          downloadPath: '',
+          status: EpisodeStatus.DELETED,
         ),
       });
-    case ActionType.DOWNLOAD_EPISODE:
-    case ActionType.FINISH_DOWNLOADING_EPISODE:
-      final Episode episode = action.payload['episode'];
-      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
-        '${episode.url}': episode,
-      });
-    case ActionType.UPDATE_DOWNLOAD_STATUS:
-      final Episode episode = action.payload['episode'];
-      final double progress = action.payload['progress'];
-      final Episode matchingEpisode = state[episode.url];
-      if(matchingEpisode != null) {
-        matchingEpisode.progress = progress;
-      }
-      return state;
     case ActionType.UPDATE_DOWNLOADS:
       return state..addEntries(
         List<Episode>.from(action.payload['downloads']).map(
           (Episode userEpisode) => MapEntry<String, Episode>(userEpisode.url, userEpisode)
         ).toList()
       );
+    case ActionType.PAUSE_EPISODE:
+      final Episode episode = action.payload['episode'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${matchingEpisode.url}': matchingEpisode.copyWith(
+          status: matchingEpisode.isPlayedToEnd()
+            ? EpisodeStatus.PLAYED
+            : EpisodeStatus.PAUSED,
+        ),
+      });
+    case ActionType.PLAY_EPISODE:
+      final Episode episode = action.payload['episode'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${matchingEpisode.url}': matchingEpisode.copyWith(
+          status: EpisodeStatus.PLAYING
+        ),
+      });
+    case ActionType.RESUME_EPISODE:
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${playingEpisode.url}': playingEpisode.copyWith(
+          status: EpisodeStatus.PLAYING
+        ),
+      });
+    case ActionType.SET_EPISODE_LENGTH:
+      return playingEpisode != null
+        ? (Map<String, Episode>.from(state)..addAll(<String, Episode>{
+          '${playingEpisode.url}': playingEpisode.copyWith(
+            length: action.payload['length'],
+          ),
+        }))
+        : null;
+    case ActionType.SET_EPISODE_POSITION:
+      return playingEpisode != null
+        ? (Map<String, Episode>.from(state)..addAll(<String, Episode>{
+          '${playingEpisode.url}': playingEpisode.copyWith(
+            position: action.payload['position'],
+          ),
+        }))
+        : null;
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 
 class AppState {
-  final Episode playingEpisode;
+  final String playingEpisode;
   final Duration positionInEpisode;
 
   final Map<String, Episode> userEpisodes;
@@ -18,7 +18,7 @@ class AppState {
   });
 
   AppState copyWith({
-    Episode playingEpisode,
+    String playingEpisode,
     Duration positionInEpisode,
     List<Podcast> subscriptions,
     Map<String, Episode> userEpisodes,

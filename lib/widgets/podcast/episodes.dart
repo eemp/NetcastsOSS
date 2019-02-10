@@ -72,6 +72,7 @@ class PodcastEpisodesList extends StatelessWidget {
 
   Icon getEpisodeIcon(Episode episode) {
     const Map<EpisodeStatus, Icon> icons = <EpisodeStatus, Icon>{
+      EpisodeStatus.DELETED: Icon(Icons.get_app),
       EpisodeStatus.DOWNLOADED: Icon(Icons.play_arrow),
       EpisodeStatus.DOWNLOADING: Icon(Icons.more_horiz),
       EpisodeStatus.NONE: Icon(Icons.get_app),
@@ -84,6 +85,7 @@ class PodcastEpisodesList extends StatelessWidget {
 
   Function getEpisodeAction(Episode episode) {
     final Map<EpisodeStatus, Function> actions = <EpisodeStatus, Function>{
+      EpisodeStatus.DELETED: () { onEpisodeDownload(episode); },
       EpisodeStatus.DOWNLOADED: () { onEpisodePlay(episode); },
       EpisodeStatus.DOWNLOADING: null,
       EpisodeStatus.NONE: () { onEpisodeDownload(episode); },
@@ -95,7 +97,13 @@ class PodcastEpisodesList extends StatelessWidget {
   }
 
   double getEpisodeProgress(Episode episode) {
-    if(episode.status == EpisodeStatus.PLAYED || episode.status == EpisodeStatus.NONE) {
+    const List<EpisodeStatus> WITHOUT_PROGRESS_STATUSES = <EpisodeStatus>[
+      EpisodeStatus.NONE,
+      EpisodeStatus.DELETED,
+      EpisodeStatus.PLAYED,
+    ];
+
+    if(WITHOUT_PROGRESS_STATUSES.contains(episode.status)) {
       return null;
     }
     if(episode.status == EpisodeStatus.DOWNLOADING) {

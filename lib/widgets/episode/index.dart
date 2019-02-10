@@ -40,11 +40,17 @@ class EpisodePage extends StatelessWidget {
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onEpisodeDelete: (Episode episode) {
+                onDelete: () {
                   app.store.dispatch(deleteEpisode(episode));
                 },
-                onEpisodeDownload: (Episode episode) {
+                onDownload: () {
                   app.store.dispatch(downloadEpisode(episode));
+                },
+                onPause: () {
+                  app.store.dispatch(pauseEpisode(episode));
+                },
+                onPlay: () {
+                  app.store.dispatch(playEpisode(episode));
                 },
               ),
               margin: const EdgeInsets.all(16.0),

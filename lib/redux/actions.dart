@@ -50,9 +50,9 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
       callback: (String payload) {
         store.dispatch(resumeEpisode());
       },
-      content: store.state.playingEpisode.title,
+      content: getPlayingEpisode(store).title,
       payload: 'playAction',
-      title: store.state.playingEpisode.podcastTitle,
+      title: getPlayingEpisode(store).podcastTitle,
     );
 
     store.dispatch(Action(
@@ -67,28 +67,29 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
 ThunkAction<AppState> playEpisode(Episode episode) {
   return (Store<AppState> store) async {
     final App app = App();
+    final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
 
     app.player.play(
-      episode.downloadPath,
+      matchingEpisode.downloadPath,
       isLocal: true,
     );
-    app.player.seek(episode.position ?? Duration());
+    app.player.seek(matchingEpisode.position ?? Duration());
 
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
-        store.dispatch(pauseEpisode(episode));
+        store.dispatch(pauseEpisode(matchingEpisode));
       },
-      content: episode.title,
+      content: matchingEpisode.title,
       isOngoing: true,
       payload: 'pauseAction',
-      title: episode.podcastTitle,
+      title: matchingEpisode.podcastTitle,
     );
 
     store.dispatch(Action(
       type: ActionType.PLAY_EPISODE,
       payload: <String, dynamic>{
-        'episode': episode,
+        'episode': matchingEpisode,
       },
     ));
   };
@@ -102,12 +103,12 @@ ThunkAction<AppState> resumeEpisode() {
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
-        store.dispatch(pauseEpisode(store.state.playingEpisode));
+        store.dispatch(pauseEpisode(getPlayingEpisode(store)));
       },
-      content: store.state.playingEpisode.title,
+      content: getPlayingEpisode(store).title,
       isOngoing: true,
       payload: 'pauseAction',
-      title: store.state.playingEpisode.podcastTitle,
+      title: getPlayingEpisode(store).podcastTitle,
     );
 
     store.dispatch(Action(
@@ -126,10 +127,16 @@ Action seekInEpisode(Duration position) {
 ThunkAction<AppState> updateEpisodePosition(Duration position) {
   return (Store<AppState> store) async {
     if(position.inSeconds % 5 == 0) {
-      await episode_helpers.updateEpisodePosition(store.state.playingEpisode, position);
+      await episode_helpers.updateEpisodePosition(getPlayingEpisode(store), position);
     }
     store.dispatch(setEpisodePosition(position));
   };
+}
+
+Episode getPlayingEpisode(Store<AppState> store) {
+  final String playingEpisode = store.state.playingEpisode;
+  final Map<String, Episode> userEpisodes = store.state.userEpisodes;
+  return userEpisodes[playingEpisode];
 }
 
 Action setEpisodePosition(Duration position) {
@@ -218,18 +225,24 @@ ThunkAction<AppState> downloadEpisode(Episode episode) {
     store.dispatch(queueDownload(episode));
 
     final Function throttledStatusUpdate = dash.throttle(
-      (double progress) {
-        store.dispatch(updateDownloadStatus(episode, progress));
+      (EpisodeStatus status, double progress) {
+        if(status == EpisodeStatus.DOWNLOADING) {
+          store.dispatch(updateDownloadStatus(episode, progress));
+        }
+        else {
+          store.dispatch(finishDownloadingEpisode(episode));
+        }
       },
       Duration(milliseconds: 1000)
     );
 
     await episode_helpers.downloadEpisode(episode, onProgress: (int received, int total) {
-      final List<dynamic> throttledUpdateArgs = <dynamic>[ received/total ];
+      final List<dynamic> throttledUpdateArgs = <dynamic>[ EpisodeStatus.DOWNLOADING, received/total ];
       throttledStatusUpdate(throttledUpdateArgs);
     });
 
-    store.dispatch(finishDownloadingEpisode(episode));
+    final List<dynamic> throttledUpdateArgs = <dynamic>[ EpisodeStatus.DOWNLOADED, 1.0 ];
+    throttledStatusUpdate(throttledUpdateArgs);
   };
 }
 

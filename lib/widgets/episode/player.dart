@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
 class EpisodePlayer extends StatelessWidget {
   final Episode episode;
+  final Function onPause;
+  final Function onPlay;
 
   const EpisodePlayer({
     Key key,
     this.episode,
+    this.onPause,
+    this.onPlay,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, QueuedEpisode>(
-      converter: queuedEpisodeSelector,
-      builder: (BuildContext context, QueuedEpisode queuedEpisode) {
-        final bool canPlay = episode.downloadPath != null;
-        final bool isPlaying = queuedEpisode.isPlaying
-          && episode.url == queuedEpisode.episode?.url;
-        final bool isQueued = episode.url == queuedEpisode.episode?.url;
-        final Duration duration = isQueued ? queuedEpisode.duration : null;
-        final Function onPause = canPlay ? queuedEpisode.onPause : null;
-        final Function onPlay = canPlay ? queuedEpisode.onPlay : null;
-        final Duration position = isQueued ? queuedEpisode.position : null;
+    return StoreConnector<AppState, Episode>(
+      converter: getEpisodeSelector(episode),
+      builder: (BuildContext context, Episode episode) {
+        final bool canPlay = dash.isNotEmpty(episode.downloadPath);
+        final bool isPlaying = episode?.isPlaying() ?? false;
+        final bool isQueued = episode.url == episode?.url;
+        final Duration duration = canPlay ? episode?.length : null;
+        final Duration position = canPlay ? episode?.position : null;
+
+        final double durationInSeconds = duration?.inSeconds?.toDouble() ?? 0.0;
+        final double positionInSeconds = position?.inSeconds?.toDouble() ?? 0.0;
 
         return Column(
           children: <Widget>[
@@ -55,11 +59,11 @@ class EpisodePlayer extends StatelessWidget {
                     child: Slider(
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
-                      max: duration?.inSeconds?.toDouble() ?? 0.0,
+                      max: durationInSeconds,
                       onChanged: isQueued ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
-                      value: position?.inSeconds?.toDouble() ?? 0.0,
+                      value: dash.clamp(0.0, positionInSeconds ?? 0.0, durationInSeconds),
                     ),
                   ),
                   Container(
@@ -94,7 +98,7 @@ class EpisodePlayer extends StatelessWidget {
                         onPause();
                       }
                       else {
-                        onPlay(episode);
+                        onPlay();
                       }
                     } : null,
                     child: Padding(

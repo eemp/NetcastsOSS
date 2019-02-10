@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EpisodeTile extends StatelessWidget {
+  final bool emphasis;
   final Image image;
   final String subtitle;
   final String title;
@@ -8,6 +9,7 @@ class EpisodeTile extends StatelessWidget {
 
   const EpisodeTile({
     Key key,
+    this.emphasis = false,
     this.image,
     this.options,
     this.subtitle,
@@ -23,7 +25,13 @@ class EpisodeTile extends StatelessWidget {
         //constraints: new BoxConstraints(maxWidth: 80.0, minWidth: 80.0),
       //),
       subtitle: Text(subtitle),
-      title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
+      title: Text(title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: emphasis
+          ? const TextStyle(fontWeight: FontWeight.bold)
+          : const TextStyle(fontWeight: FontWeight.normal),
+      ),
       trailing: options,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:percent_indicator/percent_indicator.dart';
 
 class CircularProgressWithOptionalAction extends StatelessWidget {
@@ -23,7 +24,7 @@ class CircularProgressWithOptionalAction extends StatelessWidget {
           : const Color(0xFFB8C7CB),
         center: icon,
         lineWidth: 3.0,
-        percent: progress ?? 0.0,
+        percent: dash.clamp(0.0, progress ?? 0.0, 1.0),
         radius: 40.0,
         progressColor: Theme.of(context).accentColor,
       ),

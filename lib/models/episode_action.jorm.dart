@@ -1,78 +1,67 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'podcast_subscription.dart';
+part of 'episode_action.dart';
 
 // **************************************************************************
 // BeanGenerator
 // **************************************************************************
 
-abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
-  final id = StrField('id');
-  final isSubscribed = BoolField('is_subscribed');
+abstract class _EpisodeActionBean implements Bean<EpisodeAction> {
   final created = DateTimeField('created');
   final details = StrField('details');
-  final podcastId = StrField('podcast_id');
-  final podcastUrl = StrField('podcast_url');
+  final type = StrField('type');
+  final url = StrField('url');
+  final id = StrField('id');
   Map<String, Field> _fields;
   Map<String, Field> get fields => _fields ??= {
-        id.name: id,
-        isSubscribed.name: isSubscribed,
         created.name: created,
         details.name: details,
-        podcastId.name: podcastId,
-        podcastUrl.name: podcastUrl,
+        type.name: type,
+        url.name: url,
+        id.name: id,
       };
-  PodcastSubscription fromMap(Map map) {
-    PodcastSubscription model = PodcastSubscription();
-    model.id = adapter.parseValue(map['id']);
-    model.isSubscribed = adapter.parseValue(map['is_subscribed']);
+  EpisodeAction fromMap(Map map) {
+    EpisodeAction model = EpisodeAction();
     model.created = adapter.parseValue(map['created']);
     model.details = adapter.parseValue(map['details']);
-    model.podcastId = adapter.parseValue(map['podcast_id']);
-    model.podcastUrl = adapter.parseValue(map['podcast_url']);
+    model.type = adapter.parseValue(map['type']);
+    model.url = adapter.parseValue(map['url']);
+    model.id = adapter.parseValue(map['id']);
 
     return model;
   }
 
-  List<SetColumn> toSetColumns(PodcastSubscription model,
+  List<SetColumn> toSetColumns(EpisodeAction model,
       {bool update = false, Set<String> only, bool onlyNonNull: false}) {
     List<SetColumn> ret = [];
 
     if (only == null && !onlyNonNull) {
-      ret.add(id.set(model.id));
-      ret.add(isSubscribed.set(model.isSubscribed));
       ret.add(created.set(model.created));
       ret.add(details.set(model.details));
-      ret.add(podcastId.set(model.podcastId));
-      ret.add(podcastUrl.set(model.podcastUrl));
+      ret.add(type.set(model.type));
+      ret.add(url.set(model.url));
+      ret.add(id.set(model.id));
     } else if (only != null) {
-      if (only.contains(id.name)) ret.add(id.set(model.id));
-      if (only.contains(isSubscribed.name))
-        ret.add(isSubscribed.set(model.isSubscribed));
       if (only.contains(created.name)) ret.add(created.set(model.created));
       if (only.contains(details.name)) ret.add(details.set(model.details));
-      if (only.contains(podcastId.name))
-        ret.add(podcastId.set(model.podcastId));
-      if (only.contains(podcastUrl.name))
-        ret.add(podcastUrl.set(model.podcastUrl));
+      if (only.contains(type.name)) ret.add(type.set(model.type));
+      if (only.contains(url.name)) ret.add(url.set(model.url));
+      if (only.contains(id.name)) ret.add(id.set(model.id));
     } else /* if (onlyNonNull) */ {
-      if (model.id != null) {
-        ret.add(id.set(model.id));
-      }
-      if (model.isSubscribed != null) {
-        ret.add(isSubscribed.set(model.isSubscribed));
-      }
       if (model.created != null) {
         ret.add(created.set(model.created));
       }
       if (model.details != null) {
         ret.add(details.set(model.details));
       }
-      if (model.podcastId != null) {
-        ret.add(podcastId.set(model.podcastId));
+      if (model.type != null) {
+        ret.add(type.set(model.type));
       }
-      if (model.podcastUrl != null) {
-        ret.add(podcastUrl.set(model.podcastUrl));
+      if (model.url != null) {
+        ret.add(url.set(model.url));
+      }
+      if (model.id != null) {
+        ret.add(id.set(model.id));
       }
     }
 
@@ -81,23 +70,22 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
 
   Future<void> createTable({bool ifNotExists: false}) async {
     final st = Sql.create(tableName, ifNotExists: ifNotExists);
-    st.addStr(id.name, primary: true, length: 36, isNullable: false);
-    st.addBool(isSubscribed.name, isNullable: false);
     st.addDateTime(created.name, isNullable: false);
     st.addStr(details.name, length: 0, isNullable: false);
-    st.addStr(podcastId.name, length: 0, isNullable: false);
-    st.addStr(podcastUrl.name, length: 0, isNullable: false);
+    st.addStr(type.name, length: 0, isNullable: false);
+    st.addStr(url.name, length: 0, isNullable: false);
+    st.addStr(id.name, primary: true, length: 36, isNullable: false);
     return adapter.createTable(st);
   }
 
-  Future<dynamic> insert(PodcastSubscription model,
+  Future<dynamic> insert(EpisodeAction model,
       {bool cascade: false, bool onlyNonNull: false, Set<String> only}) async {
     final Insert insert = inserter
         .setMany(toSetColumns(model, only: only, onlyNonNull: onlyNonNull));
     return adapter.insert(insert);
   }
 
-  Future<void> insertMany(List<PodcastSubscription> models,
+  Future<void> insertMany(List<EpisodeAction> models,
       {bool onlyNonNull: false, Set<String> only}) async {
     final List<List<SetColumn>> data = models
         .map((model) =>
@@ -108,14 +96,14 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<dynamic> upsert(PodcastSubscription model,
+  Future<dynamic> upsert(EpisodeAction model,
       {bool cascade: false, Set<String> only, bool onlyNonNull: false}) async {
     final Upsert upsert = upserter
         .setMany(toSetColumns(model, only: only, onlyNonNull: onlyNonNull));
     return adapter.upsert(upsert);
   }
 
-  Future<void> upsertMany(List<PodcastSubscription> models,
+  Future<void> upsertMany(List<EpisodeAction> models,
       {bool onlyNonNull: false, Set<String> only}) async {
     final List<List<SetColumn>> data = [];
     for (var i = 0; i < models.length; ++i) {
@@ -128,7 +116,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<int> update(PodcastSubscription model,
+  Future<int> update(EpisodeAction model,
       {bool cascade: false,
       bool associate: false,
       Set<String> only,
@@ -139,7 +127,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return adapter.update(update);
   }
 
-  Future<void> updateMany(List<PodcastSubscription> models,
+  Future<void> updateMany(List<EpisodeAction> models,
       {bool onlyNonNull: false, Set<String> only}) async {
     final List<List<SetColumn>> data = [];
     final List<Expression> where = [];
@@ -154,7 +142,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return;
   }
 
-  Future<PodcastSubscription> find(String id,
+  Future<EpisodeAction> find(String id,
       {bool preload: false, bool cascade: false}) async {
     final Find find = finder.where(this.id.eq(id));
     return await findOne(find);
@@ -165,7 +153,7 @@ abstract class _PodcastSubscriptionBean implements Bean<PodcastSubscription> {
     return adapter.remove(remove);
   }
 
-  Future<int> removeMany(List<PodcastSubscription> models) async {
+  Future<int> removeMany(List<EpisodeAction> models) async {
 // Return if models is empty. If this is not done, all records will be removed!
     if (models == null || models.isEmpty) return 0;
     final Remove remove = remover;

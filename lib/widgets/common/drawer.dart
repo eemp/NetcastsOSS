@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
 import 'package:hear2learn/widgets/home/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
@@ -51,17 +52,17 @@ class AppDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.subscriptions),
+            leading: const Icon(Icons.collections_bookmark),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(builder: (BuildContext context) => SubscriptionsPage()),
               );
             },
-            title: const Text('Your Podcasts'),
+            title: const Text(LIBRARY_LABEL),
           ),
           ListTile(
-            leading: const Icon(Icons.get_app),
+            leading: const Icon(Icons.folder),
             onTap: () {
               Navigator.push(
                 context,

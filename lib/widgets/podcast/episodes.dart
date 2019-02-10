@@ -54,6 +54,7 @@ class PodcastEpisodesList extends StatelessWidget {
         );
       },
       child: EpisodeTile(
+        emphasis: !episode.isPlayedToEnd(),
         subtitle: episode.getMetaLine(),
         title: episode.title,
         options: buildEpisodeOptions(episode),
@@ -71,33 +72,46 @@ class PodcastEpisodesList extends StatelessWidget {
 
   Icon getEpisodeIcon(Episode episode) {
     const Map<EpisodeStatus, Icon> icons = <EpisodeStatus, Icon>{
+      EpisodeStatus.DELETED: Icon(Icons.get_app),
       EpisodeStatus.DOWNLOADED: Icon(Icons.play_arrow),
       EpisodeStatus.DOWNLOADING: Icon(Icons.more_horiz),
       EpisodeStatus.NONE: Icon(Icons.get_app),
       EpisodeStatus.PAUSED: Icon(Icons.play_arrow),
       EpisodeStatus.PLAYING: Icon(Icons.pause),
+      EpisodeStatus.PLAYED: Icon(Icons.delete),
     };
     return icons[episode.status];
   }
 
   Function getEpisodeAction(Episode episode) {
     final Map<EpisodeStatus, Function> actions = <EpisodeStatus, Function>{
+      EpisodeStatus.DELETED: () { onEpisodeDownload(episode); },
       EpisodeStatus.DOWNLOADED: () { onEpisodePlay(episode); },
       EpisodeStatus.DOWNLOADING: null,
       EpisodeStatus.NONE: () { onEpisodeDownload(episode); },
-      EpisodeStatus.PAUSED: onEpisodeResume,
-      EpisodeStatus.PLAYING: onEpisodePause,
+      EpisodeStatus.PAUSED: () { onEpisodePlay(episode); },
+      EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
+      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
     };
     return actions[episode.status];
   }
 
   double getEpisodeProgress(Episode episode) {
-    if(episode.status == EpisodeStatus.PAUSED || episode.status == EpisodeStatus.PLAYING) {
-      return (episode.position?.inSeconds?.toDouble() ?? 0)
-        / (episode.length?.inSeconds?.toDouble() ?? 1);
+    const List<EpisodeStatus> WITHOUT_PROGRESS_STATUSES = <EpisodeStatus>[
+      EpisodeStatus.NONE,
+      EpisodeStatus.DELETED,
+      EpisodeStatus.PLAYED,
+    ];
+
+    if(WITHOUT_PROGRESS_STATUSES.contains(episode.status)) {
+      return null;
     }
     if(episode.status == EpisodeStatus.DOWNLOADING) {
       return episode.progress;
+    }
+    if((episode.position?.inSeconds ?? 0) > 0) {
+      return (episode.position?.inSeconds?.toDouble() ?? 0)
+        / (episode.length?.inSeconds?.toDouble() ?? 1);
     }
     return null;
   }

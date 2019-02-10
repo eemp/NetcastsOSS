@@ -5,7 +5,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 final Store<AppState> store = Store<AppState>(
   AppReducer,
-  initialState: const AppState(),
+  initialState: AppState(),
   // ignore: always_specify_types
   middleware: [
     thunkMiddleware,

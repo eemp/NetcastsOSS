@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -48,12 +49,11 @@ class Home extends StatelessWidget {
             );
           }
 
-          return ListView.separated(
+          return ListView.builder(
             itemBuilder: (BuildContext context, int idx) {
               return snapshot.data[idx];
             },
             itemCount: snapshot.data.length,
-            separatorBuilder: (BuildContext context, int index) => const Divider(),
             shrinkWrap: true,
           );
         }
@@ -81,7 +81,7 @@ class Home extends StatelessWidget {
             }
             : null,
           directToEpisodes: true,
-          title: 'Your Podcasts',
+          title: LIBRARY_LABEL,
         );
       },
     );

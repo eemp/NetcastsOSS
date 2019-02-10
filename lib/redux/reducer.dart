@@ -95,12 +95,21 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
       });
     case ActionType.PLAY_EPISODE:
       final Episode episode = action.payload['episode'];
-      final Episode matchingEpisode = state[episode.url] ?? episode;
-      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
-        '${matchingEpisode.url}': matchingEpisode.copyWith(
-          status: EpisodeStatus.PLAYING
-        ),
-      });
+      return state..addEntries(
+        List<Episode>.from(state.values).map(
+          (Episode userEpisode) =>
+            MapEntry<String, Episode>(
+              userEpisode.url,
+              userEpisode.url == episode.url
+                ? userEpisode.copyWith(status: EpisodeStatus.PLAYING)
+                : userEpisode.copyWith(
+                  status: userEpisode.status == EpisodeStatus.PLAYING
+                    ? EpisodeStatus.PAUSED
+                    : userEpisode.status
+                )
+            )
+        ).toList()
+      );
     case ActionType.RESUME_EPISODE:
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
         '${playingEpisode.url}': playingEpisode.copyWith(

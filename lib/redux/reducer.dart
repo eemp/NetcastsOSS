@@ -1,3 +1,4 @@
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -40,7 +41,9 @@ List<Podcast> subscriptionsReducer(List<Podcast> state, dynamic action) {
 
 Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
   final Map<String, Episode> state = appState.userEpisodes;
-  final Episode playingEpisode = state[appState.playingEpisode];
+  final Episode playingEpisode = dash.isNotEmpty(appState.playingEpisode)
+    ? state[appState.playingEpisode]
+    : null;
 
   switch(action.type) {
     case ActionType.DOWNLOAD_EPISODE:
@@ -59,6 +62,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
       final Episode matchingEpisode = state[episode.url] ?? episode;
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
         '${episode.url}': matchingEpisode.copyWith(
+          downloadPath: episode.downloadPath ?? matchingEpisode.downloadPath,
           position: Duration(),
           progress: 1.0,
           status: EpisodeStatus.DOWNLOADED,
@@ -110,7 +114,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
             length: action.payload['length'],
           ),
         }))
-        : null;
+        : state;
     case ActionType.SET_EPISODE_POSITION:
       return playingEpisode != null
         ? (Map<String, Episode>.from(state)..addAll(<String, Episode>{
@@ -118,7 +122,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
             position: action.payload['position'],
           ),
         }))
-        : null;
+        : state;
     default:
       return state;
   }

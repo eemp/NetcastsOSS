@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/themes.dart';
@@ -17,7 +16,6 @@ Future<void> start() async {
 
   app.store.dispatch(updateSubscriptions);
   app.store.dispatch(updateDownloads);
-  app.store.dispatch(setPendingDownloads(<Episode>[]));
 
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
 

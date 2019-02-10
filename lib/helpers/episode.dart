@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_action.dart';
 import 'package:hear2learn/models/user_episode.dart';
@@ -26,14 +27,24 @@ Future<Episode> getEpisodeWithActions(UserEpisode userEpisode) async {
   final List<EpisodeAction> episodeActions = await episodeActionModel.findWhere(
     episodeActionModel.url.eq(episode.url)
   );
-  episodeActions.forEach((EpisodeAction action) {
-    if(action.type == EpisodeActionType.DOWNLOAD.toString()) {
-      episode.downloadPath = action.details;
+
+  final EpisodeAction downloadAction =
+      dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.DOWNLOAD.toString());
+  final EpisodeAction playAction =
+      dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.PLAY.toString());
+
+  if(downloadAction != null) {
+    episode.downloadPath = downloadAction.details;
+    episode.status = EpisodeStatus.DOWNLOADED;
+  }
+  if(playAction != null) {
+    episode.setPlayerDetails(playAction.details);
+    if(downloadAction != null) {
+      episode.status = episode.isPlayedToEnd()
+        ? (dash.isNotEmpty(episode.downloadPath) ? EpisodeStatus.PLAYED : EpisodeStatus.DELETED)
+        : EpisodeStatus.PAUSED;
     }
-    else if(action.type == EpisodeActionType.PLAY.toString()) {
-      episode.setPlayerDetails(action.details);
-    }
-  });
+  }
   return episode;
 }
 

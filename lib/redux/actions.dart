@@ -136,7 +136,9 @@ ThunkAction<AppState> updateEpisodePosition(Duration position) {
 Episode getPlayingEpisode(Store<AppState> store) {
   final String playingEpisode = store.state.playingEpisode;
   final Map<String, Episode> userEpisodes = store.state.userEpisodes;
-  return userEpisodes[playingEpisode];
+  return dash.isNotEmpty(playingEpisode)
+    ? userEpisodes[playingEpisode]
+    : null;
 }
 
 Action setEpisodePosition(Duration position) {
@@ -179,15 +181,6 @@ Action setSubscriptions(List<Podcast> subscriptions) {
   );
 }
 
-Action setPendingDownloads(List<Episode> downloads) {
-  return Action(
-    type: ActionType.UPDATE_PENDING_DOWNLOADS,
-    payload: <String, dynamic>{
-      'downloads': downloads,
-    },
-  );
-}
-
 Future<void> updateDownloads(Store<AppState> store) async {
   final List<Episode> downloads = await episode_helpers.getDownloads();
   store.dispatch(
@@ -206,6 +199,11 @@ Action setDownloads(List<Episode> downloads) {
 
 ThunkAction<AppState> deleteEpisode(Episode episode) {
   return (Store<AppState> store) async {
+    final App app = App();
+    if(episode.url == store.state.playingEpisode) {
+      app.player.pause();
+    }
+
     await episode_helpers.deleteEpisode(episode);
     store.dispatch(removeEpisode(episode));
   };

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -18,7 +19,7 @@ class SubscriptionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Podcasts'),
+        title: const Text(LIBRARY_LABEL),
       ),
       body: StoreConnector<AppState, List<Podcast>>(
         converter: subscriptionsSelector,

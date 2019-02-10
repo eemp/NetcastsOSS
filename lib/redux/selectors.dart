@@ -7,15 +7,8 @@ import 'package:redux/redux.dart';
 Function getEpisodeSelector(Episode episode) {
   return (Store<AppState> store) {
     final AppState state = store.state;
-    final Episode playingEpisode = state.userEpisodes[state.playingEpisode];
     final Episode userEpisode = state.userEpisodes[episode.url];
     final Episode selectedEpisode = userEpisode ?? episode;
-
-    if(selectedEpisode.status == EpisodeStatus.PAUSED || selectedEpisode.status == EpisodeStatus.PLAYING) {
-      selectedEpisode.length = playingEpisode.length;
-      selectedEpisode.position = playingEpisode.position;
-    }
-
     return selectedEpisode;
   };
 }

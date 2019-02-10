@@ -89,7 +89,7 @@ class PodcastEpisodesList extends StatelessWidget {
       EpisodeStatus.DOWNLOADED: () { onEpisodePlay(episode); },
       EpisodeStatus.DOWNLOADING: null,
       EpisodeStatus.NONE: () { onEpisodeDownload(episode); },
-      EpisodeStatus.PAUSED: onEpisodeResume,
+      EpisodeStatus.PAUSED: () { onEpisodePlay(episode); },
       EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
       EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
     };

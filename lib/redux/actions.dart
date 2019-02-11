@@ -22,10 +22,12 @@ enum ActionType {
 
   DELETE_EPISODE,
   DOWNLOAD_EPISODE,
+  FAVORITE_EPISODE,
   FINISH_DOWNLOADING_EPISODE,
   UPDATE_DOWNLOAD_STATUS,
   UPDATE_DOWNLOADS,
   UPDATE_PENDING_DOWNLOADS,
+  UNFAVORITE_EPISODE,
 
   UPDATE_SUBSCRIPTIONS,
 }
@@ -148,6 +150,30 @@ Action setEpisodePosition(Duration position) {
       'position': position,
     },
   );
+}
+
+ThunkAction<AppState> favoriteEpisode(Episode episode) {
+  return (Store<AppState> store) async {
+    await episode_helpers.favoriteEpisode(episode);
+    store.dispatch(Action(
+      type: ActionType.FAVORITE_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
+    ));
+  };
+}
+
+ThunkAction<AppState> unfavoriteEpisode(Episode episode) {
+  return (Store<AppState> store) async {
+    await episode_helpers.unfavoriteEpisode(episode);
+    store.dispatch(Action(
+      type: ActionType.UNFAVORITE_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
+    ));
+  };
 }
 
 ThunkAction<AppState> subscribeToPodcast(Podcast podcast) {

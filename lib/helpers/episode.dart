@@ -30,12 +30,17 @@ Future<Episode> getEpisodeWithActions(UserEpisode userEpisode) async {
 
   final EpisodeAction downloadAction =
       dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.DOWNLOAD.toString());
+  final EpisodeAction favoriteAction =
+      dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.FAVORITE.toString());
   final EpisodeAction playAction =
       dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.PLAY.toString());
 
   if(downloadAction != null) {
     episode.downloadPath = downloadAction.details;
     episode.status = EpisodeStatus.DOWNLOADED;
+  }
+  if(favoriteAction != null) {
+    episode.isFavorited = true;
   }
   if(playAction != null) {
     episode.setPlayerDetails(playAction.details);
@@ -103,6 +108,32 @@ Future<void> updateEpisodePosition(Episode episode, Duration position) async {
   await episodeActionModel.upsert(episodeAction.copyWith(
     details: episode.copyWith(position: position).getPlayerDetails(),
   ));
+}
+
+Future<void> favoriteEpisode(Episode episode) async {
+  final App app = App();
+  final EpisodeActionBean episodeActionModel = app.models['episode_action'];
+  final UserEpisodeBean userEpisodeModel = app.models['user_episode'];
+  await userEpisodeModel.insert(
+    UserEpisode(
+      details: episode.toJson(),
+      url: episode.url,
+    )
+  );
+  await episodeActionModel.insert(EpisodeAction(
+    actionType: EpisodeActionType.FAVORITE,
+    details: true.toString(),
+    url: episode.url,
+  ));
+}
+
+Future<void> unfavoriteEpisode(Episode episode) async {
+  final App app = App();
+  final EpisodeActionBean episodeActionModel = app.models['episode_action'];
+  episodeActionModel.removeWhere(
+    episodeActionModel.url.eq(episode.url)
+      .and(episodeActionModel.type.eq(EpisodeActionType.FAVORITE.toString()))
+  );
 }
 
 Future<void> deleteEpisode(Episode episode) async {

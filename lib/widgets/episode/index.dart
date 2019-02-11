@@ -46,11 +46,17 @@ class EpisodePage extends StatelessWidget {
                 onDownload: () {
                   app.store.dispatch(downloadEpisode(episode));
                 },
+                onFavorite: () {
+                  app.store.dispatch(favoriteEpisode(episode));
+                },
                 onPause: () {
                   app.store.dispatch(pauseEpisode(episode));
                 },
                 onPlay: () {
                   app.store.dispatch(playEpisode(episode));
+                },
+                onUnfavorite: () {
+                  app.store.dispatch(unfavoriteEpisode(episode));
                 },
               ),
               margin: const EdgeInsets.all(16.0),

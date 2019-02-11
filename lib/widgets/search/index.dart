@@ -5,7 +5,6 @@ import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
-import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 

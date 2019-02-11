@@ -21,6 +21,7 @@ class Episode {
 
   String description;
   String downloadPath;
+  bool isFavorited;
   Duration length;
   String media;
   String podcastTitle;
@@ -36,6 +37,7 @@ class Episode {
   Episode({
     this.description,
     this.downloadPath,
+    this.isFavorited = false,
     this.length,
     this.media,
     this.podcastTitle,
@@ -52,6 +54,7 @@ class Episode {
   Episode copyWith({
     String description,
     String downloadPath,
+    bool isFavorited,
     Duration length,
     String media,
     String podcastTitle,
@@ -67,6 +70,7 @@ class Episode {
     return Episode(
       description: description ?? this.description,
       downloadPath: downloadPath ?? this.downloadPath,
+      isFavorited: isFavorited ?? this.isFavorited,
       length: length ?? this.length,
       media: media ?? this.media,
       podcastTitle: podcastTitle ?? this.podcastTitle,

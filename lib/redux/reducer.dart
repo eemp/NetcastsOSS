@@ -86,6 +86,15 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
           isFavorited: action.type == ActionType.FAVORITE_EPISODE,
         ),
       });
+    case ActionType.FINISH_EPISODE:
+    case ActionType.UNFINISH_EPISODE:
+      final Episode episode = action.payload['episode'];
+      final Episode matchingEpisode = state[episode.url] ?? episode;
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${matchingEpisode.url}': matchingEpisode.copyWith(
+          isFinished: action.type == ActionType.FINISH_EPISODE,
+        ),
+      });
     case ActionType.UPDATE_DOWNLOADS:
       return state..addEntries(
         List<Episode>.from(action.payload['downloads']).map(

@@ -54,7 +54,7 @@ class PodcastEpisodesList extends StatelessWidget {
         );
       },
       child: EpisodeTile(
-        emphasis: !episode.isPlayedToEnd(),
+        emphasis: !episode.isFinished,
         subtitle: episode.getMetaLine(),
         title: episode.title,
         options: buildEpisodeOptions(episode),

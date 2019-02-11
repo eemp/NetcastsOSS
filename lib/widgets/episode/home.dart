@@ -9,9 +9,11 @@ class EpisodeHome extends StatelessWidget {
   final Function onDelete;
   final Function onDownload;
   final Function onFavorite;
+  final Function onFinish;
   final Function onPause;
   final Function onPlay;
   final Function onUnfavorite;
+  final Function onUnfinish;
 
   const EpisodeHome({
     Key key,
@@ -19,9 +21,11 @@ class EpisodeHome extends StatelessWidget {
     this.onDelete,
     this.onDownload,
     this.onFavorite,
+    this.onFinish,
     this.onPause,
     this.onPlay,
     this.onUnfavorite,
+    this.onUnfinish,
   }) : super(key: key);
 
   @override
@@ -45,7 +49,9 @@ class EpisodeHome extends StatelessWidget {
               onDelete: onDelete,
               onDownload: onDownload,
               onFavorite: onFavorite,
+              onFinish: onFinish,
               onUnfavorite: onUnfavorite,
+              onUnfinish: onUnfinish,
             ),
           ],
         ),

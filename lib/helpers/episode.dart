@@ -32,6 +32,8 @@ Future<Episode> getEpisodeWithActions(UserEpisode userEpisode) async {
       dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.DOWNLOAD.toString());
   final EpisodeAction favoriteAction =
       dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.FAVORITE.toString());
+  final EpisodeAction finishAction =
+      dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.FINISH.toString());
   final EpisodeAction playAction =
       dash.find(episodeActions, (EpisodeAction action) => action.type == EpisodeActionType.PLAY.toString());
 
@@ -44,11 +46,17 @@ Future<Episode> getEpisodeWithActions(UserEpisode userEpisode) async {
   }
   if(playAction != null) {
     episode.setPlayerDetails(playAction.details);
-    if(downloadAction != null) {
-      episode.status = episode.isPlayedToEnd()
-        ? (dash.isNotEmpty(episode.downloadPath) ? EpisodeStatus.PLAYED : EpisodeStatus.DELETED)
-        : EpisodeStatus.PAUSED;
+    if(!episode.isPlayedToEnd() && dash.isNotEmpty(episode.downloadPath)) {
+      episode.status = EpisodeStatus.PAUSED;
     }
+  }
+  if(finishAction != null) {
+    episode.isFinished = true;
+    episode.status = dash.isEmpty(episode.downloadPath)
+      ? EpisodeStatus.DELETED
+      : episode.isPlayedToEnd()
+        ? EpisodeStatus.PLAYED
+        : EpisodeStatus.PAUSED;
   }
   return episode;
 }
@@ -113,13 +121,7 @@ Future<void> updateEpisodePosition(Episode episode, Duration position) async {
 Future<void> favoriteEpisode(Episode episode) async {
   final App app = App();
   final EpisodeActionBean episodeActionModel = app.models['episode_action'];
-  final UserEpisodeBean userEpisodeModel = app.models['user_episode'];
-  await userEpisodeModel.insert(
-    UserEpisode(
-      details: episode.toJson(),
-      url: episode.url,
-    )
-  );
+  await addUserEpisodeIfAbsent(episode);
   await episodeActionModel.insert(EpisodeAction(
     actionType: EpisodeActionType.FAVORITE,
     details: true.toString(),
@@ -130,10 +132,44 @@ Future<void> favoriteEpisode(Episode episode) async {
 Future<void> unfavoriteEpisode(Episode episode) async {
   final App app = App();
   final EpisodeActionBean episodeActionModel = app.models['episode_action'];
-  episodeActionModel.removeWhere(
+  await episodeActionModel.removeWhere(
     episodeActionModel.url.eq(episode.url)
       .and(episodeActionModel.type.eq(EpisodeActionType.FAVORITE.toString()))
   );
+}
+
+Future<void> finishEpisode(Episode episode) async {
+  final App app = App();
+  final EpisodeActionBean episodeActionModel = app.models['episode_action'];
+  await addUserEpisodeIfAbsent(episode);
+  await episodeActionModel.insert(EpisodeAction(
+    actionType: EpisodeActionType.FINISH,
+    details: true.toString(),
+    url: episode.url,
+  ));
+}
+
+Future<void> unfinishEpisode(Episode episode) async {
+  final App app = App();
+  final EpisodeActionBean episodeActionModel = app.models['episode_action'];
+  await episodeActionModel.removeWhere(
+    episodeActionModel.url.eq(episode.url)
+      .and(episodeActionModel.type.eq(EpisodeActionType.FINISH.toString()))
+  );
+}
+
+Future<void> addUserEpisodeIfAbsent(Episode episode) async {
+  final App app = App();
+  final UserEpisodeBean userEpisodeModel = app.models['user_episode'];
+  final Episode existingEpisode = await getUserEpisodeFromUrl(episode.url);
+  if(existingEpisode != null) {
+    await userEpisodeModel.insert(
+      UserEpisode(
+        details: episode.toJson(),
+        url: episode.url,
+      )
+    );
+  }
 }
 
 Future<void> deleteEpisode(Episode episode) async {

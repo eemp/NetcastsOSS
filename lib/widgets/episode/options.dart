@@ -11,7 +11,9 @@ class EpisodeOptions extends StatelessWidget {
   final Function onDelete;
   final Function onDownload;
   final Function onFavorite;
+  final Function onFinish;
   final Function onUnfavorite;
+  final Function onUnfinish;
 
   const EpisodeOptions({
     Key key,
@@ -19,7 +21,9 @@ class EpisodeOptions extends StatelessWidget {
     this.onDelete,
     this.onDownload,
     this.onFavorite,
+    this.onFinish,
     this.onUnfavorite,
+    this.onUnfinish,
   }) : super(key: key);
 
   @override
@@ -31,13 +35,8 @@ class EpisodeOptions extends StatelessWidget {
           children: <Widget>[
             buildDownloadDeleteOptions(episode),
             buildFavoritesOptions(episode),
-            const IconButton(
-              icon: Icon(Icons.check),
-              onPressed: null,
-              tooltip: 'Mark Played',
-            ),
+            buildFinishOptions(episode),
           ],
-          //alignment: MainAxisAlignment.start,
         );
       },
     );
@@ -86,6 +85,20 @@ class EpisodeOptions extends StatelessWidget {
         icon: const Icon(Icons.favorite_border),
         onPressed: onFavorite,
         tooltip: 'Favorite',
+      );
+  }
+
+  Widget buildFinishOptions(Episode episode) {
+    return episode.isFinished == true
+      ? IconButton(
+        icon: const Icon(Icons.done),
+        onPressed: onUnfinish,
+        tooltip: 'Mark Not Played',
+      )
+      : IconButton(
+        icon: const Icon(Icons.done_outline),
+        onPressed: onFinish,
+        tooltip: 'Mark Played',
       );
   }
 }

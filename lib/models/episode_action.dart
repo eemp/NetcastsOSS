@@ -6,6 +6,7 @@ part 'episode_action.jorm.dart';
 enum EpisodeActionType {
   DOWNLOAD,
   FAVORITE,
+  FINISH,
   PLAY,
 }
 

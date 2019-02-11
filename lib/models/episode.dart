@@ -22,6 +22,7 @@ class Episode {
   String description;
   String downloadPath;
   bool isFavorited;
+  bool isFinished;
   Duration length;
   String media;
   String podcastTitle;
@@ -38,6 +39,7 @@ class Episode {
     this.description,
     this.downloadPath,
     this.isFavorited = false,
+    this.isFinished = false,
     this.length,
     this.media,
     this.podcastTitle,
@@ -55,6 +57,7 @@ class Episode {
     String description,
     String downloadPath,
     bool isFavorited,
+    bool isFinished,
     Duration length,
     String media,
     String podcastTitle,
@@ -71,6 +74,7 @@ class Episode {
       description: description ?? this.description,
       downloadPath: downloadPath ?? this.downloadPath,
       isFavorited: isFavorited ?? this.isFavorited,
+      isFinished: isFinished ?? this.isFinished,
       length: length ?? this.length,
       media: media ?? this.media,
       podcastTitle: podcastTitle ?? this.podcastTitle,

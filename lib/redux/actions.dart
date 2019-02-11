@@ -23,11 +23,13 @@ enum ActionType {
   DELETE_EPISODE,
   DOWNLOAD_EPISODE,
   FAVORITE_EPISODE,
+  FINISH_EPISODE,
   FINISH_DOWNLOADING_EPISODE,
   UPDATE_DOWNLOAD_STATUS,
   UPDATE_DOWNLOADS,
   UPDATE_PENDING_DOWNLOADS,
   UNFAVORITE_EPISODE,
+  UNFINISH_EPISODE,
 
   UPDATE_SUBSCRIPTIONS,
 }
@@ -128,8 +130,12 @@ Action seekInEpisode(Duration position) {
 
 ThunkAction<AppState> updateEpisodePosition(Duration position) {
   return (Store<AppState> store) async {
+    final Episode playingEpisode = getPlayingEpisode(store);
     if(position.inSeconds % 5 == 0) {
-      await episode_helpers.updateEpisodePosition(getPlayingEpisode(store), position);
+      await episode_helpers.updateEpisodePosition(playingEpisode, position);
+      if(!playingEpisode.isFinished && playingEpisode.isPlayedToEnd()) {
+        store.dispatch(finishEpisode(playingEpisode));
+      }
     }
     store.dispatch(setEpisodePosition(position));
   };
@@ -152,6 +158,25 @@ Action setEpisodePosition(Duration position) {
   );
 }
 
+//Function generateThunkEpisodeAction(Function persistFn, ActionType actionType) {
+  //return (Episode episode) async {
+    //return (Store<AppState> store) async {
+      //await persistFn(episode);
+      //store.dispatch(
+        //Action(
+          //type: actionType,
+          //payload: <String, dynamic>{
+            //'episode': episode,
+          //},
+        //),
+      //);
+    //};
+  //};
+//}
+
+//ThunkAction<AppState> finishEpisode = generateThunkEpisodeAction(episode_helpers.finishEpisode, ActionType.FINISH_EPISODE);
+//ThunkAction<AppState> unfinishEpisode = generateThunkEpisodeAction(episode_helpers.unfinishEpisode, ActionType.UNFINISH_EPISODE);
+
 ThunkAction<AppState> favoriteEpisode(Episode episode) {
   return (Store<AppState> store) async {
     await episode_helpers.favoriteEpisode(episode);
@@ -169,6 +194,30 @@ ThunkAction<AppState> unfavoriteEpisode(Episode episode) {
     await episode_helpers.unfavoriteEpisode(episode);
     store.dispatch(Action(
       type: ActionType.UNFAVORITE_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
+    ));
+  };
+}
+
+ThunkAction<AppState> finishEpisode(Episode episode) {
+  return (Store<AppState> store) async {
+    await episode_helpers.finishEpisode(episode);
+    store.dispatch(Action(
+      type: ActionType.FINISH_EPISODE,
+      payload: <String, dynamic>{
+        'episode': episode,
+      },
+    ));
+  };
+}
+
+ThunkAction<AppState> unfinishEpisode(Episode episode) {
+  return (Store<AppState> store) async {
+    await episode_helpers.unfinishEpisode(episode);
+    store.dispatch(Action(
+      type: ActionType.UNFINISH_EPISODE,
       payload: <String, dynamic>{
         'episode': episode,
       },

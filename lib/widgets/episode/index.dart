@@ -49,6 +49,9 @@ class EpisodePage extends StatelessWidget {
                 onFavorite: () {
                   app.store.dispatch(favoriteEpisode(episode));
                 },
+                onFinish: () {
+                  app.store.dispatch(finishEpisode(episode));
+                },
                 onPause: () {
                   app.store.dispatch(pauseEpisode(episode));
                 },
@@ -57,6 +60,9 @@ class EpisodePage extends StatelessWidget {
                 },
                 onUnfavorite: () {
                   app.store.dispatch(unfavoriteEpisode(episode));
+                },
+                onUnfinish: () {
+                  app.store.dispatch(unfinishEpisode(episode));
                 },
               ),
               margin: const EdgeInsets.all(16.0),

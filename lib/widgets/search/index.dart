@@ -97,36 +97,45 @@ class PodcastSearchState extends State<PodcastSearch> {
               );
             }
 
-            return snapshot.data.isNotEmpty
-              ? VerticalListView(
-                children: snapshot.data.map((Podcast podcast) {
-                  final Widget image = WithFadeInImage(
-                    heroTag: 'search/${podcast.artwork600}',
-                    location: podcast.artwork600,
-                  );
-
-                  return VerticalListTile(
-                    image: image,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
-                          image: image,
-                          podcast: podcast,
-                        )),
-                      );
-                    },
-                    //subtitle: podcast.description,
-                    subtitle: podcast.getByline(),
-                    title: podcast.name,
-                  );
-                }).toList(),
-              )
-              : const PlaceholderScreen(
+            if(snapshot.data.isEmpty) {
+              return const PlaceholderScreen(
                 icon: Icons.search,
                 subtitle: 'Search for podcasts by keywords above.',
                 title: 'No podcasts to show',
               );
+            }
+
+            final List<Podcast> podcasts = snapshot.data;
+            return ListView.separated(
+              itemCount: podcasts.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Podcast podcast = podcasts[index];
+                final Widget image = WithFadeInImage(
+                  heroTag: 'search/${podcast.artwork600}',
+                  location: podcast.artwork600,
+                );
+
+                return ListTile(
+                  dense: true,
+                  leading: Container(
+                    child: image,
+                    width: 60.0,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
+                        image: image,
+                        podcast: podcast,
+                      )),
+                    );
+                  },
+                  subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  title: Text(podcast.name, maxLines: 2, overflow: TextOverflow.ellipsis),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
+            );
           },
         ),
         padding: const EdgeInsets.all(16.0),

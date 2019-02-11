@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 
 class WithFadeInImage extends StatelessWidget {
   final List<String> availablePlaceholders = <String>[
@@ -30,24 +31,12 @@ class WithFadeInImage extends StatelessWidget {
     final int randIdx = rng.nextInt(availablePlaceholders.length);
     final String randomPlaceholder = availablePlaceholders[randIdx];
 
-    final Widget image = location != null
-      ? DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: CachedNetworkImageProvider(location),
-          ),
-        ),
-      )
-      : DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(randomPlaceholder),
-            fit: BoxFit.fill,
-          ),
-        ),
-      )
-    ;
+    final Widget image = Image(
+      fit: BoxFit.cover,
+      image: dash.isNotEmpty(location)
+        ? CachedNetworkImageProvider(location)
+        : AssetImage(randomPlaceholder),
+    );
 
     return heroTag != null
       ? Hero(

@@ -43,7 +43,7 @@ class SettingsState extends State<Settings> {
                 ],
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
             Divider(),
             Container(
@@ -72,7 +72,7 @@ class SettingsState extends State<Settings> {
                   labelText: 'Theme',
                 ),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
           ],
           padding: const EdgeInsets.all(16.0),

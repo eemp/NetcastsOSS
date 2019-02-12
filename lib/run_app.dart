@@ -22,7 +22,7 @@ Future<void> start() async {
   runApp(
     AppWidget(
       store: app.store,
-      title: 'Hear2Learn',
+      title: app.packageInfo.appName,
     )
   );
 }

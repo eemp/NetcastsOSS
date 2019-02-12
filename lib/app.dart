@@ -13,6 +13,7 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/api/elastic.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
@@ -31,6 +32,7 @@ class App {
   Episode episode;
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = <String, dynamic>{};
+  PackageInfo packageInfo;
   final AudioPlayer player = AudioPlayer();
   SharedPreferences prefs;
   Store<AppState> store;
@@ -42,17 +44,20 @@ class App {
   App._internal();
 
   Future<void> init({ String elasticHost }) async {
-    store = appStore();
-    prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
+    packageInfo = await PackageInfo.fromPlatform();
 
-    localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
-    await localDatabaseAdapter.init();
+    store = appStore();
 
     elasticClient = ElasticsearchClient(
       host: elasticHost,
       index: 'hear2learn',
     );
+
+    localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
+    await localDatabaseAdapter.init();
+
+    prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
 
     downloadsPath = await getApplicationDownloadsPath();
     await Directory(downloadsPath).create(recursive: true);

@@ -5,6 +5,7 @@ import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:share/share.dart';
 
 class EpisodeOptions extends StatelessWidget {
   final Episode episode;
@@ -36,6 +37,7 @@ class EpisodeOptions extends StatelessWidget {
             buildDownloadDeleteOptions(episode),
             buildFavoritesOptions(episode),
             buildFinishOptions(episode),
+            buildShareOptions(episode),
           ],
         );
       },
@@ -100,5 +102,15 @@ class EpisodeOptions extends StatelessWidget {
         onPressed: onFinish,
         tooltip: 'Mark Played',
       );
+  }
+
+  Widget buildShareOptions(Episode episode) {
+    return IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: () {
+        Share.share('Check out ${episode.title}, an episode of the ${episode.podcastTitle} podcast');
+      },
+      tooltip: 'Share',
+    );
   }
 }

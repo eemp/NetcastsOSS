@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:hear2learn/app.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
@@ -102,8 +101,6 @@ class PodcastPage extends StatelessWidget {
   }
 
   Widget buildPodcastEpisodesList() {
-    final App app = App();
-
     return FutureBuilder<Podcast>(
       future: completePodcastFuture,
       builder: (BuildContext context, AsyncSnapshot<Podcast> snapshot) {
@@ -114,21 +111,6 @@ class PodcastPage extends StatelessWidget {
         }
 
         return PodcastEpisodesList(
-          onEpisodeDelete: (Episode episode) {
-            app.store.dispatch(deleteEpisode(episode));
-          },
-          onEpisodeDownload: (Episode episode) {
-            app.store.dispatch(downloadEpisode(episode));
-          },
-          onEpisodePause: (Episode episode) {
-            app.store.dispatch(pauseEpisode(episode));
-          },
-          onEpisodePlay: (Episode episode) {
-            app.store.dispatch(playEpisode(episode));
-          },
-          onEpisodeResume: () {
-            app.store.dispatch(resumeEpisode());
-          },
           episodes: snapshot.data.episodes,
         );
       },

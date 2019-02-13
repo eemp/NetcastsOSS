@@ -45,7 +45,7 @@ class SettingsState extends State<Settings> {
               ),
               padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
-            Divider(),
+            const Divider(),
             Container(
               child: InputDecorator(
                 child: DropdownButtonHideUnderline(

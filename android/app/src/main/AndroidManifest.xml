@@ -14,7 +14,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="hear2learn"
+        android:label="Netcasts OSS - dev"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
@@ -35,5 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service
+            android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
+            android:exported="false" />
     </application>
 </manifest>

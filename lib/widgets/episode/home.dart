@@ -6,14 +6,26 @@ import 'package:hear2learn/models/episode.dart';
 
 class EpisodeHome extends StatelessWidget {
   final Episode episode;
-  final Function onEpisodeDelete;
-  final Function onEpisodeDownload;
+  final Function onDelete;
+  final Function onDownload;
+  final Function onFavorite;
+  final Function onFinish;
+  final Function onPause;
+  final Function onPlay;
+  final Function onUnfavorite;
+  final Function onUnfinish;
 
   const EpisodeHome({
     Key key,
     this.episode,
-    this.onEpisodeDelete,
-    this.onEpisodeDownload,
+    this.onDelete,
+    this.onDownload,
+    this.onFavorite,
+    this.onFinish,
+    this.onPause,
+    this.onPlay,
+    this.onUnfavorite,
+    this.onUnfinish,
   }) : super(key: key);
 
   @override
@@ -34,8 +46,12 @@ class EpisodeHome extends StatelessWidget {
             ),
             EpisodeOptions(
               episode: episode,
-              onEpisodeDelete: onEpisodeDelete,
-              onEpisodeDownload: onEpisodeDownload,
+              onDelete: onDelete,
+              onDownload: onDownload,
+              onFavorite: onFavorite,
+              onFinish: onFinish,
+              onUnfavorite: onUnfavorite,
+              onUnfinish: onUnfinish,
             ),
           ],
         ),
@@ -49,6 +65,8 @@ class EpisodeHome extends StatelessWidget {
         Container(
           child: EpisodePlayer(
             episode: episode,
+            onPause: onPause,
+            onPlay: onPlay,
           ),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),

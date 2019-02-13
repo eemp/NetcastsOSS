@@ -35,30 +35,44 @@ class SettingsState extends State<Settings> {
         key: formKey,
         child: ListView(
           children: <Widget>[
-            InputDecorator(
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isDense: true,
-                  items: ThemeProvider.THEME_LIST.map((String theme) => DropdownMenuItem<String>(
-                    child: Text(theme),
-                    value: theme,
-                  )).toList(),
-                  onChanged: (String newTheme) {
-                    DynamicTheme.of(context).setTheme(newTheme);
-                    setState(() {
-                      theme = newTheme;
-                    });
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Text('${app.packageInfo.packageName}@${app.packageInfo.version}.${app.packageInfo.buildNumber}', style: Theme.of(context).textTheme.overline),
+                  Text('${app.packageInfo.appName}', style: Theme.of(context).textTheme.headline),
+                ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+            ),
+            Divider(),
+            Container(
+              child: InputDecorator(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isDense: true,
+                    items: ThemeProvider.THEME_LIST.map((String theme) => DropdownMenuItem<String>(
+                      child: Text(theme),
+                      value: theme,
+                    )).toList(),
+                    onChanged: (String newTheme) {
+                      DynamicTheme.of(context).setTheme(newTheme);
+                      setState(() {
+                        theme = newTheme;
+                      });
 
-                    app.prefs.setString(THEME_PREF, newTheme);
-                  },
-                  value: theme ?? ThemeProvider.DEFAULT_THEME,
+                      app.prefs.setString(THEME_PREF, newTheme);
+                    },
+                    value: theme ?? ThemeProvider.DEFAULT_THEME,
+                  ),
+                ),
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  icon: Icon(Icons.color_lens),
+                  labelText: 'Theme',
                 ),
               ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                icon: const Icon(Icons.color_lens),
-                labelText: 'Theme',
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
           ],
           padding: const EdgeInsets.all(16.0),

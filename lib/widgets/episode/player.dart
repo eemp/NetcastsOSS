@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/models/queued_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
-class EpisodePlayer extends StatefulWidget {
+class EpisodePlayer extends StatelessWidget {
   final Episode episode;
+  final Function onPause;
+  final Function onPlay;
 
   const EpisodePlayer({
     Key key,
     this.episode,
+    this.onPause,
+    this.onPlay,
   }) : super(key: key);
 
   @override
-  EpisodePlayerState createState() => EpisodePlayerState();
-}
-
-class EpisodePlayerState extends State<EpisodePlayer> {
-  final App app = App();
-
-  @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, QueuedEpisode>(
-      converter: queuedEpisodeSelector,
-      builder: (BuildContext context, QueuedEpisode queuedEpisode) {
-        final Duration duration = queuedEpisode.duration;
-        final Episode episode = queuedEpisode.episode ?? widget.episode;
-        final bool isPlaying = queuedEpisode.isPlaying;
-        final Function onPause = queuedEpisode.onPause;
-        final Function onPlay = queuedEpisode.onPlay;
-        final Duration position = queuedEpisode.position;
+    return StoreConnector<AppState, Episode>(
+      converter: getEpisodeSelector(episode),
+      builder: (BuildContext context, Episode episode) {
+        final bool canPlay = dash.isNotEmpty(episode.downloadPath);
+        final bool isPlaying = episode?.isPlaying() ?? false;
+        final bool isQueued = episode.url == episode?.url;
+        final Duration duration = canPlay ? episode?.length : null;
+        final Duration position = canPlay ? episode?.position : null;
+
+        final double durationInSeconds = duration?.inSeconds?.toDouble() ?? 0.0;
+        final double positionInSeconds = position?.inSeconds?.toDouble() ?? 0.0;
 
         return Column(
           children: <Widget>[
@@ -61,11 +59,11 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                     child: Slider(
                       activeColor: Theme.of(context).accentColor,
                       min: 0.0,
-                      max: duration?.inSeconds?.toDouble() ?? 0.0,
-                      onChanged: episode.download != null ? (double value) {
+                      max: durationInSeconds,
+                      onChanged: isQueued ? (double value) {
                         seekInEpisode(Duration(seconds: value.toInt()));
                       } : null,
-                      value: position?.inSeconds?.toDouble() ?? 0.0,
+                      value: dash.clamp(0.0, positionInSeconds ?? 0.0, durationInSeconds),
                     ),
                   ),
                   Container(
@@ -84,23 +82,23 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.replay_10),
                     iconSize: 40.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: canPlay ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds - 10));
                     } : null,
                   ),
                   RawMaterialButton(
                     shape: const CircleBorder(),
-                    fillColor: episode.download != null ? Theme.of(context).accentColor : Colors.grey,
+                    fillColor: canPlay ? Theme.of(context).accentColor : Colors.grey,
                     splashColor: Theme.of(context).splashColor,
                     highlightColor: Theme.of(context).accentColor.withOpacity(0.5),
                     elevation: 10.0,
                     highlightElevation: 5.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: canPlay ? () {
                       if(isPlaying) {
                         onPause();
                       }
                       else {
-                        onPlay(widget.episode);
+                        onPlay();
                       }
                     } : null,
                     child: Padding(
@@ -115,7 +113,7 @@ class EpisodePlayerState extends State<EpisodePlayer> {
                   IconButton(
                     icon: const Icon(Icons.forward_30),
                     iconSize: 40.0,
-                    onPressed: episode.download != null ? () {
+                    onPressed: canPlay ? () {
                       seekInEpisode(Duration(seconds: position.inSeconds + 30));
                     } : null,
                   ),

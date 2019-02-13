@@ -18,3 +18,7 @@ coverage/
 
 # custom ignores
 # *.jorm.dart
+
+# security
+lib/main_prod.dart
+android/key.properties

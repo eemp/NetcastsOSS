@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:hear2learn/app.dart';
+import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
-import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
-import 'package:hear2learn/models/episode.dart';
 
-class EpisodePage extends StatefulWidget {
+class EpisodePage extends StatelessWidget {
   final Episode episode;
 
   const EpisodePage({
@@ -14,20 +15,15 @@ class EpisodePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  EpisodePageState createState() => EpisodePageState();
-}
-
-class EpisodePageState extends State<EpisodePage> {
-  Episode get episode => widget.episode;
-
-  @override
   Widget build(BuildContext context) {
+    final App app = App();
+
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
           title: Text('Episode of ' + episode.podcastTitle),
-          bottom: TabBar(
-            tabs: const <Widget>[
+          bottom: const TabBar(
+            tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.music_video),
                 text: 'Episode',
@@ -44,15 +40,29 @@ class EpisodePageState extends State<EpisodePage> {
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onEpisodeDelete: (Episode episode) async {
-                  await episode_helpers.deleteEpisode(episode);
-                  await episode.getDownload();
-                  setState(() { /* force most of episode page to update - home, options, player */ });
+                onDelete: () {
+                  app.store.dispatch(deleteEpisode(episode));
                 },
-                onEpisodeDownload: (Episode episode) async {
-                  await episode_helpers.downloadEpisode(episode);
-                  await episode.getDownload();
-                  setState(() { /* force most of episode page to update - home, options, player */ });
+                onDownload: () {
+                  app.store.dispatch(downloadEpisode(episode));
+                },
+                onFavorite: () {
+                  app.store.dispatch(favoriteEpisode(episode));
+                },
+                onFinish: () {
+                  app.store.dispatch(finishEpisode(episode));
+                },
+                onPause: () {
+                  app.store.dispatch(pauseEpisode(episode));
+                },
+                onPlay: () {
+                  app.store.dispatch(playEpisode(episode));
+                },
+                onUnfavorite: () {
+                  app.store.dispatch(unfavoriteEpisode(episode));
+                },
+                onUnfinish: () {
+                  app.store.dispatch(unfinishEpisode(episode));
                 },
               ),
               margin: const EdgeInsets.all(16.0),

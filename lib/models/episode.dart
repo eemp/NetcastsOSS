@@ -96,8 +96,13 @@ class Episode {
   }
 
   String getMetaLine() {
-    final num sizeInMegabytes = size / 1e6;
-    return 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  Added: ' + getFriendlyDate() + '.';
+    String sizeDisplay = '';
+    if(size != null) {
+      final num sizeInMegabytes = size / 1e6;
+      sizeDisplay = 'Size: ' + sizeInMegabytes.toStringAsFixed(2) + ' MB.  ';
+    }
+    final String dateDisplay = 'Added: ' + getFriendlyDate() + '.';
+    return sizeDisplay + dateDisplay;
   }
 
   String getPlayerDetails() {

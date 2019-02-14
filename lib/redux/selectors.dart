@@ -1,4 +1,5 @@
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
@@ -35,4 +36,8 @@ Function getSubscriptionSelector(Podcast potentialSubscription) {
     final AppState state = store.state;
     return dash.find(state.subscriptions, (Podcast podcast) => podcast.feed == potentialSubscription.feed);
   };
+}
+
+AppSettings settingsSelector(Store<AppState> store) {
+  return store.state.settings;
 }

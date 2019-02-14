@@ -1,4 +1,5 @@
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -7,6 +8,7 @@ import 'package:hear2learn/redux/state.dart';
 AppState reducer(AppState state, dynamic action) {
   return AppState(
     playingEpisode: playingEpisodeReducer(state.playingEpisode, action),
+    settings: settingsReducer(state.settings, action),
     subscriptions: subscriptionsReducer(state.subscriptions, action),
     userEpisodes: userEpisodesReducer(state, action),
   );
@@ -25,6 +27,15 @@ String playingEpisodeReducer(String state, dynamic action) {
       return action.payload['episode'].url;
     case ActionType.RESUME_EPISODE:
       return state;
+    default:
+      return state;
+  }
+}
+
+AppSettings settingsReducer(AppSettings state, dynamic action) {
+  switch(action.type) {
+    case ActionType.UPDATE_SETTINGS:
+      return action.payload['settings'];
     default:
       return state;
   }

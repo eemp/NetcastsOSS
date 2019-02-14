@@ -41,15 +41,15 @@ class EpisodeTileConnector extends StatelessWidget {
         emphasis: !episode.isFinished,
         subtitle: subtitleProvider(episode),
         title: episode.title,
-        options: buildEpisodeOptions(episode),
+        options: buildEpisodeOptions(context, episode),
       ),
     );
   }
 
-  Widget buildEpisodeOptions(Episode episode) {
+  Widget buildEpisodeOptions(BuildContext context, Episode episode) {
     return CircularProgressWithOptionalAction(
       icon: getEpisodeIcon(episode),
-      onPressed: getEpisodeAction(episode),
+      onPressed: getEpisodeAction(context, episode),
       progress: getEpisodeProgress(episode),
     );
   }
@@ -67,12 +67,12 @@ class EpisodeTileConnector extends StatelessWidget {
     return icons[episode.status];
   }
 
-  Function getEpisodeAction(Episode episode) {
+  Function getEpisodeAction(BuildContext context, Episode episode) {
     final Map<EpisodeStatus, Function> actions = <EpisodeStatus, Function>{
-      EpisodeStatus.DELETED: () { onEpisodeDownload(episode); },
+      EpisodeStatus.DELETED: () { onEpisodeDownload(context, episode); },
       EpisodeStatus.DOWNLOADED: () { onEpisodePlay(episode); },
       EpisodeStatus.DOWNLOADING: null,
-      EpisodeStatus.NONE: () { onEpisodeDownload(episode); },
+      EpisodeStatus.NONE: () { onEpisodeDownload(context, episode); },
       EpisodeStatus.PAUSED: () { onEpisodePlay(episode); },
       EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
       EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
@@ -105,9 +105,9 @@ class EpisodeTileConnector extends StatelessWidget {
     app.store.dispatch(deleteEpisode(episode));
   }
 
-  void onEpisodeDownload(Episode episode) {
+  void onEpisodeDownload(BuildContext context, Episode episode) {
     final App app = App();
-    app.store.dispatch(downloadEpisode(episode));
+    app.store.dispatch(downloadEpisode(context, episode));
   }
 
   void onEpisodePause(Episode episode) {

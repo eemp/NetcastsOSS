@@ -44,7 +44,7 @@ class EpisodePage extends StatelessWidget {
                   app.store.dispatch(deleteEpisode(episode));
                 },
                 onDownload: () {
-                  app.store.dispatch(downloadEpisode(episode));
+                  app.store.dispatch(downloadEpisode(context, episode));
                 },
                 onFavorite: () {
                   app.store.dispatch(favoriteEpisode(episode));

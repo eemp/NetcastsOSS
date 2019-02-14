@@ -16,9 +16,9 @@ class AppSettings {
 
   AppSettings.prefs() {
     final App app = App();
-    privacySetting = app.prefs.getBool('privacySetting');
-    themeName = app.prefs.getString('themeName');
-    wifiSetting = app.prefs.getBool('wifiSetting');
+    privacySetting = app.prefs.getBool('privacySetting') ?? false;
+    themeName = app.prefs.getString('themeName') ?? 'Dark';
+    wifiSetting = app.prefs.getBool('wifiSetting') ?? false;
   }
 
   AppSettings copyWith({

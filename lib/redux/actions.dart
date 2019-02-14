@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+
+import 'package:connectivity/connectivity.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/helpers/podcast.dart' as podcast_helpers;
+import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/notifications.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -32,6 +38,8 @@ enum ActionType {
   UNFINISH_EPISODE,
 
   UPDATE_SUBSCRIPTIONS,
+
+  UPDATE_SETTINGS,
 }
 
 class Action {
@@ -293,8 +301,16 @@ Action removeEpisode(Episode episode) {
   );
 }
 
-ThunkAction<AppState> downloadEpisode(Episode episode) {
+ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {
   return (Store<AppState> store) async {
+    final ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    if(connectivityResult == ConnectivityResult.none) {
+      return showNoConnectivityNotification(context);
+    }
+    else if(store.state.settings.wifiSetting && connectivityResult != ConnectivityResult.wifi) {
+      return showNoWifiNotification(context);
+    }
+
     store.dispatch(queueDownload(episode));
 
     final Function throttledStatusUpdate = dash.throttle(
@@ -343,6 +359,30 @@ Action finishDownloadingEpisode(Episode episode) {
     type: ActionType.FINISH_DOWNLOADING_EPISODE,
     payload: <String, dynamic>{
       'episode': episode,
+    },
+  );
+}
+
+Future<void> loadSettings(Store<AppState> store) async {
+  final AppSettings settings = AppSettings.prefs();
+  store.dispatch(
+    setSettings(settings)
+  );
+}
+
+ThunkAction<AppState> updateSettings(BuildContext context, AppSettings settings) {
+  return (Store<AppState> store) async {
+    DynamicTheme.of(context).setTheme(settings.themeName);
+    await settings.persistPreferences();
+    store.dispatch(setSettings(settings));
+  };
+}
+
+Action setSettings(AppSettings settings) {
+  return Action(
+    type: ActionType.UPDATE_SETTINGS,
+    payload: <String, dynamic>{
+      'settings': settings,
     },
   );
 }

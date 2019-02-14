@@ -10,10 +10,16 @@ class ThemeProvider {
   );
 
   static const String DARK_THEME = 'Dark';
-  static final ThemeData darkThemeData = ThemeData.dark();
+  static final ThemeData darkThemeData = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: 'OpenSans',
+  );
 
   static const String LIGHT_THEME = 'Light';
-  static final ThemeData lightThemeData = ThemeData.light();
+  static final ThemeData lightThemeData = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: 'OpenSans',
+  );
 
   static final Map<String, ThemeData> themes = <String, ThemeData>{};
 

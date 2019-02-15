@@ -39,4 +39,8 @@
             android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
             android:exported="false" />
     </application>
+    <supports-screens android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="false"
+        android:xlargeScreens="false" />
 </manifest>

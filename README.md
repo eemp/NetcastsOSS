@@ -9,10 +9,9 @@
 |![Homepage](images/netcastsOSS_home.png)|![Drawer](images/netcastsOSS_drawer.png)|![Search](images/netcastsOSS_search.png)|![Podcast](images/netcastsOSS_podcast.png)
 |-----|-----|-----|-----|
 |Homepage|Drawer|Search|Podcast|
-|-----|-----|-----|-----|
 |![Episodes](images/netcastsOSS_episodes.png)|![Player](images/netcastsOSS_player.png)|![Library](images/netcastsOSS_library.png)|![Downloads](images/netcastsOSS_downloads.png)
-|Episodes|Player|Library|Downloads|
 |-----|-----|-----|-----|
+|Episodes|Player|Library|Downloads|
 
 ## Why?
 

@@ -115,10 +115,10 @@ class PodcastSearchState extends State<PodcastSearch> {
                 );
 
                 return ListTile(
-                  dense: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                   leading: Container(
                     child: image,
-                    width: 60.0,
+                    width: 80.0,
                   ),
                   onTap: () {
                     Navigator.push(
@@ -130,7 +130,7 @@ class PodcastSearchState extends State<PodcastSearch> {
                     );
                   },
                   subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
-                  title: Text(podcast.name, maxLines: 2, overflow: TextOverflow.ellipsis),
+                  title: Text(podcast.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                 );
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(),

@@ -54,3 +54,6 @@ what's in the flutter docs guiding developers through the release process.
 
 For help getting started with Flutter, view the official
 [documentation](https://flutter.io/).
+
+Find out more about the flutter developer experience
+while [building this app](https://eemp.io/2019/02/04/first-serious-flutter-app/).

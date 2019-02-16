@@ -6,11 +6,11 @@
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>
 </a>
 
-|![Homepage](images/netcastsOSS-home.png)|![Drawer](images/netcastsOSS-drawer.png)|![Search](images/netcastsOSS-search.png)|![Podcast](images/netcastsOSS-podcast.png)
+|![Homepage](images/netcastsOSS_home.png)|![Drawer](images/netcastsOSS_drawer.png)|![Search](images/netcastsOSS_search.png)|![Podcast](images/netcastsOSS_podcast.png)
 |-----|-----|-----|-----|
 |Homepage|Drawer|Search|Podcast|
 |-----|-----|-----|-----|
-|![Episodes](images/netcastsOSS-episodes.png)|![Player](images/netcastsOSS-player.png)|![Library](images/netcastsOSS-library.png)|![Downloads](images/netcastsOSS-downloads.png)
+|![Episodes](images/netcastsOSS_episodes.png)|![Player](images/netcastsOSS_player.png)|![Library](images/netcastsOSS_library.png)|![Downloads](images/netcastsOSS_downloads.png)
 |Episodes|Player|Library|Downloads|
 |-----|-----|-----|-----|
 

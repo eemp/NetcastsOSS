@@ -28,10 +28,10 @@ class Home extends StatelessWidget {
     try {
       return <Widget>[
         buildSubscriptionsPreview(),
-        buildHomepageList('Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
-        buildHomepageList('Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
-        buildHomepageList('Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
-        buildHomepageList('Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
+        buildHomepageList(const Icon(Icons.flash_on), 'Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
+        buildHomepageList(const Icon(Icons.power_settings_new), 'Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
+        buildHomepageList(const Icon(Icons.mood), 'Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
+        buildHomepageList(const Icon(Icons.attach_money), 'Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
       ];
     } catch (e) {
       return <Widget>[
@@ -88,15 +88,17 @@ class Home extends StatelessWidget {
             : null,
           directToEpisodes: true,
           title: LIBRARY_LABEL,
+          titleIcon: const Icon(Icons.collections_bookmark),
         );
       },
     );
   }
 
-  static Widget buildHomepageList(String title, List<Podcast> podcasts) {
+  static Widget buildHomepageList(Icon titleIcon, String title, List<Podcast> podcasts) {
     return HomepageList(
       list: podcasts,
       title: title,
+      titleIcon: titleIcon,
     );
   }
 }

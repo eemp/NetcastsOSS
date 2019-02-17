@@ -88,7 +88,7 @@ class App {
 
   void initConnectivityListener() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult connectivity) {
-      store.dispatch(updateConnectivity(connectivity));
+      store.dispatch(setConnectivity(connectivity));
     });
   }
 

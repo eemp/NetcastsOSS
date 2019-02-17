@@ -5,7 +5,7 @@ import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:share/share.dart';
+import 'package:hear2learn/widgets/common/outline_icon_button.dart';
 
 class EpisodeOptions extends StatelessWidget {
   final Episode episode;
@@ -13,6 +13,7 @@ class EpisodeOptions extends StatelessWidget {
   final Function onDownload;
   final Function onFavorite;
   final Function onFinish;
+  final Function onShare;
   final Function onUnfavorite;
   final Function onUnfinish;
 
@@ -23,6 +24,7 @@ class EpisodeOptions extends StatelessWidget {
     this.onDownload,
     this.onFavorite,
     this.onFinish,
+    this.onShare,
     this.onUnfavorite,
     this.onUnfinish,
   }) : super(key: key);
@@ -53,64 +55,60 @@ class EpisodeOptions extends StatelessWidget {
   }
 
   Widget buildDeleteOption(Episode episode) {
-    return FlatButton.icon(
+    return RaisedButton.icon(
       icon: const Icon(Icons.delete),
       label: const Text('Delete'),
       onPressed: onDelete,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );
   }
 
   Widget buildDownloadOption(Episode episode) {
-    return FlatButton.icon(
+    return OutlineButton.icon(
       icon: const Icon(Icons.get_app),
       label: const Text('Download'),
       onPressed: onDownload,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );
   }
 
   Widget buildDownloadProgress(Episode episode) {
-    return FlatButton.icon(
+    return OutlineButton.icon(
       icon: const Icon(Icons.more_horiz),
       label: Text('Downloaded ${(episode.progress * 100).truncateToDouble().toString()}%'),
       onPressed: null,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );
   }
 
   Widget buildFavoritesOptions(Episode episode) {
     return episode.isFavorited == true
-      ? IconButton(
-        icon: const Icon(Icons.favorite),
+      ? OutlineIconButton(
+        icon: Icons.favorite,
         onPressed: onUnfavorite,
-        tooltip: 'Unfavorite',
       )
-      : IconButton(
-        icon: const Icon(Icons.favorite_border),
+      : OutlineIconButton(
+        icon: Icons.favorite_border,
         onPressed: onFavorite,
-        tooltip: 'Favorite',
       );
   }
 
   Widget buildFinishOptions(Episode episode) {
     return episode.isFinished == true
-      ? IconButton(
-        icon: const Icon(Icons.done),
+      ? OutlineIconButton(
+        icon: Icons.done,
         onPressed: onUnfinish,
-        tooltip: 'Mark Not Played',
       )
-      : IconButton(
-        icon: const Icon(Icons.done_outline),
+      : OutlineIconButton(
+        icon: Icons.done_outline,
         onPressed: onFinish,
-        tooltip: 'Mark Played',
       );
   }
 
   Widget buildShareOptions(Episode episode) {
-    return IconButton(
-      icon: const Icon(Icons.share),
-      onPressed: () {
-        Share.share('Check out ${episode.title}, an episode of the ${episode.podcastTitle} podcast');
-      },
-      tooltip: 'Share',
+    return OutlineIconButton(
+      icon: Icons.share,
+      onPressed: onShare,
     );
   }
 }

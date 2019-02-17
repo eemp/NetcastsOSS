@@ -4,15 +4,17 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
-import 'package:share/share.dart';
+import 'package:hear2learn/widgets/common/outline_icon_button.dart';
 
 class PodcastOptions extends StatelessWidget {
+  final Function onShare;
   final Function onSubscribe;
   final Function onUnsubscribe;
   final Podcast podcast;
 
   const PodcastOptions({
     Key key,
+    this.onShare,
     this.onSubscribe,
     this.onUnsubscribe,
     this.podcast,
@@ -43,28 +45,27 @@ class PodcastOptions extends StatelessWidget {
   }
 
   Widget buildSubscribeOption() {
-    return FlatButton.icon(
+    return OutlineButton.icon(
       icon: const Icon(Icons.add),
       label: const Text('Subscribe'),
       onPressed: onSubscribe,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );
   }
 
   Widget buildUnsubscribeOption() {
-    return FlatButton.icon(
-      icon: const Icon(Icons.remove),
-      label: const Text('Unsubscribe'),
+    return RaisedButton.icon(
+      icon: const Icon(Icons.done),
+      label: const Text('Subscribed'),
       onPressed: onUnsubscribe,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );
   }
 
   Widget buildShareOptions() {
-    return IconButton(
-      icon: const Icon(Icons.share),
-      onPressed: () {
-        Share.share('Check out ${podcast.name} podcast, courtesy of ${podcast.artist.name}');
-      },
-      tooltip: 'Share',
+    return OutlineIconButton(
+      icon: Icons.share,
+      onPressed: onShare,
     );
   }
 }

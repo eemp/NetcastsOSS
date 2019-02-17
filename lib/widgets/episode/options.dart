@@ -74,8 +74,8 @@ class EpisodeOptions extends StatelessWidget {
 
   Widget buildDownloadProgress(Episode episode) {
     return OutlineButton.icon(
-      icon: const Icon(Icons.more_horiz),
-      label: Text('Downloaded ${(episode.progress * 100).truncateToDouble().toString()}%'),
+      icon: const Icon(Icons.get_app),
+      label: Text('${(episode.progress * 100).truncateToDouble().toString()}%'),
       onPressed: null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
     );

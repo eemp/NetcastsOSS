@@ -19,10 +19,13 @@ class HorizontalListTile extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            Container(
-              child: image,
-              height: 100.0,
-              width: 100.0,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Container(
+                child: image,
+                height: 100.0,
+                width: 100.0,
+              ),
             ),
             Flexible(
               child: Container(

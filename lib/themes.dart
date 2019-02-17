@@ -4,7 +4,7 @@ class ThemeProvider {
   static const String BLUES_THEME = 'Blues';
   static final ThemeData bluesThemeData = ThemeData(
     accentColor: const Color(0xFF005B96),
-    primaryColor: const Color(0xFF6497B1),
+    primaryColor: const Color(0xFF00ACC1),
     brightness: Brightness.light,
     fontFamily: 'OpenSans',
   );

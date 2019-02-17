@@ -33,7 +33,10 @@ class SubscriptionsPage extends StatelessWidget {
                       location: podcast.artwork600,
                     );
                     return VerticalListTile(
-                      image: image,
+                      image: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: image,
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,

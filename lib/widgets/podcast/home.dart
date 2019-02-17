@@ -24,10 +24,13 @@ class PodcastHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Container(
-          child: image,
-          height: MediaQuery.of(context).size.width,
-          width: MediaQuery.of(context).size.width,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            child: image,
+            height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
+          ),
         ),
         Container(
           child: Tags(

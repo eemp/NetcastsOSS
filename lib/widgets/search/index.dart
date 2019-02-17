@@ -122,9 +122,12 @@ class PodcastSearchState extends State<PodcastSearch> {
 
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-                  leading: Container(
-                    child: image,
-                    width: 80.0,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      child: image,
+                      width: 80.0,
+                    ),
                   ),
                   onTap: () {
                     Navigator.push(

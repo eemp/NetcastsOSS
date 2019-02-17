@@ -14,6 +14,7 @@ import 'package:redux/redux.dart';
 Future<void> start() async {
   final App app = App();
 
+  app.store.dispatch(updateConnectivity);
   app.store.dispatch(loadSettings);
   app.store.dispatch(updateSubscriptions);
   app.store.dispatch(updateDownloads);

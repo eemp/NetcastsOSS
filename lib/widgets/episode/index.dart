@@ -5,6 +5,7 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
+import 'package:share/share.dart';
 
 class EpisodePage extends StatelessWidget {
   final Episode episode;
@@ -16,8 +17,6 @@ class EpisodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final App app = App();
-
     return DefaultTabController(
       child: Scaffold(
         appBar: AppBar(
@@ -40,30 +39,15 @@ class EpisodePage extends StatelessWidget {
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onDelete: () {
-                  app.store.dispatch(deleteEpisode(episode));
-                },
-                onDownload: () {
-                  app.store.dispatch(downloadEpisode(context, episode));
-                },
-                onFavorite: () {
-                  app.store.dispatch(favoriteEpisode(episode));
-                },
-                onFinish: () {
-                  app.store.dispatch(finishEpisode(episode));
-                },
-                onPause: () {
-                  app.store.dispatch(pauseEpisode(episode));
-                },
-                onPlay: () {
-                  app.store.dispatch(playEpisode(episode));
-                },
-                onUnfavorite: () {
-                  app.store.dispatch(unfavoriteEpisode(episode));
-                },
-                onUnfinish: () {
-                  app.store.dispatch(unfinishEpisode(episode));
-                },
+                onDelete: onDelete,
+                onDownload: downloadHandler(context),
+                onFavorite: onFavorite,
+                onFinish: onFinish,
+                onPause: onPause,
+                onPlay: onPlay,
+                onShare: onShare,
+                onUnfavorite: onUnfavorite,
+                onUnfinish: onUnfinish,
               ),
               margin: const EdgeInsets.all(16.0),
             ),
@@ -78,5 +62,52 @@ class EpisodePage extends StatelessWidget {
       ),
       length: 2,
     );
+  }
+
+  Function downloadHandler(BuildContext context) {
+    final App app = App();
+
+    return () {
+      app.store.dispatch(downloadEpisode(context, episode));
+    };
+  }
+
+  void onDelete() {
+    final App app = App();
+    app.store.dispatch(deleteEpisode(episode));
+  }
+
+  void onFavorite() {
+    final App app = App();
+    app.store.dispatch(favoriteEpisode(episode));
+  }
+
+  void onFinish() {
+    final App app = App();
+    app.store.dispatch(finishEpisode(episode));
+  }
+
+  void onPause() {
+    final App app = App();
+    app.store.dispatch(pauseEpisode(episode));
+  }
+
+  void onPlay() {
+    final App app = App();
+    app.store.dispatch(playEpisode(episode));
+  }
+
+  void onShare() {
+    Share.share('Check out ${episode.title}, an episode of the ${episode.podcastTitle} podcast');
+  }
+
+  void onUnfavorite() {
+    final App app = App();
+    app.store.dispatch(unfavoriteEpisode(episode));
+  }
+
+  void onUnfinish() {
+    final App app = App();
+    app.store.dispatch(unfinishEpisode(episode));
   }
 }

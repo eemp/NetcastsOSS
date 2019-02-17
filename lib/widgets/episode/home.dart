@@ -12,6 +12,7 @@ class EpisodeHome extends StatelessWidget {
   final Function onFinish;
   final Function onPause;
   final Function onPlay;
+  final Function onShare;
   final Function onUnfavorite;
   final Function onUnfinish;
 
@@ -24,6 +25,7 @@ class EpisodeHome extends StatelessWidget {
     this.onFinish,
     this.onPause,
     this.onPlay,
+    this.onShare,
     this.onUnfavorite,
     this.onUnfinish,
   }) : super(key: key);
@@ -50,6 +52,7 @@ class EpisodeHome extends StatelessWidget {
               onDownload: onDownload,
               onFavorite: onFavorite,
               onFinish: onFinish,
+              onShare: onShare,
               onUnfavorite: onUnfavorite,
               onUnfinish: onUnfinish,
             ),

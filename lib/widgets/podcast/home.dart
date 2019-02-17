@@ -7,6 +7,7 @@ import 'package:hear2learn/widgets/podcast/options.dart';
 
 class PodcastHome extends StatelessWidget {
   final Widget image;
+  final Function onShare;
   final Function onSubscribe;
   final Function onUnsubscribe;
   final Podcast podcast;
@@ -18,6 +19,7 @@ class PodcastHome extends StatelessWidget {
     Key key,
     this.image,
     this.podcast,
+    this.onShare,
     this.onSubscribe,
     this.onUnsubscribe,
   }) : super(key: key);
@@ -37,6 +39,7 @@ class PodcastHome extends StatelessWidget {
         Container(
           child: PodcastOptions(
             podcast: podcast,
+            onShare: onShare,
             onSubscribe: onSubscribe,
             onUnsubscribe: onUnsubscribe,
           ),

@@ -12,6 +12,7 @@ import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
+import 'package:share/share.dart';
 
 // ignore: must_be_immutable
 class PodcastPage extends StatelessWidget {
@@ -53,6 +54,7 @@ class PodcastPage extends StatelessWidget {
             Container(
               child: PodcastHome(
                 image: image,
+                onShare: onShare,
                 onSubscribe: onSubscribe,
                 onUnsubscribe: onUnsubscribe,
                 podcast: podcast,
@@ -101,16 +103,6 @@ class PodcastPage extends StatelessWidget {
     );
   }
 
-  void onSubscribe() {
-    final App app = App();
-    app.store.dispatch(subscribeToPodcast(podcast));
-  }
-
-  void onUnsubscribe() {
-    final App app = App();
-    app.store.dispatch(unsubscribeFromPodcast(podcast));
-  }
-
   Widget buildPodcastEpisodesList() {
     return FutureBuilder<Podcast>(
       future: completePodcastFuture,
@@ -133,5 +125,19 @@ class PodcastPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void onShare() {
+    Share.share('Check out ${podcast.name} podcast, courtesy of ${podcast.artist.name}');
+  }
+
+  void onSubscribe() {
+    final App app = App();
+    app.store.dispatch(subscribeToPodcast(podcast));
+  }
+
+  void onUnsubscribe() {
+    final App app = App();
+    app.store.dispatch(unsubscribeFromPodcast(podcast));
   }
 }

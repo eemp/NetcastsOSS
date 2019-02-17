@@ -54,7 +54,14 @@ class Action {
   });
 }
 
-Action updateConnectivity(ConnectivityResult connectivity) {
+Future<void> updateConnectivity(Store<AppState> store) async {
+  final ConnectivityResult connectivity = await Connectivity().checkConnectivity();
+  store.dispatch(
+    setConnectivity(connectivity)
+  );
+}
+
+Action setConnectivity(ConnectivityResult connectivity) {
   return Action(
     type: ActionType.UPDATE_CONNECTIVITY,
     payload: <String, dynamic>{

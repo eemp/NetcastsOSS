@@ -27,6 +27,7 @@
 
 * Find and subscribe to podcasts
 * Download and play podcast episodes
+* Share podcasts
 * Favorite and share podcast episodes
 * Limit data usage / download only when wifi is available
 * Customize look and feel via themes

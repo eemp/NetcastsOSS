@@ -10,6 +10,7 @@ class HomepageList extends StatelessWidget {
   final List<Podcast> list;
   final Function onMoreClick;
   final String title;
+  final Icon titleIcon;
 
   const HomepageList({
     Key key,
@@ -17,6 +18,7 @@ class HomepageList extends StatelessWidget {
     this.list,
     this.onMoreClick,
     this.title,
+    this.titleIcon,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,7 @@ class HomepageList extends StatelessWidget {
         children: tiles,
         onMoreClick: onMoreClick,
         title: title,
+        titleIcon: titleIcon,
       )
       : Container(height: 0.0, width: 0.0);
   }

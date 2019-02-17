@@ -29,8 +29,8 @@ class HorizontalListTile extends StatelessWidget {
             ),
             Flexible(
               child: Container(
-                child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
-                padding: const EdgeInsets.only(top: 8.0),
+                child: title != null ? Text(title, maxLines: 2, overflow: TextOverflow.ellipsis) : null,
+                padding: title != null ? const EdgeInsets.only(top: 8.0) : null,
               ),
             ),
           ],
@@ -64,6 +64,7 @@ class HorizontalListView extends StatelessWidget {
 class HorizontalListViewCard extends StatelessWidget {
   final List<Widget> children;
   final String title;
+  final Icon titleIcon;
   final Function onMoreClick;
 
   const HorizontalListViewCard({
@@ -71,6 +72,7 @@ class HorizontalListViewCard extends StatelessWidget {
     this.children,
     this.onMoreClick,
     this.title,
+    this.titleIcon,
   }) : super(key: key);
 
   @override
@@ -81,7 +83,15 @@ class HorizontalListViewCard extends StatelessWidget {
           Container(
             child: Row(
               children: <Widget>[
-                Text(title, style: Theme.of(context).textTheme.subhead),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: titleIcon != null ? titleIcon : null,
+                      padding: titleIcon != null ? const EdgeInsets.only(right: 8.0) : null,
+                    ),
+                    Text(title, style: Theme.of(context).textTheme.subhead),
+                  ],
+                ),
                 onMoreClick != null ? InkWell(
                   child: Text('MORE', style: Theme.of(context).textTheme.button),
                   onTap: onMoreClick,
@@ -95,7 +105,7 @@ class HorizontalListViewCard extends StatelessWidget {
             child: HorizontalListView(
               children: children,
             ),
-            height: 175.0,
+            height: 132.0,
           ),
         ],
       ),

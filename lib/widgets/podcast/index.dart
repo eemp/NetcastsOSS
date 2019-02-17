@@ -52,9 +52,10 @@ class PodcastPage extends StatelessWidget {
           children: <Widget>[
             Container(
               child: PodcastHome(
-                description: podcast.description,
-                genres: podcast.genres,
                 image: image,
+                onSubscribe: onSubscribe,
+                onUnsubscribe: onUnsubscribe,
+                podcast: podcast,
               ),
               margin: const EdgeInsets.all(16.0),
             ),
@@ -65,7 +66,7 @@ class PodcastPage extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: const BottomAppBarPlayer(),
-        floatingActionButton: buildSubscriptionButton(),
+        //floatingActionButton: buildSubscriptionButton(),
       ),
       initialIndex: directToEpisodes ? 1 : 0,
       length: 2,
@@ -74,7 +75,6 @@ class PodcastPage extends StatelessWidget {
 
   Widget buildSubscriptionButton() {
     final App app = App();
-
     return StoreConnector<AppState, Podcast>(
       converter: getSubscriptionSelector(podcast),
       builder: (BuildContext context, Podcast subscription) {
@@ -99,6 +99,16 @@ class PodcastPage extends StatelessWidget {
           );
       },
     );
+  }
+
+  void onSubscribe() {
+    final App app = App();
+    app.store.dispatch(subscribeToPodcast(podcast));
+  }
+
+  void onUnsubscribe() {
+    final App app = App();
+    app.store.dispatch(unsubscribeFromPodcast(podcast));
   }
 
   Widget buildPodcastEpisodesList() {

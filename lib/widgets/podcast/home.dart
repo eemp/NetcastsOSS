@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/tags.dart';
+import 'package:hear2learn/widgets/podcast/options.dart';
 
 class PodcastHome extends StatelessWidget {
-  final String description;
-  final List<Genre> genres;
   final Widget image;
   final Function onSubscribe;
   final Function onUnsubscribe;
+  final Podcast podcast;
+
+  String get description => podcast.description;
+  List<Genre> get genres => podcast.genres;
 
   const PodcastHome({
     Key key,
-    this.description,
-    this.genres,
     this.image,
+    this.podcast,
     this.onSubscribe,
     this.onUnsubscribe,
   }) : super(key: key);
@@ -24,22 +26,34 @@ class PodcastHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Container(
-          child: image,
-          height: MediaQuery.of(context).size.width,
-          width: MediaQuery.of(context).size.width,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            child: image,
+            height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
+          ),
         ),
         Container(
-          child: Tags(
-            genres: genres,
+          child: PodcastOptions(
+            podcast: podcast,
+            onSubscribe: onSubscribe,
+            onUnsubscribe: onUnsubscribe,
           ),
-          margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
         ),
         Container(
           child: description != null ? Html(
             data: description,
             defaultTextStyle: Theme.of(context).textTheme.body1,
           ) : null,
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
+        ),
+        Container(
+          child: Tags(
+            genres: genres,
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
         ),
       ],
     );

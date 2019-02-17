@@ -25,13 +25,19 @@ class Home extends StatelessWidget {
   }) : super(key: key);
 
   static Future<List<Widget>> getHomepageLists() async {
-    return <Widget>[
-      buildSubscriptionsPreview(),
-      buildHomepageList('Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
-      buildHomepageList('Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
-      buildHomepageList('Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
-      buildHomepageList('Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
-    ];
+    try {
+      return <Widget>[
+        buildSubscriptionsPreview(),
+        buildHomepageList('Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
+        buildHomepageList('Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
+        buildHomepageList('Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
+        buildHomepageList('Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
+      ];
+    } catch (e) {
+      return <Widget>[
+        buildSubscriptionsPreview(),
+      ];
+    }
   }
 
   @override

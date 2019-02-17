@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:local_notifications/local_notifications.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
@@ -83,6 +84,12 @@ class App {
 
   Future<void> initNotifications() async {
     await LocalNotifications.createAndroidNotificationChannel(channel: channel);
+  }
+
+  void initConnectivityListener() {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult connectivity) {
+      store.dispatch(updateConnectivity(connectivity));
+    });
   }
 
   void initPlayer() {

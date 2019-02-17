@@ -90,12 +90,18 @@ class PodcastSearchState extends State<PodcastSearch> {
         child: FutureBuilder<List<Podcast>>(
           future: results,
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
+            if(snapshot.hasError) {
+              return const PlaceholderScreen(
+                icon: Icons.error_outline,
+                subtitle: 'Unable to search podcasts. Please check your connectivity or try again later.',
+                title: 'No podcasts to show',
+              );
+            }
             if(!snapshot.hasData) {
               return Container(
                 child: const Center(child: CircularProgressIndicator()),
               );
             }
-
             if(snapshot.data.isEmpty) {
               return const PlaceholderScreen(
                 icon: Icons.search,
@@ -116,9 +122,12 @@ class PodcastSearchState extends State<PodcastSearch> {
 
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-                  leading: Container(
-                    child: image,
-                    width: 80.0,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      child: image,
+                      width: 80.0,
+                    ),
                   ),
                   onTap: () {
                     Navigator.push(

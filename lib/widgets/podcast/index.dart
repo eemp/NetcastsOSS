@@ -8,6 +8,7 @@ import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
@@ -51,9 +52,10 @@ class PodcastPage extends StatelessWidget {
           children: <Widget>[
             Container(
               child: PodcastHome(
-                description: podcast.description,
-                genres: podcast.genres,
                 image: image,
+                onSubscribe: onSubscribe,
+                onUnsubscribe: onUnsubscribe,
+                podcast: podcast,
               ),
               margin: const EdgeInsets.all(16.0),
             ),
@@ -64,7 +66,7 @@ class PodcastPage extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: const BottomAppBarPlayer(),
-        floatingActionButton: buildSubscriptionButton(),
+        //floatingActionButton: buildSubscriptionButton(),
       ),
       initialIndex: directToEpisodes ? 1 : 0,
       length: 2,
@@ -73,7 +75,6 @@ class PodcastPage extends StatelessWidget {
 
   Widget buildSubscriptionButton() {
     final App app = App();
-
     return StoreConnector<AppState, Podcast>(
       converter: getSubscriptionSelector(podcast),
       builder: (BuildContext context, Podcast subscription) {
@@ -100,6 +101,16 @@ class PodcastPage extends StatelessWidget {
     );
   }
 
+  void onSubscribe() {
+    final App app = App();
+    app.store.dispatch(subscribeToPodcast(podcast));
+  }
+
+  void onUnsubscribe() {
+    final App app = App();
+    app.store.dispatch(unsubscribeFromPodcast(podcast));
+  }
+
   Widget buildPodcastEpisodesList() {
     return FutureBuilder<Podcast>(
       future: completePodcastFuture,
@@ -107,6 +118,13 @@ class PodcastPage extends StatelessWidget {
         if(!snapshot.hasData) {
           return Container(
             child: const Center(child: CircularProgressIndicator()),
+          );
+        }
+        if(snapshot.hasError) {
+          return const PlaceholderScreen(
+            icon: Icons.error_outline,
+            subtitle: 'Unable to fetch episodes. Please check your connectivity or try again later.',
+            title: 'No episodes to show',
           );
         }
 

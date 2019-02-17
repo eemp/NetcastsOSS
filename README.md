@@ -41,8 +41,9 @@
 
 Currently, I maintain a datastore with popular podcast data.  In order to
 contribute, you would need information about this datastore.  As a substitute,
-one of the items in the roadmap is to provide a data faking layer to support
-general app feature development.
+one of the items in the roadmap is to provide a data mocking layer to support
+general app feature development.  However, you are able to reproduce
+this datastore using the [podcasts-fetcher](/packages/podcasts-fetcher) work.
 
 ## App Releases
 

@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -7,6 +8,7 @@ import 'package:hear2learn/redux/state.dart';
 
 AppState reducer(AppState state, dynamic action) {
   return AppState(
+    connectivity: connectivityReducer(state.connectivity, action),
     playingEpisode: playingEpisodeReducer(state.playingEpisode, action),
     settings: settingsReducer(state.settings, action),
     subscriptions: subscriptionsReducer(state.subscriptions, action),
@@ -15,6 +17,15 @@ AppState reducer(AppState state, dynamic action) {
 }
 
 const Function AppReducer = reducer;
+
+ConnectivityResult connectivityReducer(ConnectivityResult state, dynamic action) {
+  switch(action.type) {
+    case ActionType.UPDATE_CONNECTIVITY:
+      return action.payload['connectivity'];
+    default:
+      return state;
+  }
+}
 
 String playingEpisodeReducer(String state, dynamic action) {
   switch(action.type) {

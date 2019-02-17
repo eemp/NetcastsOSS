@@ -8,6 +8,7 @@ import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
+import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
 import 'package:hear2learn/widgets/podcast/home.dart';
 import 'package:hear2learn/services/feeds/podcast.dart';
@@ -107,6 +108,13 @@ class PodcastPage extends StatelessWidget {
         if(!snapshot.hasData) {
           return Container(
             child: const Center(child: CircularProgressIndicator()),
+          );
+        }
+        if(snapshot.hasError) {
+          return const PlaceholderScreen(
+            icon: Icons.error_outline,
+            subtitle: 'Unable to fetch episodes. Please check your connectivity or try again later.',
+            title: 'No episodes to show',
           );
         }
 

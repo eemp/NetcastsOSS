@@ -19,6 +19,8 @@ const String PAUSE_BUTTON = '⏸️';
 const String PLAY_BUTTON = '▶️';
 
 enum ActionType {
+  UPDATE_CONNECTIVITY,
+
   CLEAR_EPISODE,
   PAUSE_EPISODE,
   PLAY_EPISODE,
@@ -50,6 +52,15 @@ class Action {
     this.type,
     this.payload,
   });
+}
+
+Action updateConnectivity(ConnectivityResult connectivity) {
+  return Action(
+    type: ActionType.UPDATE_CONNECTIVITY,
+    payload: <String, dynamic>{
+      'connectivity': connectivity,
+    },
+  );
 }
 
 ThunkAction<AppState> pauseEpisode(Episode episode) {
@@ -303,11 +314,10 @@ Action removeEpisode(Episode episode) {
 
 ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {
   return (Store<AppState> store) async {
-    final ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-    if(connectivityResult == ConnectivityResult.none) {
+    if(store.state.connectivity == ConnectivityResult.none) {
       return showNoConnectivityNotification(context);
     }
-    else if(store.state.settings.wifiSetting && connectivityResult != ConnectivityResult.wifi) {
+    else if(store.state.settings.wifiSetting && store.state.connectivity != ConnectivityResult.wifi) {
       return showNoWifiNotification(context);
     }
 

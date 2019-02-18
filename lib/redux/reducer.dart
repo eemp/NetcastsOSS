@@ -90,6 +90,13 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
           status: EpisodeStatus.DOWNLOADED,
         ),
       });
+    case ActionType.CLEAR_EPISODE:
+      return Map<String, Episode>.from(state)..addAll(<String, Episode>{
+        '${playingEpisode.url}': playingEpisode.copyWith(
+          position: Duration(),
+          status: EpisodeStatus.PLAYED,
+        ),
+      });
     case ActionType.DELETE_EPISODE:
       final Episode episode = action.payload['episode'];
       final Episode matchingEpisode = state[episode.url] ?? episode;

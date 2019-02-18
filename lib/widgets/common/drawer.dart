@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
+import 'package:hear2learn/widgets/favorites/index.dart';
 import 'package:hear2learn/widgets/home/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
@@ -70,6 +71,16 @@ class AppDrawer extends StatelessWidget {
               );
             },
             title: const Text('Downloads'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(builder: (BuildContext context) => FavoritePage()),
+              );
+            },
+            title: const Text('Favorites'),
           ),
           const Divider(),
           ListTile(

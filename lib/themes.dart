@@ -21,6 +21,21 @@ class ThemeProvider {
     fontFamily: 'OpenSans',
   );
 
+  static const String MOONLIGHT_BYTES_THEME = 'Moonlight Bytes 6';
+  static final ThemeData moonlightBytesThemeData = ThemeData(
+    accentColor: const Color(0xFFFF8870),
+    brightness: Brightness.dark,
+    buttonTheme: ButtonThemeData(
+      buttonColor: const Color(0xFFF2CC63),
+      highlightColor: const Color(0xFFFF8870),
+      textTheme: ButtonTextTheme.primary,
+    ),
+    canvasColor: const Color(0xFF272822),
+    fontFamily: 'OpenSans',
+    primaryColor: const Color(0xFF0D99A6),
+    toggleableActiveColor: const Color(0xFFFF8870),
+  );
+
   static const String MONOKAI_THEME = 'Monokai';
   static final ThemeData monokaiThemeData = ThemeData(
     accentColor: const Color(0xFF66D9EF),
@@ -45,6 +60,7 @@ class ThemeProvider {
     DARK_THEME,
     LIGHT_THEME,
     MONOKAI_THEME,
+    MOONLIGHT_BYTES_THEME,
   ];
 
   static const String DEFAULT_THEME = DARK_THEME;
@@ -54,6 +70,7 @@ class ThemeProvider {
     themes[DARK_THEME] = darkThemeData;
     themes[LIGHT_THEME] = lightThemeData;
     themes[MONOKAI_THEME] = monokaiThemeData;
+    themes[MOONLIGHT_BYTES_THEME] = moonlightBytesThemeData;
     return themes[themeName];
   }
 }

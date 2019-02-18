@@ -14,6 +14,13 @@ Function getEpisodeSelector(Episode episode) {
   };
 }
 
+int sortFavoritedEpisodes(Episode a, Episode b) {
+  if (a.podcastTitle != b.podcastTitle) {
+    return a.podcastTitle.compareTo(b.podcastTitle);
+  }
+  return a.title.compareTo(b.title);
+}
+
 Episode playingEpisodeSelector(Store<AppState> store) {
   final AppState state = store.state;
   return state.userEpisodes[state.playingEpisode];
@@ -25,6 +32,14 @@ List<Episode> downloadsSelector(Store<AppState> store) {
       episode.downloadPath != null
         || episode.status == EpisodeStatus.DOWNLOADING
   ).toList();
+}
+
+List<Episode> favoritesSelector(Store<AppState> store) {
+  final List<Episode> favorites = store.state.userEpisodes.values.where(
+    (Episode episode) => episode.isFavorited
+  ).toList();
+  favorites.sort(sortFavoritedEpisodes);
+  return favorites;
 }
 
 List<Podcast> subscriptionsSelector(Store<AppState> store) {

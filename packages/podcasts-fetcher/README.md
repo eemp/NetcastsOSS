@@ -37,8 +37,3 @@ ES_SERVER=http://localhost:9200 \
 ES_INDEX=hear2learn \
 node index-feed-data.js
 ```
-
-## Custom Podcasts
-
-* [Rated G for Gamers](http://ratedgforgamers.libsyn.com/rss)
-* [RubyApps Insights](https://www.rubensteintech.com/feed-RubyApps-Insights.rss)

@@ -102,8 +102,10 @@ ThunkAction<AppState> playEpisode(Episode episode) {
     app.player.play(
       matchingEpisode.downloadPath,
       isLocal: true,
+      position: matchingEpisode.position ?? Duration(),
+      skipSilence: store.state.settings.skipSilence ?? false,
+      speed: store.state.settings.speed ?? 1.0,
     );
-    app.player.seek(matchingEpisode.position ?? Duration());
 
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
@@ -389,10 +391,19 @@ Future<void> loadSettings(Store<AppState> store) async {
 
 ThunkAction<AppState> updateSettings(BuildContext context, AppSettings settings) {
   return (Store<AppState> store) async {
-    DynamicTheme.of(context).setTheme(settings.themeName);
+    onAppSettingsUpdate(context, settings);
     await settings.persistPreferences();
     store.dispatch(setSettings(settings));
   };
+}
+
+void onAppSettingsUpdate(BuildContext context, AppSettings newSettings) {
+  final App app = App();
+  DynamicTheme.of(context).setTheme(newSettings.themeName);
+  app.player.setOptions(
+    skipSilence: newSettings.skipSilence ?? false,
+    speed: newSettings.speed ?? 1.0,
+  );
 }
 
 Action setSettings(AppSettings settings) {

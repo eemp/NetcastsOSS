@@ -19,7 +19,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  audioplayers: ^0.8.0
+  #audioplayers: ^0.8.0
+  audioplayers:
+    #path: ./packages/audioplayers
+    git:
+      url: https://github.com/eemp/audioplayers.git
+      ref: exoplayer
   cached_network_image: ^0.5.1
   connectivity: ^0.4.2
   dio: ^1.0.13

@@ -32,10 +32,12 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.1"
+      path: "."
+      ref: exoplayer
+      resolved-ref: "551cfc6ea788c8d2cf57632b1d1d972a9bd28f58"
+      url: "https://github.com/eemp/audioplayers.git"
+    source: git
+    version: "0.8.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -147,7 +149,7 @@ packages:
       name: cookie_jar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.7"
+    version: "0.0.8"
   crypto:
     dependency: transitive
     description:

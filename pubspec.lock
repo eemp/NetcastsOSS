@@ -34,7 +34,7 @@ packages:
     description:
       path: "."
       ref: exoplayer
-      resolved-ref: "2f6114f55841051dd09cca8139ac7ed35a073f88"
+      resolved-ref: "551cfc6ea788c8d2cf57632b1d1d972a9bd28f58"
       url: "https://github.com/eemp/audioplayers.git"
     source: git
     version: "0.8.2"

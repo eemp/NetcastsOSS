@@ -103,8 +103,8 @@ ThunkAction<AppState> playEpisode(Episode episode) {
       matchingEpisode.downloadPath,
       isLocal: true,
       position: matchingEpisode.position ?? Duration(),
-      skipSilence: store.state.settings.skipSilence,
-      speed: store.state.settings.speed,
+      skipSilence: store.state.settings.skipSilence ?? false,
+      speed: store.state.settings.speed ?? 1.0,
     );
 
     await app.createNotification(
@@ -400,7 +400,10 @@ ThunkAction<AppState> updateSettings(BuildContext context, AppSettings settings)
 void onAppSettingsUpdate(BuildContext context, AppSettings newSettings) {
   final App app = App();
   DynamicTheme.of(context).setTheme(newSettings.themeName);
-  app.player.setOptions(skipSilence: newSettings.skipSilence, speed: newSettings.speed);
+  app.player.setOptions(
+    skipSilence: newSettings.skipSilence ?? false,
+    speed: newSettings.speed ?? 1.0,
+  );
 }
 
 Action setSettings(AppSettings settings) {

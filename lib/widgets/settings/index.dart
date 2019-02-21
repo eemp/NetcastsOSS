@@ -114,7 +114,7 @@ class Settings extends StatelessWidget {
                             ))
                           );
                         },
-                        value: settings.speed ?? 1.0,
+                        value: settings.speed != null ? num.parse(settings.speed.toStringAsFixed(1)) : 1.0,
                       ),
                     ),
                     decoration: const InputDecoration(

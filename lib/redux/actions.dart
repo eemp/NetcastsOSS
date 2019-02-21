@@ -391,10 +391,16 @@ Future<void> loadSettings(Store<AppState> store) async {
 
 ThunkAction<AppState> updateSettings(BuildContext context, AppSettings settings) {
   return (Store<AppState> store) async {
-    DynamicTheme.of(context).setTheme(settings.themeName);
+    onAppSettingsUpdate(context, settings);
     await settings.persistPreferences();
     store.dispatch(setSettings(settings));
   };
+}
+
+void onAppSettingsUpdate(BuildContext context, AppSettings newSettings) {
+  final App app = App();
+  DynamicTheme.of(context).setTheme(newSettings.themeName);
+  app.player.setOptions(skipSilence: newSettings.skipSilence, speed: newSettings.speed);
 }
 
 Action setSettings(AppSettings settings) {

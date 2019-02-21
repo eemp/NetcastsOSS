@@ -34,7 +34,7 @@ packages:
     description:
       path: "."
       ref: exoplayer
-      resolved-ref: "6429856410ce466e781a6a1c751e2b1869549578"
+      resolved-ref: "2f6114f55841051dd09cca8139ac7ed35a073f88"
       url: "https://github.com/eemp/audioplayers.git"
     source: git
     version: "0.8.2"
@@ -149,7 +149,7 @@ packages:
       name: cookie_jar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.7"
+    version: "0.0.8"
   crypto:
     dependency: transitive
     description:

@@ -85,6 +85,48 @@ class Settings extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  subtitle: const Text('Cut out dead moments in episodes'),
+                  title: const Text('Skip Silence'),
+                  trailing: Checkbox(
+                    onChanged: (bool skipSilence) {
+                      app.store.dispatch(
+                        updateSettings(context, settings.copyWith(
+                          skipSilence: skipSilence,
+                        ))
+                      );
+                    },
+                    value: settings.skipSilence,
+                  ),
+                ),
+                Container(
+                  child: InputDecorator(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<double>(
+                        isDense: true,
+                        items: <double>[0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3].map((double speed) => DropdownMenuItem<double>(
+                          child: Text(speed.toString()),
+                          value: speed,
+                        )).toList(),
+                        onChanged: (double speed) {
+                          app.store.dispatch(
+                            updateSettings(context, settings.copyWith(
+                              speed: speed,
+                            ))
+                          );
+                        },
+                        value: settings.speed ?? 1.0,
+                      ),
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      icon: Icon(Icons.play_arrow),
+                      labelText: 'Player Speed',
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
                   subtitle: const Text('Help improve the app'),
                   title: const Text('Share Usage Information'),
                   trailing: Checkbox(

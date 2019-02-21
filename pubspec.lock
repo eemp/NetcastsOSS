@@ -32,10 +32,12 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.1"
+      path: "."
+      ref: exoplayer
+      resolved-ref: "6429856410ce466e781a6a1c751e2b1869549578"
+      url: "https://github.com/eemp/audioplayers.git"
+    source: git
+    version: "0.8.2"
   boolean_selector:
     dependency: transitive
     description:

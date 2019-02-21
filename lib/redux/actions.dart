@@ -102,8 +102,10 @@ ThunkAction<AppState> playEpisode(Episode episode) {
     app.player.play(
       matchingEpisode.downloadPath,
       isLocal: true,
+      position: matchingEpisode.position ?? Duration(),
+      skipSilence: true,
+      speed: 1.1,
     );
-    app.player.seek(matchingEpisode.position ?? Duration());
 
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',

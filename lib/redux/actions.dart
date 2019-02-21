@@ -103,8 +103,8 @@ ThunkAction<AppState> playEpisode(Episode episode) {
       matchingEpisode.downloadPath,
       isLocal: true,
       position: matchingEpisode.position ?? Duration(),
-      skipSilence: true,
-      speed: 1.1,
+      skipSilence: store.state.settings.skipSilence,
+      speed: store.state.settings.speed,
     );
 
     await app.createNotification(

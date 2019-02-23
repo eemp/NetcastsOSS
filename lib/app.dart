@@ -114,7 +114,7 @@ class App {
 
     //AudioPlayer.logEnabled = true;
     app.player.completionHandler = () {
-      store.dispatch(Action(type: ActionType.CLEAR_EPISODE));
+      store.dispatch(clearEpisode());
     };
     app.player.durationHandler = (Duration duration) {
       final List<dynamic> throttledUpdateArgs = <dynamic>[ duration ];
@@ -166,5 +166,9 @@ class App {
       id: 0,
       title: title,
     );
+  }
+
+  Future<void> removeNotification() async {
+    await LocalNotifications.removeNotification(0);
   }
 }

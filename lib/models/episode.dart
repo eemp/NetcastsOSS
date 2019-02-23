@@ -17,7 +17,7 @@ enum EpisodeStatus {
 class Episode {
   final App app = App();
 
-  static const int END_OF_EPISODE_THRESHOLD = 30;
+  static const int END_OF_EPISODE_THRESHOLD = 60;
 
   String description;
   String downloadPath;

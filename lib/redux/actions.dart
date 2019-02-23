@@ -159,7 +159,7 @@ Action seekInEpisode(Duration position) {
 ThunkAction<AppState> updateEpisodePosition(Duration position) {
   return (Store<AppState> store) async {
     final Episode playingEpisode = getPlayingEpisode(store);
-    if(position.inSeconds % 5 == 0) {
+    if(playingEpisode != null && position.inSeconds % 5 == 0) {
       await episode_helpers.updateEpisodePosition(playingEpisode, position);
       if(!playingEpisode.isFinished && playingEpisode.isPlayedToEnd()) {
         store.dispatch(finishEpisode(playingEpisode));

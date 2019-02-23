@@ -29,7 +29,7 @@ Episode playingEpisodeSelector(Store<AppState> store) {
 List<Episode> downloadsSelector(Store<AppState> store) {
   return store.state.userEpisodes.values.where(
     (Episode episode) =>
-      episode.downloadPath != null
+      dash.isNotEmpty(episode.downloadPath)
         || episode.status == EpisodeStatus.DOWNLOADING
   ).toList();
 }

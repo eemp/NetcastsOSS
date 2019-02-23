@@ -300,11 +300,26 @@ Action setDownloads(List<Episode> downloads) {
   );
 }
 
+ThunkAction<AppState> clearEpisode([Episode episode]) {
+  final App app = App();
+
+  return (Store<AppState> store) async {
+    final Episode playingEpisode = store.state.userEpisodes[store.state.playingEpisode];
+    episode ??= playingEpisode;
+    if(episode != null && episode.url == playingEpisode?.url) {
+      app.player.stop();
+      app.removeNotification();
+      store.dispatch(Action(
+        type: ActionType.CLEAR_EPISODE,
+      ));
+    }
+  };
+}
+
 ThunkAction<AppState> deleteEpisode(Episode episode) {
   return (Store<AppState> store) async {
-    final App app = App();
     if(episode.url == store.state.playingEpisode) {
-      app.player.pause();
+      store.dispatch(clearEpisode(episode));
     }
 
     await episode_helpers.deleteEpisode(episode);

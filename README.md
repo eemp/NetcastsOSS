@@ -34,9 +34,10 @@
 
 ## Roadmap
 
+* Playlists
+* Far better local notifications (blocked by: https://github.com/MaikuB/flutter_local_notifications/issues/17)
+* Chromecast support
 * Allow development without requiring a datastore
-* Focus on UX
-* Focus on access to podcasts
 
 ## Contributing
 

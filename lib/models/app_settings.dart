@@ -22,7 +22,7 @@ class AppSettings {
     final App app = App();
     privacySetting = app.prefs.getBool('privacySetting') ?? false;
     skipSilence = app.prefs.getBool('skipSilence') ?? false;
-    speed = app.prefs.getDouble('speed') ?? false;
+    speed = app.prefs.getDouble('speed') ?? 1.0;
     themeName = app.prefs.getString('themeName') ?? 'Dark';
     wifiSetting = app.prefs.getBool('wifiSetting') ?? false;
   }

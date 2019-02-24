@@ -12,12 +12,18 @@ import 'package:hear2learn/widgets/episode/index.dart';
 
 class EpisodeTileConnector extends StatelessWidget {
   final Episode episode;
+  final bool isSelected;
+  final bool selectOnTap;
   final Function subtitleProvider;
+  final Function toggleEpisodeSelection;
 
   const EpisodeTileConnector({
     Key key,
     this.episode,
+    this.isSelected,
+    this.selectOnTap,
     this.subtitleProvider,
+    this.toggleEpisodeSelection,
   }) : super(key: key);
 
   @override
@@ -30,19 +36,19 @@ class EpisodeTileConnector extends StatelessWidget {
 
   Widget episodeTileBuilder(BuildContext context, Episode episode) {
     final Function subtitleProvider = this.subtitleProvider ?? (Episode episodeToSubtitle) => episodeToSubtitle.getMetaLine();
-    return GestureDetector(
-      onTap: () {
+    return EpisodeTile(
+      emphasis: !episode.isFinished,
+      isSelected: isSelected,
+      onTap: selectOnTap ? () => toggleEpisodeSelection(episode) : () {
         Navigator.push(
           context,
           MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: episode)),
         );
       },
-      child: EpisodeTile(
-        emphasis: !episode.isFinished,
-        subtitle: subtitleProvider(episode),
-        title: episode.title,
-        options: buildEpisodeOptions(context, episode),
-      ),
+      onLongPress: () => toggleEpisodeSelection(episode),
+      options: buildEpisodeOptions(context, episode),
+      subtitle: subtitleProvider(episode),
+      title: episode.title,
     );
   }
 

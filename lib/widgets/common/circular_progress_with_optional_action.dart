@@ -20,7 +20,7 @@ class CircularProgressWithOptionalAction extends StatelessWidget {
     return GestureDetector(
       child: CircularPercentIndicator(
         backgroundColor: progress == null
-          ? Theme.of(context).scaffoldBackgroundColor
+          ? Colors.transparent
           : const Color(0xFFB8C7CB),
         center: icon,
         lineWidth: 3.0,

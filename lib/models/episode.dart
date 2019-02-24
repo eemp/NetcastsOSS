@@ -127,11 +127,6 @@ class Episode {
     return remainder.inSeconds < END_OF_EPISODE_THRESHOLD;
   }
 
-  @override
-  String toString() {
-    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, ]';
-  }
-
   String toJson() {
     return jsonEncode(<String, dynamic>{
       'description': description,
@@ -143,5 +138,25 @@ class Episode {
       'title': title,
       'url': url,
     });
+  }
+
+  @override
+  String toString() {
+    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, ]';
+  }
+
+  @override
+  int get hashCode {
+    // why is this necessary?
+    // implementation based on https://www.dartlang.org/guides/libraries/library-tour#implementing-map-keys
+    return 37 * (17 + url.hashCode);
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    if(other is! Episode) {
+      return false;
+    }
+    return url == other.url;
   }
 }

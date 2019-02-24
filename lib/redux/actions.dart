@@ -316,6 +316,14 @@ ThunkAction<AppState> clearEpisode([Episode episode]) {
   };
 }
 
+ThunkAction<AppState> batchDelete(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(deleteEpisode(episode));
+    }
+  };
+}
+
 ThunkAction<AppState> deleteEpisode(Episode episode) {
   return (Store<AppState> store) async {
     if(episode.url == store.state.playingEpisode) {
@@ -334,6 +342,14 @@ Action removeEpisode(Episode episode) {
       'episode': episode,
     },
   );
+}
+
+ThunkAction<AppState> batchDownload(BuildContext context, List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(downloadEpisode(context, episode));
+    }
+  };
 }
 
 ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {

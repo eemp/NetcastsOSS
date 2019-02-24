@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:hear2learn/app.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
@@ -63,7 +63,6 @@ class PodcastPage extends StatelessWidget {
             ),
             Container(
               child: buildPodcastEpisodesList(),
-              margin: const EdgeInsets.all(16.0),
             ),
           ],
         ),

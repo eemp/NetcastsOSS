@@ -6,9 +6,8 @@ import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
-import 'package:hear2learn/widgets/common/episode_tile_connector.dart';
+import 'package:hear2learn/widgets/common/episode_list.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
-import 'package:hear2learn/widgets/common/vertical_list_view.dart';
 
 class FavoritePage extends StatelessWidget {
   final App app = App();
@@ -30,14 +29,8 @@ class FavoritePage extends StatelessWidget {
             );
           }
 
-          return Container(
-            child: VerticalListView(
-              children: favorites.map((Episode episode) => EpisodeTileConnector(
-                episode: episode,
-                subtitleProvider: (Episode episode) => episode.podcastTitle,
-              )).toList(),
-            ),
-            padding: const EdgeInsets.all(16.0),
+          return EpisodesList(
+            episodes: favorites,
           );
         },
       ),

@@ -24,7 +24,10 @@ class PodcastOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        buildSubscriptionButton(),
+        Container(
+          child: buildSubscriptionButton(),
+          margin: EdgeInsets.only(right: 16.0),
+        ),
         buildShareOptions(),
       ],
     );

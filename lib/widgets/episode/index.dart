@@ -49,7 +49,6 @@ class EpisodePage extends StatelessWidget {
                 onUnfavorite: onUnfavorite,
                 onUnfinish: onUnfinish,
               ),
-              margin: const EdgeInsets.all(16.0),
             ),
             Container(
               child: EpisodeInfo(

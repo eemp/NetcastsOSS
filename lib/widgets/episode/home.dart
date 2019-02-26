@@ -36,11 +36,14 @@ class EpisodeHome extends StatelessWidget {
       children: <Widget>[
         Column(
           children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                child: Text(episode.podcastTitle, style: Theme.of(context).textTheme.title, textAlign: TextAlign.left),
+            Container(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  child: Text(episode.podcastTitle, style: Theme.of(context).textTheme.title, textAlign: TextAlign.left),
+                ),
               ),
+              margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
             ),
             EpisodeTile(
               subtitle: episode.getMetaLine(),

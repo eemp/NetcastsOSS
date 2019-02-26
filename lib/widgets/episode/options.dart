@@ -36,7 +36,10 @@ class EpisodeOptions extends StatelessWidget {
       builder: (BuildContext context, Episode episode) {
         return Row(
           children: <Widget>[
-            buildDownloadDeleteOptions(episode),
+            Container(
+              child: buildDownloadDeleteOptions(episode),
+              margin: const EdgeInsets.only(left: 16.0, right: 8.0),
+            ),
             buildFavoritesOptions(episode),
             buildFinishOptions(episode),
             buildShareOptions(episode),

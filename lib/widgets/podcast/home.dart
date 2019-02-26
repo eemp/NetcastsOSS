@@ -32,8 +32,8 @@ class PodcastHome extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           child: Container(
             child: image,
-            height: MediaQuery.of(context).size.width,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width - 64,
+            width: MediaQuery.of(context).size.width - 32,
           ),
         ),
         Container(

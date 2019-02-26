@@ -125,7 +125,7 @@ class EpisodePlayer extends StatelessWidget {
               ),
             ],
           ),
-          margin: EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(16.0),
         );
       },
     );

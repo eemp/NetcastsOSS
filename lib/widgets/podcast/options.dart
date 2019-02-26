@@ -26,7 +26,7 @@ class PodcastOptions extends StatelessWidget {
       children: <Widget>[
         Container(
           child: buildSubscriptionButton(),
-          margin: EdgeInsets.only(right: 16.0),
+          margin: const EdgeInsets.only(right: 16.0),
         ),
         buildShareOptions(),
       ],

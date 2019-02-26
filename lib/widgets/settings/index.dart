@@ -37,11 +37,64 @@ class Settings extends StatelessWidget {
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.all(16.0),
                 ),
                 const Divider(),
-                Container(
-                  child: InputDecorator(
+                SwitchListTile(
+                  onChanged: (bool wifiSetting) {
+                    app.store.dispatch(
+                      updateSettings(context, settings.copyWith(
+                        wifiSetting: wifiSetting,
+                      ))
+                    );
+                  },
+                  subtitle: const Text('Toggle this on if you want to limit your data usage'),
+                  title: const Text('Wi-Fi Only Downloads'),
+                  value: settings.wifiSetting,
+                ),
+                const Divider(),
+                SwitchListTile(
+                  onChanged: (bool skipSilence) {
+                    app.store.dispatch(
+                      updateSettings(context, settings.copyWith(
+                        skipSilence: skipSilence,
+                      ))
+                    );
+                  },
+                  subtitle: const Text('Cut out dead moments in episodes'),
+                  title: const Text('Skip Silence'),
+                  value: settings.skipSilence,
+                ),
+                ListTile(
+                  trailing: InputDecorator(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<double>(
+                        isDense: true,
+                        items: <double>[0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3].map((double speed) => DropdownMenuItem<double>(
+                          child: Text(speed.toString()),
+                          value: speed,
+                        )).toList(),
+                        onChanged: (double speed) {
+                          app.store.dispatch(
+                            updateSettings(context, settings.copyWith(
+                              speed: speed,
+                            ))
+                          );
+                        },
+                        value: settings.speed != null ? num.parse(settings.speed.toStringAsFixed(1)) : 1.0,
+                      ),
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      icon: Icon(Icons.play_arrow),
+                      labelText: 'Player Speed',
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  trailing: InputDecorator(
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isDense: true,
@@ -67,81 +120,19 @@ class Settings extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  subtitle: const Text('Toggle this on if you want to limit your data usage'),
-                  title: const Text('Wi-Fi Only Downloads'),
-                  trailing: Checkbox(
-                    onChanged: (bool wifiSetting) {
-                      app.store.dispatch(
-                        updateSettings(context, settings.copyWith(
-                          wifiSetting: wifiSetting,
-                        ))
-                      );
-                    },
-                    value: settings.wifiSetting,
-                  ),
-                ),
-                const Divider(),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  subtitle: const Text('Cut out dead moments in episodes'),
-                  title: const Text('Skip Silence'),
-                  trailing: Checkbox(
-                    onChanged: (bool skipSilence) {
-                      app.store.dispatch(
-                        updateSettings(context, settings.copyWith(
-                          skipSilence: skipSilence,
-                        ))
-                      );
-                    },
-                    value: settings.skipSilence,
-                  ),
-                ),
-                Container(
-                  child: InputDecorator(
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<double>(
-                        isDense: true,
-                        items: <double>[0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3].map((double speed) => DropdownMenuItem<double>(
-                          child: Text(speed.toString()),
-                          value: speed,
-                        )).toList(),
-                        onChanged: (double speed) {
-                          app.store.dispatch(
-                            updateSettings(context, settings.copyWith(
-                              speed: speed,
-                            ))
-                          );
-                        },
-                        value: settings.speed != null ? num.parse(settings.speed.toStringAsFixed(1)) : 1.0,
-                      ),
-                    ),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      icon: Icon(Icons.play_arrow),
-                      labelText: 'Player Speed',
-                    ),
-                  ),
-                ),
-                const Divider(),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
+                SwitchListTile(
+                  onChanged: (bool privacySetting) {
+                    app.store.dispatch(
+                      updateSettings(context, settings.copyWith(
+                        privacySetting: privacySetting,
+                      ))
+                    );
+                  },
                   subtitle: const Text('Help improve the app'),
                   title: const Text('Share Usage Information'),
-                  trailing: Checkbox(
-                    onChanged: (bool privacySetting) {
-                      app.store.dispatch(
-                        updateSettings(context, settings.copyWith(
-                          privacySetting: privacySetting,
-                        ))
-                      );
-                    },
-                    value: settings.privacySetting,
-                  ),
+                  value: settings.privacySetting,
                 ),
               ],
-              padding: const EdgeInsets.all(16.0),
             ),
           );
         },

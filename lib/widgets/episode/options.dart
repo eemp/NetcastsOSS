@@ -38,7 +38,7 @@ class EpisodeOptions extends StatelessWidget {
           children: <Widget>[
             Container(
               child: buildDownloadDeleteOptions(episode),
-              margin: EdgeInsets.only(left: 16.0, right: 8.0),
+              margin: const EdgeInsets.only(left: 16.0, right: 8.0),
             ),
             buildFavoritesOptions(episode),
             buildFinishOptions(episode),

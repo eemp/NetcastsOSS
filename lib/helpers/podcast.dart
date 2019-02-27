@@ -44,16 +44,18 @@ Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
   ).then((response) => toPodcasts(response));
 }
 
-Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery) async {
+Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {
   final App app = App();
   final client = app.elasticClient;
 
   final query = {
+    'from': page * pageSize,
     'query': {
       'bool': {
         'filter': [
           { 'exists': { 'field': 'feed' } },
         ],
+        'minimum_should_match': 1,
         'should': [
           {
             'multi_match': {
@@ -63,12 +65,14 @@ Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery) async {
                 'genre^8',
                 'description',
               ],
+              'operator': 'and',
               'query': textQuery
             }
           }
-        ]
+        ],
       }
-    }
+    },
+    'size': pageSize,
   };
   return client.search(
     body: query,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
@@ -110,39 +111,44 @@ class PodcastSearchState extends State<PodcastSearch> {
               );
             }
 
-            final List<Podcast> podcasts = snapshot.data;
-            return ListView.separated(
-              itemCount: podcasts.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Podcast podcast = podcasts[index];
+            return PagewiseListView<Podcast>(
+              pageSize: 10,
+              itemBuilder: (BuildContext context, Podcast podcast, int index) {
                 final Widget image = WithFadeInImage(
                   heroTag: 'search/${podcast.artwork600}',
                   location: podcast.artwork600,
                 );
 
-                return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Container(
-                      child: image,
-                      width: 80.0,
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Container(
+                          child: image,
+                          width: 80.0,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
+                            image: image,
+                            podcast: podcast,
+                          )),
+                        );
+                      },
+                      subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
+                      title: Text(podcast.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
-                        image: image,
-                        podcast: podcast,
-                      )),
-                    );
-                  },
-                  subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
-                  title: Text(podcast.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const Divider(),
+                  ],
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => const Divider(),
+              pageFuture: (int pageIndex) {
+                return searchPodcastsByTextQuery(userQuery, page: pageIndex);
+              },
             );
           },
         ),

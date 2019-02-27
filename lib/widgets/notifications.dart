@@ -9,7 +9,7 @@ void showNoConnectivityNotification(BuildContext context) {
     ..backgroundColor = Theme.of(context).accentColor
     ..titleText = Text('No Connectivity', style: Theme.of(context).accentTextTheme.title)
     ..messageText = Text('Please try again later when connectivity is available to download episodes', style: Theme.of(context).accentTextTheme.body1)
-    ..duration = Duration(seconds: 3)
+    ..duration = const Duration(seconds: 3)
     ..show(context);
 }
 
@@ -28,6 +28,6 @@ void showNoWifiNotification(BuildContext context) {
         );
       }
     )
-    ..duration = Duration(seconds: 4)
+    ..duration = const Duration(seconds: 4)
     ..show(context);
 }

@@ -102,7 +102,7 @@ ThunkAction<AppState> playEpisode(Episode episode) {
     app.player.play(
       matchingEpisode.downloadPath,
       isLocal: true,
-      position: matchingEpisode.position ?? Duration(),
+      position: matchingEpisode.position ?? const Duration(),
       skipSilence: store.state.settings.skipSilence ?? false,
       speed: store.state.settings.speed ?? 1.0,
     );
@@ -372,7 +372,7 @@ ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {
           store.dispatch(finishDownloadingEpisode(episode));
         }
       },
-      Duration(milliseconds: 1000)
+      const Duration(milliseconds: 1000)
     );
 
     await episode_helpers.downloadEpisode(episode, onProgress: (int received, int total) {

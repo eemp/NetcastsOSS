@@ -102,13 +102,13 @@ class App {
           },
         ));
       },
-      Duration(milliseconds: 1000)
+      const Duration(milliseconds: 1000)
     );
     final Function throttledPositionHandler = dash.throttle(
       (Duration position) {
         store.dispatch(updateEpisodePosition(position));
       },
-      Duration(milliseconds: 1000)
+      const Duration(milliseconds: 1000)
     );
 
 

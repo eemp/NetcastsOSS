@@ -85,7 +85,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
         '${episode.url}': matchingEpisode.copyWith(
           downloadPath: episode.downloadPath ?? matchingEpisode.downloadPath,
-          position: Duration(),
+          position: const Duration(),
           progress: 1.0,
           status: EpisodeStatus.DOWNLOADED,
         ),
@@ -93,7 +93,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
     case ActionType.CLEAR_EPISODE:
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
         '${playingEpisode.url}': playingEpisode.copyWith(
-          position: Duration(),
+          position: const Duration(),
           status: EpisodeStatus.PLAYED,
         ),
       });

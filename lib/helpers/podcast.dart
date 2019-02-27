@@ -71,8 +71,8 @@ Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery) async {
     }
   };
   return client.search(
-    type: PODCAST_TYPE,
     body: query,
+    type: PODCAST_TYPE,
   ).then((response) => toPodcasts(response));
 }
 

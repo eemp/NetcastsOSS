@@ -18,11 +18,18 @@ const String COMEDY_GENRE_ID = '1303';
 const String BUSINESS_GENRE_ID = '1321';
 
 class Home extends StatelessWidget {
+  final Future<List<Widget>> fallbackShowcases = getFallbackHomepageLists();
   final Future<List<Widget>> showcases = getHomepageLists();
 
   Home({
     Key key,
   }) : super(key: key);
+
+  static Future<List<Widget>> getFallbackHomepageLists() async {
+    return <Widget>[
+      buildSubscriptionsPreview(),
+    ];
+  }
 
   static Future<List<Widget>> getHomepageLists() async {
     try {
@@ -34,9 +41,7 @@ class Home extends StatelessWidget {
         buildHomepageList(const Icon(Icons.attach_money), 'Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
       ];
     } catch (e) {
-      return <Widget>[
-        buildSubscriptionsPreview(),
-      ];
+      return getFallbackHomepageLists();
     }
   }
 
@@ -47,7 +52,10 @@ class Home extends StatelessWidget {
         title: const Text('Home'),
       ),
       body: FutureBuilder<List<Widget>>(
-        future: showcases,
+        future: Future.any<List<Widget>>(<Future<List<Widget>>>[
+          showcases,
+          Future<List<Widget>>.delayed(const Duration(seconds: 10), () => fallbackShowcases),
+        ]),
         builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
           if(!snapshot.hasData) {
             return Container(

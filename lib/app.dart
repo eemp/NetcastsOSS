@@ -13,7 +13,7 @@ import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
-import 'package:hear2learn/services/api/elastic.dart';
+import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -102,13 +102,13 @@ class App {
           },
         ));
       },
-      Duration(milliseconds: 1000)
+      const Duration(milliseconds: 1000)
     );
     final Function throttledPositionHandler = dash.throttle(
       (Duration position) {
         store.dispatch(updateEpisodePosition(position));
       },
-      Duration(milliseconds: 1000)
+      const Duration(milliseconds: 1000)
     );
 
 

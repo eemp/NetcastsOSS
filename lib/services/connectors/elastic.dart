@@ -26,11 +26,14 @@ class ElasticsearchClient {
     final Uri uri = query != null
       ? Uri.https(host, path, <String, String>{ 'q': query })
       : Uri.https(host, path);
+
     final dynamic response = await http.post(uri,
       body: json.encode(body),
       headers: <String, String>{ 'Content-Type': 'application/json' }
-    );
-    return compute<String, ElasticsearchResponse>(parseResponse, response.body);
+    ).timeout(const Duration(seconds: 5));
+    final String responseBody = response.body;
+
+    return compute<String, ElasticsearchResponse>(parseResponse, responseBody);
   }
 
   static String getPath(String index, String type, String route) {

@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:hear2learn/app.dart';
-import 'package:hear2learn/services/api/elastic.dart';
+import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 

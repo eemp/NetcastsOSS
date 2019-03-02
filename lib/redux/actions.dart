@@ -153,7 +153,11 @@ Action seekInEpisode(Duration position) {
   final App app = App();
 
   app.player.seek(position);
-  return setEpisodePosition(position);
+  return setEpisodePosition(
+    position > Duration(seconds: 0)
+      ? position
+      : Duration(seconds: 0)
+  );
 }
 
 ThunkAction<AppState> updateEpisodePosition(Duration position) {

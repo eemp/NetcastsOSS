@@ -154,9 +154,9 @@ Action seekInEpisode(Duration position) {
 
   app.player.seek(position);
   return setEpisodePosition(
-    position > Duration(seconds: 0)
+    position > const Duration(seconds: 0)
       ? position
-      : Duration(seconds: 0)
+      : const Duration(seconds: 0)
   );
 }
 

@@ -78,13 +78,13 @@ class EpisodeTileConnector extends StatelessWidget {
 
   Function getEpisodeAction(BuildContext context, Episode episode) {
     final Map<EpisodeStatus, Function> actions = <EpisodeStatus, Function>{
-      EpisodeStatus.DELETED: () { onEpisodeDownload(context, episode); },
+      EpisodeStatus.DELETED: () { onEpisodeDownload(episode, context: context); },
       EpisodeStatus.DOWNLOADED: () { onEpisodePlay(episode); },
       EpisodeStatus.DOWNLOADING: null,
-      EpisodeStatus.NONE: () { onEpisodeDownload(context, episode); },
+      EpisodeStatus.NONE: () { onEpisodeDownload(episode, context: context); },
       EpisodeStatus.PAUSED: () { onEpisodePlay(episode); },
       EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
-      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
+      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode, context: context); },
     };
     return actions[episode.status];
   }
@@ -109,14 +109,14 @@ class EpisodeTileConnector extends StatelessWidget {
     return null;
   }
 
-  void onEpisodeDelete(Episode episode) {
+  void onEpisodeDelete(Episode episode, { BuildContext context }) {
     final App app = App();
-    app.store.dispatch(deleteEpisode(episode));
+    app.store.dispatch(deleteEpisode(episode, context: context));
   }
 
-  void onEpisodeDownload(BuildContext context, Episode episode) {
+  void onEpisodeDownload(Episode episode, { BuildContext context }) {
     final App app = App();
-    app.store.dispatch(downloadEpisode(context, episode));
+    app.store.dispatch(downloadEpisode(episode, context: context));
   }
 
   void onEpisodePause(Episode episode) {

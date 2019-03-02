@@ -63,6 +63,8 @@ class App {
     downloadsPath = await getApplicationDownloadsPath();
     await Directory(downloadsPath).create(recursive: true);
 
+    initConnectivityListener();
+
     await initModels();
 
     await initNotifications();

@@ -60,7 +60,7 @@ class EpisodesListState extends State<EpisodesList> {
                             onBatchDownload(getSelectedEpisodes(), context: context);
                           }
                           else if(selectedAction == ActionType.DELETE_EPISODE) {
-                            onBatchDelete(getSelectedEpisodes());
+                            onBatchDelete(getSelectedEpisodes(), context: context);
                           }
                           clearSelections();
                         },
@@ -146,8 +146,8 @@ class EpisodesListState extends State<EpisodesList> {
     app.store.dispatch(batchDownload(episodes, context: context));
   }
 
-  void onBatchDelete(List<Episode> episodes) {
+  void onBatchDelete(List<Episode> episodes, { BuildContext context }) {
     final App app = App();
-    app.store.dispatch(batchDelete(episodes));
+    app.store.dispatch(batchDelete(episodes, context: context));
   }
 }

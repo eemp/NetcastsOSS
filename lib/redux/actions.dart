@@ -320,15 +320,17 @@ ThunkAction<AppState> clearEpisode([Episode episode]) {
   };
 }
 
-ThunkAction<AppState> batchDelete(List<Episode> episodes) {
+ThunkAction<AppState> batchDelete(List<Episode> episodes, { BuildContext context }) {
   return (Store<AppState> store) async {
     for(Episode episode in episodes) {
       store.dispatch(deleteEpisode(episode));
     }
+
+    showBatchEpisodeDeleteNotification(context, episodes);
   };
 }
 
-ThunkAction<AppState> deleteEpisode(Episode episode) {
+ThunkAction<AppState> deleteEpisode(Episode episode, { BuildContext context }) {
   return (Store<AppState> store) async {
     if(episode.url == store.state.playingEpisode) {
       store.dispatch(clearEpisode(episode));
@@ -336,6 +338,8 @@ ThunkAction<AppState> deleteEpisode(Episode episode) {
 
     await episode_helpers.deleteEpisode(episode);
     store.dispatch(removeEpisode(episode));
+
+    showEpisodeDeleteNotification(context, episode);
   };
 }
 

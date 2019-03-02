@@ -41,7 +41,7 @@ class EpisodePage extends StatelessWidget {
             Container(
               child: EpisodeHome(
                 episode: episode,
-                onDelete: onDelete,
+                onDelete: deleteHandler(context),
                 onDownload: downloadHandler(context),
                 onFavorite: onFavorite,
                 onFinish: onFinish,
@@ -73,9 +73,12 @@ class EpisodePage extends StatelessWidget {
     };
   }
 
-  void onDelete() {
+  Function deleteHandler(BuildContext context) {
     final App app = App();
-    app.store.dispatch(deleteEpisode(episode));
+
+    return () {
+      app.store.dispatch(deleteEpisode(episode, context: context));
+    };
   }
 
   void onFavorite() {

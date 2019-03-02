@@ -84,7 +84,7 @@ class EpisodeTileConnector extends StatelessWidget {
       EpisodeStatus.NONE: () { onEpisodeDownload(episode, context: context); },
       EpisodeStatus.PAUSED: () { onEpisodePlay(episode); },
       EpisodeStatus.PLAYING: () { onEpisodePause(episode); },
-      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode); },
+      EpisodeStatus.PLAYED: () { onEpisodeDelete(episode, context: context); },
     };
     return actions[episode.status];
   }
@@ -109,9 +109,9 @@ class EpisodeTileConnector extends StatelessWidget {
     return null;
   }
 
-  void onEpisodeDelete(Episode episode) {
+  void onEpisodeDelete(Episode episode, { BuildContext context }) {
     final App app = App();
-    app.store.dispatch(deleteEpisode(episode));
+    app.store.dispatch(deleteEpisode(episode, context: context));
   }
 
   void onEpisodeDownload(Episode episode, { BuildContext context }) {

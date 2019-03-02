@@ -69,7 +69,7 @@ class EpisodePage extends StatelessWidget {
     final App app = App();
 
     return () {
-      app.store.dispatch(downloadEpisode(context, episode));
+      app.store.dispatch(downloadEpisode(episode, context: context));
     };
   }
 

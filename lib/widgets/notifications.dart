@@ -4,6 +4,10 @@ import 'package:flushbar/flushbar.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 
 void showNoConnectivityNotification(BuildContext context) {
+  if(context == null) {
+    return;
+  }
+
   // ignore: always_specify_types
   Flushbar()
     ..backgroundColor = Theme.of(context).accentColor
@@ -14,6 +18,10 @@ void showNoConnectivityNotification(BuildContext context) {
 }
 
 void showNoWifiNotification(BuildContext context) {
+  if(context == null) {
+    return;
+  }
+
   // ignore: always_specify_types
   Flushbar()
     ..backgroundColor = Theme.of(context).accentColor

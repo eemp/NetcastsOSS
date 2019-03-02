@@ -348,21 +348,24 @@ Action removeEpisode(Episode episode) {
   );
 }
 
-ThunkAction<AppState> batchDownload(BuildContext context, List<Episode> episodes) {
+ThunkAction<AppState> batchDownload(List<Episode> episodes, { BuildContext context }) {
   return (Store<AppState> store) async {
+    final bool connectivityIsAvailable = connectivityCheck(store.state.connectivity, store.state.settings, context: context);
+    if(!connectivityIsAvailable) {
+      return;
+    }
+
     for(Episode episode in episodes) {
-      store.dispatch(downloadEpisode(context, episode));
+      store.dispatch(downloadEpisode(episode, context: context));
     }
   };
 }
 
-ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {
+ThunkAction<AppState> downloadEpisode(Episode episode, { BuildContext context }) {
   return (Store<AppState> store) async {
-    if(store.state.connectivity == ConnectivityResult.none) {
-      return showNoConnectivityNotification(context);
-    }
-    else if(store.state.settings.wifiSetting && store.state.connectivity != ConnectivityResult.wifi) {
-      return showNoWifiNotification(context);
+    final bool connectivityIsAvailable = connectivityCheck(store.state.connectivity, store.state.settings, context: context);
+    if(!connectivityIsAvailable) {
+      return;
     }
 
     store.dispatch(queueDownload(episode));
@@ -387,6 +390,18 @@ ThunkAction<AppState> downloadEpisode(BuildContext context, Episode episode) {
     final List<dynamic> throttledUpdateArgs = <dynamic>[ EpisodeStatus.DOWNLOADED, 1.0 ];
     throttledStatusUpdate(throttledUpdateArgs);
   };
+}
+
+bool connectivityCheck(ConnectivityResult currentConnectivity, AppSettings settings, { BuildContext context }) {
+  if(currentConnectivity == ConnectivityResult.none) {
+    showNoConnectivityNotification(context);
+    return false;
+  }
+  else if(settings.wifiSetting && currentConnectivity != ConnectivityResult.wifi) {
+    showNoWifiNotification(context);
+    return false;
+  }
+  return true;
 }
 
 Action queueDownload(Episode download) {

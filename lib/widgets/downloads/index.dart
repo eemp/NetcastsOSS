@@ -10,6 +10,8 @@ import 'package:hear2learn/widgets/common/episode_list.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 
 class DownloadPage extends StatelessWidget {
+  static const String routeName = 'DownloadPage';
+
   final App app = App();
 
   @override

@@ -18,6 +18,8 @@ const String COMEDY_GENRE_ID = '1303';
 const String BUSINESS_GENRE_ID = '1321';
 
 class Home extends StatelessWidget {
+  static const String routeName = 'Home';
+
   final Future<List<Widget>> fallbackShowcases = getFallbackHomepageLists();
   final Future<List<Widget>> showcases = getHomepageLists();
 
@@ -90,6 +92,7 @@ class Home extends StatelessWidget {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) => SubscriptionsPage(),
+                  settings: const RouteSettings(name: SubscriptionsPage.routeName),
                 ),
               );
             }

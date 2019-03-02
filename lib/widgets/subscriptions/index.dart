@@ -13,6 +13,8 @@ import 'package:hear2learn/widgets/common/with_fade_in_image.dart';
 import 'package:hear2learn/widgets/podcast/index.dart';
 
 class SubscriptionsPage extends StatelessWidget {
+  static const String routeName = 'SubscriptionsPage';
+
   final App app = App();
 
   @override
@@ -45,7 +47,8 @@ class SubscriptionsPage extends StatelessWidget {
                               directToEpisodes: true,
                               image: image,
                               podcast: podcast,
-                            )
+                            ),
+                            settings: const RouteSettings(name: PodcastPage.routeName),
                           ),
                         );
                       },

@@ -12,6 +12,8 @@ import 'package:hear2learn/widgets/podcast/index.dart';
 const int MAX_SHOWCASE_LIST_SIZE = 20;
 
 class PodcastSearch extends StatefulWidget {
+  static const String routeName = 'PodcastSearch';
+
   @override
   PodcastSearchState createState() => PodcastSearchState();
 }
@@ -133,10 +135,13 @@ class PodcastSearchState extends State<PodcastSearch> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
-                            image: image,
-                            podcast: podcast,
-                          )),
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => PodcastPage(
+                              image: image,
+                              podcast: podcast,
+                            ),
+                            settings: const RouteSettings(name: PodcastPage.routeName),
+                          ),
                         );
                       },
                       subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),

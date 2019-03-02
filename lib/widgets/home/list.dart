@@ -34,11 +34,14 @@ class HomepageList extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute<void>(builder: (BuildContext context) => PodcastPage(
-              directToEpisodes: directToEpisodes,
-              image: image,
-              podcast: podcast,
-            )),
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => PodcastPage(
+                directToEpisodes: directToEpisodes,
+                image: image,
+                podcast: podcast,
+              ),
+              settings: const RouteSettings(name: PodcastPage.routeName),
+            ),
           );
         },
         title: podcast.name,

@@ -10,6 +10,8 @@ import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
 class Settings extends StatelessWidget {
+  static const String routeName = 'Settings';
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 

@@ -45,7 +45,10 @@ class BottomAppBarPlayer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: episode)),
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => EpisodePage(episode: episode),
+                    settings: const RouteSettings(name: EpisodePage.routeName),
+                  ),
                 );
               },
               subtitle: Text(episode.podcastTitle),

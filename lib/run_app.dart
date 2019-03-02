@@ -11,7 +11,7 @@ import 'package:hear2learn/themes.dart';
 import 'package:hear2learn/widgets/home/index.dart';
 import 'package:redux/redux.dart';
 
-Future<void> start() async {
+Future<void> start({ List<NavigatorObserver> navigatorObservers }) async {
   final App app = App();
 
   app.store.dispatch(updateConnectivity);
@@ -21,8 +21,10 @@ Future<void> start() async {
 
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
 
+  navigatorObservers ??= <NavigatorObserver>[];
   runApp(
     AppWidget(
+      navigatorObservers: navigatorObservers,
       store: app.store,
       title: app.packageInfo.appName,
     )
@@ -30,11 +32,13 @@ Future<void> start() async {
 }
 
 class AppWidget extends StatelessWidget {
+  final List<NavigatorObserver> navigatorObservers;
   final Store<AppState> store;
   final String title;
 
   const AppWidget({
     Key key,
+    this.navigatorObservers,
     this.store,
     this.title
   }) : super(key: key);
@@ -48,9 +52,10 @@ class AppWidget extends StatelessWidget {
         return StoreProvider<AppState>(
           store: store,
           child: MaterialApp(
-            title: title,
             home: Home(),
+            navigatorObservers: navigatorObservers,
             theme: theme,
+            title: title,
           ),
         );
       },

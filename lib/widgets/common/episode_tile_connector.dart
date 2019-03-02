@@ -42,7 +42,10 @@ class EpisodeTileConnector extends StatelessWidget {
       onTap: selectOnTap ? () => toggleEpisodeSelection(episode) : () {
         Navigator.push(
           context,
-          MaterialPageRoute<void>(builder: (BuildContext context) => EpisodePage(episode: episode)),
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => EpisodePage(episode: episode),
+            settings: const RouteSettings(name: EpisodePage.routeName),
+          ),
         );
       },
       onLongPress: () => toggleEpisodeSelection(episode),

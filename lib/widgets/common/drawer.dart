@@ -36,7 +36,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => Home()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => Home(),
+                  settings: const RouteSettings(name: Home.routeName),
+                ),
               );
             },
             title: const Text('Home'),
@@ -46,7 +49,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => PodcastSearch()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => PodcastSearch(),
+                  settings: const RouteSettings(name: PodcastSearch.routeName),
+                ),
               );
             },
             title: const Text('Explore'),
@@ -57,7 +63,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => SubscriptionsPage()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => SubscriptionsPage(),
+                  settings: const RouteSettings(name: SubscriptionsPage.routeName),
+                ),
               );
             },
             title: const Text(LIBRARY_LABEL),
@@ -67,7 +76,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => DownloadPage()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => DownloadPage(),
+                  settings: const RouteSettings(name: DownloadPage.routeName),
+                ),
               );
             },
             title: const Text('Downloads'),
@@ -77,7 +89,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => FavoritePage()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => FavoritePage(),
+                  settings: const RouteSettings(name: FavoritePage.routeName),
+                ),
               );
             },
             title: const Text('Favorites'),
@@ -88,7 +103,10 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(builder: (BuildContext context) => Settings()),
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => Settings(),
+                  settings: const RouteSettings(name: Settings.routeName),
+                ),
               );
             },
             title: const Text('Settings'),

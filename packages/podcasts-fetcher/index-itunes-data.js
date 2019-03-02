@@ -73,6 +73,10 @@ function getRecordFromResult(scanOffset, result, idx) {
     id: result.trackId,
     name: result.trackName,
     popularity: scanOffset + idx,
+    primary_genre: {
+      id: _.get(result, 'genreIds[0]'),
+      name: _.get(result, 'genres[0]',
+    },
     release_date: result.releaseDate,
     type: PODCAST_MEDIA,
   };

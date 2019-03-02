@@ -8,6 +8,8 @@ import 'package:hear2learn/widgets/episode/home.dart';
 import 'package:share/share.dart';
 
 class EpisodePage extends StatelessWidget {
+  static const String routeName = 'EpisodePage';
+
   final Episode episode;
 
   const EpisodePage({

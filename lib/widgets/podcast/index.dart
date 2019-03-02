@@ -16,6 +16,8 @@ import 'package:share/share.dart';
 
 // ignore: must_be_immutable
 class PodcastPage extends StatelessWidget {
+  static const String routeName = 'PodcastPage';
+
   final bool directToEpisodes;
   final Widget image;
   final Podcast podcast;

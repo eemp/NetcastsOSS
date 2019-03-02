@@ -1,4 +1,4 @@
-package io.eemp.hear2learn;
+package io.eemp.netcastsOSS;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

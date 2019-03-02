@@ -24,7 +24,10 @@ void showNoWifiNotification(BuildContext context) {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute<void>(builder: (BuildContext context) => Settings()),
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => Settings(),
+            settings: const RouteSettings(name: Settings.routeName),
+          ),
         );
       }
     )

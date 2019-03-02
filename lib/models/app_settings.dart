@@ -11,7 +11,7 @@ class AppSettings {
   bool wifiSetting;
 
   AppSettings({
-    this.privacySetting = false,
+    this.privacySetting = true,
     this.skipSilence = false,
     this.speed = 1.0,
     this.themeName = 'Dark',
@@ -20,7 +20,7 @@ class AppSettings {
 
   AppSettings.prefs() {
     final App app = App();
-    privacySetting = app.prefs.getBool('privacySetting') ?? false;
+    privacySetting = app.prefs.getBool('privacySetting') ?? true;
     skipSilence = app.prefs.getBool('skipSilence') ?? false;
     speed = app.prefs.getDouble('speed') ?? 1.0;
     themeName = app.prefs.getString('themeName') ?? 'Dark';

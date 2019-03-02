@@ -28,7 +28,7 @@ Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
           { 'exists': { 'field': 'feed' } },
           {
             'term': {
-              'genres.id': genreId,
+              'primary_genre.id': genreId,
             }
           }
         ]

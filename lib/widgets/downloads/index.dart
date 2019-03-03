@@ -7,8 +7,7 @@ import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
-// import 'package:hear2learn/widgets/common/episode_list.dart';
-import 'package:hear2learn/widgets/common/episode_list_multi.dart';
+import 'package:hear2learn/widgets/common/episode_list.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 
 class DownloadPage extends StatelessWidget {

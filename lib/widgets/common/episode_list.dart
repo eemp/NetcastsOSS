@@ -8,10 +8,12 @@ import 'package:hear2learn/widgets/common/episode_tile_connector.dart';
 
 class EpisodesList extends StatefulWidget {
   final List<Episode> episodes;
+  final List<ActionType> availableActions;
 
   const EpisodesList({
     Key key,
     this.episodes,
+    this.availableActions,
   }) : super(key: key);
 
   @override
@@ -20,15 +22,17 @@ class EpisodesList extends StatefulWidget {
 
 class EpisodesListState extends State<EpisodesList> {
   List<Episode> get episodes => widget.episodes;
+  List<ActionType> get availableActions => widget.availableActions;
 
-  ActionType selectedAction;
   Map<Episode, bool> selectedEpisodes;
+  List<ActionType> visibleActions;
 
   @override
   void initState() {
     super.initState();
     // ignore: prefer_collection_literals
     selectedEpisodes = Map<Episode, bool>();
+    visibleActions = <ActionType>[];
   }
 
   @override
@@ -48,24 +52,50 @@ class EpisodesListState extends State<EpisodesList> {
                   ),
                   const Text('Finish selecting episodes'),
                   Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          selectedAction == ActionType.DELETE_EPISODE
-                            ? Icons.delete
-                            : Icons.get_app
-                        ),
-                        onPressed: () {
-                          if(selectedAction == ActionType.DOWNLOAD_EPISODE) {
-                            onBatchDownload(getSelectedEpisodes(), context: context);
-                          }
-                          else if(selectedAction == ActionType.DELETE_EPISODE) {
-                            onBatchDelete(getSelectedEpisodes(), context: context);
-                          }
-                          clearSelections();
-                        },
-                      ),
-                    ],
+                    children: visibleActions.map(
+                      (ActionType action) {
+                        Icon icon;
+                        switch (action) {
+                          case ActionType.DELETE_EPISODE:
+                            icon = const Icon(Icons.delete);
+                            break;
+                          case ActionType.DOWNLOAD_EPISODE:
+                            icon = const Icon(Icons.get_app);
+                            break;
+                          case ActionType.FINISH_EPISODE:
+                            icon = const Icon(Icons.done);
+                            break;
+                          case ActionType.UNFINISH_EPISODE:
+                            icon = const Icon(Icons.done_outline);
+                            break;
+                          default:
+                            icon = const Icon(Icons.broken_image);
+                            break;
+                        }
+                        return IconButton(
+                          icon: icon,
+                          onPressed: () {
+                            switch (action) {
+                              case ActionType.DELETE_EPISODE:
+                                onBatchDelete(getSelectedEpisodes(), context: context);
+                                break;
+                              case ActionType.DOWNLOAD_EPISODE:
+                                onBatchDownload(getSelectedEpisodes(), context: context);
+                                break;
+                              case ActionType.FINISH_EPISODE:
+                                onBatchFinish(getSelectedEpisodes());
+                                break;
+                              case ActionType.UNFINISH_EPISODE:
+                                onBatchUnfinish(getSelectedEpisodes());
+                                break;
+                              default:
+                                break;
+                            }
+                            clearSelections();
+                          },
+                        );
+                      }
+                    ).toList(),
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                 ],
@@ -97,57 +127,100 @@ class EpisodesListState extends State<EpisodesList> {
     );
   }
 
-  void toggleEpisodeSelection(Episode episode) {
+  bool canDeleteEpisode(Episode episode) {
+    return !canDownloadEpisode(episode);
+  }
+
+  bool canDownloadEpisode(Episode episode) {
+    return dash.isEmpty(episode.downloadPath);
+  }
+
+  bool canFinishEpisode(Episode episode) {
+    return !episode.isFinished;
+  }
+
+  bool canUnfinishEpisode(Episode episode) {
+    return episode.isFinished;
+  }
+  
+  void clearSelections() {
     setState(() {
-      if(isAvailableForBatchAction(episode)) {
-        selectedEpisodes.update(episode, (bool value) => !value, ifAbsent: () => true);
-        selectedAction = !inSelectMode()
-          ? null
-          : dash.isNotEmpty(episode.downloadPath)
-            ? ActionType.DELETE_EPISODE
-            : ActionType.DOWNLOAD_EPISODE
-          ;
-      }
+      selectedEpisodes.clear();
     });
   }
 
-  bool isAvailableForBatchAction(Episode episode) {
-    if(episode.status == EpisodeStatus.DOWNLOADING) {
-      return false;
-    }
+  List<Episode> getSelectedEpisodes({ Map<Episode, bool> episodes }) {
+    final Map<Episode, bool> episodesToUse = episodes == null ? selectedEpisodes : episodes;
+    return episodesToUse.keys.where((Episode episode) => selectedEpisodes[episode]).toList();
+  }
 
-    if(selectedAction == ActionType.DOWNLOAD_EPISODE) {
-      return dash.isEmpty(episode.downloadPath);
+  bool isAvailableForBatchAction(Episode episode) {
+    // Episode can be selected if no other episodes are selected, or if one of the available actions remaining can be applied to it
+    if (getSelectedEpisodes().isEmpty) {
+      return true;
     }
-    if(selectedAction == ActionType.DELETE_EPISODE) {
-      return dash.isNotEmpty(episode.downloadPath);
-    }
-    // else no selection made yet
-    return true;
+    return visibleActions.where((ActionType action) {
+      switch (action) {
+        case ActionType.DELETE_EPISODE:
+          return canDeleteEpisode(episode);
+        case ActionType.DOWNLOAD_EPISODE:
+          return canDownloadEpisode(episode);
+        case ActionType.FINISH_EPISODE:
+          return canFinishEpisode(episode);
+        case ActionType.UNFINISH_EPISODE:
+          return canUnfinishEpisode(episode);
+        default:
+          return false;
+      }
+    }).isNotEmpty;
   }
 
   bool inSelectMode() {
     return dash.find(selectedEpisodes.values.toList(), (bool val) => val) ?? false;
   }
 
-  List<Episode> getSelectedEpisodes() {
-    return selectedEpisodes.keys.where((Episode episode) => selectedEpisodes[episode]).toList();
+  void onBatchDelete(List<Episode> episodes, { BuildContext context }) {
+    final App app = App();
+    app.store.dispatch(batchDelete(episodes, context: context));
   }
-
-  void clearSelections() {
-    setState(() {
-      selectedAction = null;
-      selectedEpisodes.clear();
-    });
-  }
-
+  
   void onBatchDownload(List<Episode> episodes, { BuildContext context }) {
     final App app = App();
     app.store.dispatch(batchDownload(episodes, context: context));
   }
 
-  void onBatchDelete(List<Episode> episodes, { BuildContext context }) {
+  void onBatchFinish(List<Episode> episodes, { BuildContext context }) {
     final App app = App();
-    app.store.dispatch(batchDelete(episodes, context: context));
+    app.store.dispatch(batchFinish(episodes));
+  }
+
+  void onBatchUnfinish(List<Episode> episodes, { BuildContext context }) {
+    final App app = App();
+    app.store.dispatch(batchUnfinish(episodes));
+  }
+
+  void toggleEpisodeSelection(Episode episode) {
+    setState(() {
+      if(isAvailableForBatchAction(episode)) {
+        selectedEpisodes.update(episode, (bool value) => !value, ifAbsent: () => true);
+        final List<Episode> episodes = getSelectedEpisodes(episodes: selectedEpisodes);
+        visibleActions = availableActions.where(
+          (ActionType action) {
+            switch (action) {
+              case ActionType.DELETE_EPISODE:
+                return episodes.where(canDownloadEpisode).toList().isEmpty;
+              case ActionType.DOWNLOAD_EPISODE:
+                return episodes.where(canDeleteEpisode).toList().isEmpty;
+              case ActionType.FINISH_EPISODE:
+                return episodes.where(canUnfinishEpisode).toList().isEmpty;
+              case ActionType.UNFINISH_EPISODE:
+                return episodes.where(canFinishEpisode).toList().isEmpty;
+              default:
+                return false;
+            }
+          }
+        ).toList();
+      }
+    });
   }
 }

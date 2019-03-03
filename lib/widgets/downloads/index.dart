@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
+import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
-import 'package:hear2learn/widgets/common/episode_list.dart';
+// import 'package:hear2learn/widgets/common/episode_list.dart';
+import 'package:hear2learn/widgets/common/episode_list_multi.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 
 class DownloadPage extends StatelessWidget {
@@ -33,6 +35,7 @@ class DownloadPage extends StatelessWidget {
 
           return EpisodesList(
             episodes: downloads,
+            availableActions: const <ActionType> [ActionType.DELETE_EPISODE, ActionType.FINISH_EPISODE, ActionType.UNFINISH_EPISODE],
           );
         },
       ),

@@ -214,6 +214,14 @@ ThunkAction<AppState> unfavoriteEpisode(Episode episode) {
   };
 }
 
+ThunkAction<AppState> batchFinish(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(finishEpisode(episode));
+    }
+  };
+}
+
 ThunkAction<AppState> finishEpisode(Episode episode) {
   return (Store<AppState> store) async {
     await episode_helpers.finishEpisode(episode);
@@ -223,6 +231,14 @@ ThunkAction<AppState> finishEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+  };
+}
+
+ThunkAction<AppState> batchUnfinish(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(unfinishEpisode(episode));
+    }
   };
 }
 

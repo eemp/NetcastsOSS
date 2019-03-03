@@ -190,6 +190,14 @@ Action setEpisodePosition(Duration position) {
   );
 }
 
+ThunkAction<AppState> batchFavorite(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(favoriteEpisode(episode));
+    }
+  };
+}
+
 ThunkAction<AppState> favoriteEpisode(Episode episode) {
   return (Store<AppState> store) async {
     await episode_helpers.favoriteEpisode(episode);
@@ -199,6 +207,14 @@ ThunkAction<AppState> favoriteEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+  };
+}
+
+ThunkAction<AppState> batchUnfavorite(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(unfavoriteEpisode(episode));
+    }
   };
 }
 

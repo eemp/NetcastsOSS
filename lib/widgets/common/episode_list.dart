@@ -8,12 +8,10 @@ import 'package:hear2learn/widgets/common/episode_tile_connector.dart';
 
 class EpisodesList extends StatefulWidget {
   final List<Episode> episodes;
-  final List<ActionType> availableActions;
 
   const EpisodesList({
     Key key,
     this.episodes,
-    this.availableActions,
   }) : super(key: key);
 
   @override
@@ -22,7 +20,14 @@ class EpisodesList extends StatefulWidget {
 
 class EpisodesListState extends State<EpisodesList> {
   List<Episode> get episodes => widget.episodes;
-  List<ActionType> get availableActions => widget.availableActions;
+  List<ActionType> availableActions = [
+    ActionType.DOWNLOAD_EPISODE,
+    ActionType.DELETE_EPISODE,
+    ActionType.FAVORITE_EPISODE,
+    ActionType.FINISH_EPISODE,
+    ActionType.UNFAVORITE_EPISODE,
+    ActionType.UNFINISH_EPISODE,
+  ];
 
   Map<Episode, bool> selectedEpisodes;
   List<ActionType> visibleActions;
@@ -62,8 +67,14 @@ class EpisodesListState extends State<EpisodesList> {
                           case ActionType.DOWNLOAD_EPISODE:
                             icon = const Icon(Icons.get_app);
                             break;
+                          case ActionType.FAVORITE_EPISODE:
+                            icon = const Icon(Icons.favorite);
+                            break;
                           case ActionType.FINISH_EPISODE:
                             icon = const Icon(Icons.done);
+                            break;
+                          case ActionType.UNFAVORITE_EPISODE:
+                            icon = const Icon(Icons.favorite_border);
                             break;
                           case ActionType.UNFINISH_EPISODE:
                             icon = const Icon(Icons.done_outline);
@@ -82,8 +93,14 @@ class EpisodesListState extends State<EpisodesList> {
                               case ActionType.DOWNLOAD_EPISODE:
                                 onBatchDownload(getSelectedEpisodes(), context: context);
                                 break;
+                              case ActionType.FAVORITE_EPISODE:
+                                onBatchFavorite(getSelectedEpisodes());
+                                break;
                               case ActionType.FINISH_EPISODE:
                                 onBatchFinish(getSelectedEpisodes());
+                                break;
+                              case ActionType.UNFAVORITE_EPISODE:
+                                onBatchUnfavorite(getSelectedEpisodes());
                                 break;
                               case ActionType.UNFINISH_EPISODE:
                                 onBatchUnfinish(getSelectedEpisodes());
@@ -189,11 +206,21 @@ class EpisodesListState extends State<EpisodesList> {
     app.store.dispatch(batchDownload(episodes, context: context));
   }
 
+  void onBatchFavorite(List<Episode> episodes) {
+    final App app = App();
+    app.store.dispatch(batchFavorite(episodes));
+  }
+
   void onBatchFinish(List<Episode> episodes, { BuildContext context }) {
     final App app = App();
     app.store.dispatch(batchFinish(episodes));
   }
 
+  void onBatchUnfavorite(List<Episode> episodes) {
+    final App app = App();
+    app.store.dispatch(batchUnfavorite(episodes));
+  }
+  
   void onBatchUnfinish(List<Episode> episodes, { BuildContext context }) {
     final App app = App();
     app.store.dispatch(batchUnfinish(episodes));

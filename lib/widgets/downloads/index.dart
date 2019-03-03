@@ -34,7 +34,6 @@ class DownloadPage extends StatelessWidget {
 
           return EpisodesList(
             episodes: downloads,
-            availableActions: const <ActionType> [ActionType.DELETE_EPISODE, ActionType.FINISH_EPISODE, ActionType.UNFINISH_EPISODE],
           );
         },
       ),

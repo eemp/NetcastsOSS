@@ -16,7 +16,6 @@ class PodcastEpisodesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return EpisodesList(
       episodes: episodes,
-      availableActions: const <ActionType> [ActionType.DOWNLOAD_EPISODE, ActionType.DELETE_EPISODE, ActionType.FINISH_EPISODE, ActionType.UNFINISH_EPISODE],
     );
   }
 }

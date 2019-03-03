@@ -34,7 +34,6 @@ class FavoritePage extends StatelessWidget {
 
           return EpisodesList(
             episodes: favorites,
-            availableActions: const <ActionType> [ActionType.DOWNLOAD_EPISODE, ActionType.DELETE_EPISODE, ActionType.FINISH_EPISODE, ActionType.UNFINISH_EPISODE],
           );
         },
       ),

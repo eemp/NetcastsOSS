@@ -42,9 +42,14 @@ List<Episode> queueSelector(Store<AppState> store) {
   final List<Episode> queue = selectors[episodeQueue] != null
     ? selectors[episodeQueue](store)
     : <Episode>[];
-  return List<Episode>.from(<Episode>[
-    playingEpisode,
-  ])..addAll(queue.where((Episode queuedEpisode) => queuedEpisode.url != playingEpisode.url));
+  return playingEpisode != null
+    ? (
+      List<Episode>.from(<Episode>[
+        playingEpisode,
+      ])..addAll(queue.where((Episode queuedEpisode) => queuedEpisode.url != playingEpisode.url))
+    )
+    : queue
+    ;
 }
 
 List<Episode> unplayedDownloadsSelector(Store<AppState> store) {

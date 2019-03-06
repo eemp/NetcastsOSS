@@ -8,10 +8,12 @@ import 'package:hear2learn/widgets/common/episode_tile_connector.dart';
 
 class EpisodesList extends StatefulWidget {
   final List<Episode> episodes;
+  final EpisodeQueue episodeQueue;
 
   const EpisodesList({
     Key key,
     this.episodes,
+    this.episodeQueue,
   }) : super(key: key);
 
   @override
@@ -20,6 +22,7 @@ class EpisodesList extends StatefulWidget {
 
 class EpisodesListState extends State<EpisodesList> {
   List<Episode> get episodes => widget.episodes;
+  EpisodeQueue get episodeQueue => widget.episodeQueue;
 
   ActionType selectedAction;
   Map<Episode, bool> selectedEpisodes;
@@ -85,6 +88,7 @@ class EpisodesListState extends State<EpisodesList> {
           final Episode episode = episodes[idx - 1];
           return EpisodeTileConnector(
             episode: episode,
+            episodeQueue: episodeQueue,
             isSelected: selectedEpisodes[episode] ?? false,
             selectOnTap: inSelectMode(),
             toggleEpisodeSelection: toggleEpisodeSelection,

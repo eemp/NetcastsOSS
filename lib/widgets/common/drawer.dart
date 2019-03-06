@@ -4,6 +4,7 @@ import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/widgets/downloads/index.dart';
 import 'package:hear2learn/widgets/favorites/index.dart';
 import 'package:hear2learn/widgets/home/index.dart';
+import 'package:hear2learn/widgets/queue/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
@@ -83,6 +84,19 @@ class AppDrawer extends StatelessWidget {
               );
             },
             title: const Text('Downloads'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.folder),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => QueuedListPage(),
+                  settings: const RouteSettings(name: QueuedListPage.routeName),
+                ),
+              );
+            },
+            title: const Text('Queue'),
           ),
           ListTile(
             leading: const Icon(Icons.favorite),

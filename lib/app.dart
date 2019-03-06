@@ -116,7 +116,7 @@ class App {
 
     //AudioPlayer.logEnabled = true;
     app.player.completionHandler = () {
-      store.dispatch(clearEpisode());
+      store.dispatch(completeEpisode());
     };
     app.player.durationHandler = (Duration duration) {
       final List<dynamic> throttledUpdateArgs = <dynamic>[ duration ];

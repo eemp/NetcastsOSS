@@ -15,6 +15,7 @@ class PodcastEpisodesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return EpisodesList(
       episodes: episodes,
+      episodeQueue: EpisodeQueue.PODCAST,
     );
   }
 }

@@ -12,6 +12,7 @@ import 'package:hear2learn/widgets/episode/index.dart';
 
 class EpisodeTileConnector extends StatelessWidget {
   final Episode episode;
+  final EpisodeQueue episodeQueue;
   final bool isSelected;
   final bool selectOnTap;
   final Function subtitleProvider;
@@ -20,6 +21,7 @@ class EpisodeTileConnector extends StatelessWidget {
   const EpisodeTileConnector({
     Key key,
     this.episode,
+    this.episodeQueue,
     this.isSelected,
     this.selectOnTap,
     this.subtitleProvider,
@@ -126,7 +128,7 @@ class EpisodeTileConnector extends StatelessWidget {
 
   void onEpisodePlay(Episode episode) {
     final App app = App();
-    app.store.dispatch(playEpisode(episode));
+    app.store.dispatch(playEpisode(episode, episodeQueue: episodeQueue));
   }
 
   void onEpisodeResume() {

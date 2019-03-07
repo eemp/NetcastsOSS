@@ -34,8 +34,7 @@
 
 ## Roadmap
 
-* Playlists
-* Far better local notifications (blocked by: https://github.com/MaikuB/flutter_local_notifications/issues/17)
+* Better local notifications
 * Chromecast support
 * Allow development without requiring a datastore
 

@@ -29,13 +29,13 @@ ConnectivityResult connectivityReducer(ConnectivityResult state, dynamic action)
 
 String playingEpisodeReducer(String state, dynamic action) {
   switch(action.type) {
-    case ActionType.CLEAR_EPISODE:
+    case ActionType.COMPLETE_EPISODE:
       return '';
     case ActionType.DELETE_EPISODE:
       final Episode episode = action.payload['episode'];
       return episode.url == state ? '' : state;
     case ActionType.PLAY_EPISODE:
-      return action.payload['episode'].url;
+      return action.payload['episodeUrl'] ?? action.payload['episode'].url;
     case ActionType.RESUME_EPISODE:
       return state;
     default:
@@ -90,7 +90,7 @@ Map<String, Episode> userEpisodesReducer(AppState appState, dynamic action) {
           status: EpisodeStatus.DOWNLOADED,
         ),
       });
-    case ActionType.CLEAR_EPISODE:
+    case ActionType.COMPLETE_EPISODE:
       return Map<String, Episode>.from(state)..addAll(<String, Episode>{
         '${playingEpisode.url}': playingEpisode.copyWith(
           position: const Duration(),

@@ -45,7 +45,7 @@ class Settings extends StatelessWidget {
                 SwitchListTile(
                   onChanged: (bool wifiSetting) {
                     app.store.dispatch(
-                      updateSettings(context, settings.copyWith(
+                      updateSettings(settings.copyWith(
                         wifiSetting: wifiSetting,
                       ))
                     );
@@ -58,7 +58,7 @@ class Settings extends StatelessWidget {
                 SwitchListTile(
                   onChanged: (bool skipSilence) {
                     app.store.dispatch(
-                      updateSettings(context, settings.copyWith(
+                      updateSettings(settings.copyWith(
                         skipSilence: skipSilence,
                       ))
                     );
@@ -78,7 +78,7 @@ class Settings extends StatelessWidget {
                         )).toList(),
                         onChanged: (double speed) {
                           app.store.dispatch(
-                            updateSettings(context, settings.copyWith(
+                            updateSettings(settings.copyWith(
                               speed: speed,
                             ))
                           );
@@ -106,9 +106,9 @@ class Settings extends StatelessWidget {
                         )).toList(),
                         onChanged: (String themeName) {
                           app.store.dispatch(
-                            updateSettings(context, settings.copyWith(
+                            updateSettings(settings.copyWith(
                               themeName: themeName,
-                            ))
+                            ), context: context)
                           );
                         },
                         value: settings.themeName,
@@ -125,7 +125,7 @@ class Settings extends StatelessWidget {
                 SwitchListTile(
                   onChanged: (bool privacySetting) {
                     app.store.dispatch(
-                      updateSettings(context, settings.copyWith(
+                      updateSettings(settings.copyWith(
                         privacySetting: privacySetting,
                       ))
                     );

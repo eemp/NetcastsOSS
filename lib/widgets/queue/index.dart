@@ -9,8 +9,8 @@ import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/episode_list.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 
-class DownloadPage extends StatelessWidget {
-  static const String routeName = 'DownloadPage';
+class QueuedListPage extends StatelessWidget {
+  static const String routeName = 'QueuedListPage';
 
   final App app = App();
 
@@ -18,22 +18,21 @@ class DownloadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Downloads')
+        title: const Text('Queue')
       ),
       body: StoreConnector<AppState, List<Episode>>(
-        converter: downloadsSelector,
-        builder: (BuildContext context, List<Episode> downloads) {
-          if(downloads.isEmpty) {
+        converter: queueSelector,
+        builder: (BuildContext context, List<Episode> queue) {
+          if(queue.isEmpty) {
             return const PlaceholderScreen(
               icon: Icons.get_app,
-              subtitle: 'Download episodes and manage them here.',
-              title: 'No downloads available',
+              subtitle: 'Queue episodes via podcast episode list or downloads page, and manage them here.',
+              title: 'No queue selected yet',
             );
           }
 
           return EpisodesList(
-            episodes: downloads,
-            episodeQueue: EpisodeQueue.DOWNLOADS,
+            episodes: queue,
           );
         },
       ),

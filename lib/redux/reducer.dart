@@ -35,7 +35,7 @@ String playingEpisodeReducer(String state, dynamic action) {
       final Episode episode = action.payload['episode'];
       return episode.url == state ? '' : state;
     case ActionType.PLAY_EPISODE:
-      return action.payload['episode'].url;
+      return action.payload['episodeUrl'] ?? action.payload['episode'].url;
     case ActionType.RESUME_EPISODE:
       return state;
     default:

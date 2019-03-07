@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -64,31 +63,14 @@ class AppSettings {
 
   @override
   String toString() {
-    return 'AppSettings[wifiSetting=${wifiSetting.toString()}, skipSilence=${skipSilence.toString()}, speed=${speed.toString()}, privacySetting=${privacySetting.toString()}, themeName=$themeName]';
-  }
-
-  AppSettings fromJson(Map<String, dynamic> json) {
-    return AppSettings(
-      privacySetting: json['privacySetting'],
-      skipSilence: json['skipSilence'],
-      speed: json['speed'],
-      themeName: json['themeName'],
-      wifiSetting: json['wifiSetting'],
-    );
-  }
-
-  String toJson() {
-    return jsonEncode(<String, dynamic>{
-      'privacySetting': privacySetting,
-      'skipSilence': skipSilence,
-      'speed': speed,
-      'themeName': themeName,
-      'wifiSetting': wifiSetting,
-    });
+    return 'AppSettings[currentEpisode=$currentEpisode, currentPodcast=$currentPodcast, episodeQueue=${episodeQueue.toString()}, wifiSetting=${wifiSetting.toString()}, skipSilence=${skipSilence.toString()}, speed=${speed.toString()}, privacySetting=${privacySetting.toString()}, themeName=$themeName]';
   }
 
   Future<void> persistPreferences() async {
     final App app = App();
+    await app.prefs.setString('currentEpisode', currentEpisode);
+    await app.prefs.setString('currentPodcast', currentPodcast);
+    await app.prefs.setString('episodeQueue', episodeQueue.toString());
     await app.prefs.setBool('privacySetting', privacySetting);
     await app.prefs.setBool('skipSilence', skipSilence);
     await app.prefs.setDouble('speed', speed);

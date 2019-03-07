@@ -461,11 +461,19 @@ Action finishDownloadingEpisode(Episode episode) {
   );
 }
 
-Future<void> loadSettings(Store<AppState> store) async {
+void loadSettings(Store<AppState> store) {
   final AppSettings settings = AppSettings.prefs();
   store.dispatch(
     setSettings(settings)
   );
+  if(settings.currentEpisode != null) {
+    store.dispatch(Action(
+      type: ActionType.PLAY_EPISODE,
+      payload: <String, dynamic>{
+        'episodeUrl': settings.currentEpisode,
+      },
+    ));
+  }
 }
 
 ThunkAction<AppState> updateSettings(AppSettings settings, { BuildContext context }) {

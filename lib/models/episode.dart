@@ -14,6 +14,15 @@ enum EpisodeStatus {
   DELETED,
 }
 
+enum EpisodeQueue {
+  PODCAST,
+  DOWNLOADS,
+}
+
+EpisodeQueue episodeQueueFromString(String enumName) {
+  return EpisodeQueue.values.firstWhere((EpisodeQueue episodeQueue) => episodeQueue.toString() == enumName, orElse: () => null);
+}
+
 class Episode {
   final App app = App();
 

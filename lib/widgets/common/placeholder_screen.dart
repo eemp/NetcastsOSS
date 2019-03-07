@@ -33,7 +33,13 @@ class PlaceholderScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Text(title, style: Theme.of(context).textTheme.title),
-                  Text(subtitle, style: Theme.of(context).textTheme.subtitle),
+                  Container(
+                    child: Text(subtitle,
+                      style: Theme.of(context).textTheme.subtitle,
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                  ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
               ),

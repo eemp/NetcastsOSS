@@ -10,6 +10,7 @@ import 'package:hear2learn/helpers/podcast.dart' as podcast_helpers;
 import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
+import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/notifications.dart';
 import 'package:redux/redux.dart';
@@ -21,7 +22,7 @@ const String PLAY_BUTTON = '▶️';
 enum ActionType {
   UPDATE_CONNECTIVITY,
 
-  CLEAR_EPISODE,
+  COMPLETE_EPISODE,
   PAUSE_EPISODE,
   PLAY_EPISODE,
   RESUME_EPISODE,
@@ -80,9 +81,9 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
       callback: (String payload) {
         store.dispatch(resumeEpisode());
       },
-      content: getPlayingEpisode(store).title,
+      content: playingEpisodeSelector(store).title,
       payload: 'playAction',
-      title: getPlayingEpisode(store).podcastTitle,
+      title: playingEpisodeSelector(store).podcastTitle,
     );
 
     store.dispatch(Action(
@@ -94,7 +95,7 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
   };
 }
 
-ThunkAction<AppState> playEpisode(Episode episode) {
+ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }) {
   return (Store<AppState> store) async {
     final App app = App();
     final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
@@ -124,8 +125,29 @@ ThunkAction<AppState> playEpisode(Episode episode) {
         'episode': matchingEpisode,
       },
     ));
+
+    if(episodeQueue != null) {
+      store.dispatch(queuePlaylist(episodeQueue));
+    }
   };
 }
+
+ThunkAction<AppState> queuePlaylist(EpisodeQueue episodeQueue) {
+  return (Store<AppState> store) async {
+    final AppSettings settings = store.state.settings;
+    final Episode currentEpisode = playingEpisodeSelector(store);
+    store.dispatch(
+      updateSettings(settings.copyWith(
+        currentEpisode: currentEpisode.url,
+        currentPodcast: episodeQueue == EpisodeQueue.PODCAST
+          ? currentEpisode.podcastUrl
+          : null,
+        episodeQueue: episodeQueue,
+      ))
+    );
+  };
+}
+
 
 ThunkAction<AppState> resumeEpisode() {
   return (Store<AppState> store) async {
@@ -135,12 +157,12 @@ ThunkAction<AppState> resumeEpisode() {
     await app.createNotification(
       actionText: '$PAUSE_BUTTON Pause',
       callback: (String payload) {
-        store.dispatch(pauseEpisode(getPlayingEpisode(store)));
+        store.dispatch(pauseEpisode(playingEpisodeSelector(store)));
       },
-      content: getPlayingEpisode(store).title,
+      content: playingEpisodeSelector(store).title,
       isOngoing: true,
       payload: 'pauseAction',
-      title: getPlayingEpisode(store).podcastTitle,
+      title: playingEpisodeSelector(store).podcastTitle,
     );
 
     store.dispatch(Action(
@@ -162,7 +184,7 @@ Action seekInEpisode(Duration position) {
 
 ThunkAction<AppState> updateEpisodePosition(Duration position) {
   return (Store<AppState> store) async {
-    final Episode playingEpisode = getPlayingEpisode(store);
+    final Episode playingEpisode = playingEpisodeSelector(store);
     if(playingEpisode != null && position.inSeconds % 5 == 0) {
       await episode_helpers.updateEpisodePosition(playingEpisode, position);
       if(!playingEpisode.isFinished && playingEpisode.isPlayedToEnd()) {
@@ -171,14 +193,6 @@ ThunkAction<AppState> updateEpisodePosition(Duration position) {
     }
     store.dispatch(setEpisodePosition(position));
   };
-}
-
-Episode getPlayingEpisode(Store<AppState> store) {
-  final String playingEpisode = store.state.playingEpisode;
-  final Map<String, Episode> userEpisodes = store.state.userEpisodes;
-  return dash.isNotEmpty(playingEpisode)
-    ? userEpisodes[playingEpisode]
-    : null;
 }
 
 Action setEpisodePosition(Duration position) {
@@ -304,7 +318,7 @@ Action setDownloads(List<Episode> downloads) {
   );
 }
 
-ThunkAction<AppState> clearEpisode([Episode episode]) {
+ThunkAction<AppState> completeEpisode([Episode episode]) {
   final App app = App();
 
   return (Store<AppState> store) async {
@@ -314,8 +328,19 @@ ThunkAction<AppState> clearEpisode([Episode episode]) {
       app.player.stop();
       app.removeNotification();
       store.dispatch(Action(
-        type: ActionType.CLEAR_EPISODE,
+        type: ActionType.COMPLETE_EPISODE,
       ));
+      store.dispatch(playNextEpisodeInQueue());
+    }
+  };
+}
+
+ThunkAction<AppState> playNextEpisodeInQueue() {
+  return (Store<AppState> store) async {
+    final EpisodeQueue episodeQueue = store.state.settings.episodeQueue;
+    final List<Episode> queuedEpisodes = queueSelector(store);
+    if(queuedEpisodes.isNotEmpty) {
+      store.dispatch(playEpisode(queuedEpisodes[0], episodeQueue: episodeQueue));
     }
   };
 }
@@ -333,7 +358,7 @@ ThunkAction<AppState> batchDelete(List<Episode> episodes, { BuildContext context
 ThunkAction<AppState> deleteEpisode(Episode episode, { BuildContext context }) {
   return (Store<AppState> store) async {
     if(episode.url == store.state.playingEpisode) {
-      store.dispatch(clearEpisode(episode));
+      store.dispatch(completeEpisode(episode));
     }
 
     await episode_helpers.deleteEpisode(episode);
@@ -436,28 +461,38 @@ Action finishDownloadingEpisode(Episode episode) {
   );
 }
 
-Future<void> loadSettings(Store<AppState> store) async {
+void loadSettings(Store<AppState> store) {
   final AppSettings settings = AppSettings.prefs();
   store.dispatch(
     setSettings(settings)
   );
+  if(settings.currentEpisode != null) {
+    store.dispatch(Action(
+      type: ActionType.PLAY_EPISODE,
+      payload: <String, dynamic>{
+        'episodeUrl': settings.currentEpisode,
+      },
+    ));
+  }
 }
 
-ThunkAction<AppState> updateSettings(BuildContext context, AppSettings settings) {
+ThunkAction<AppState> updateSettings(AppSettings settings, { BuildContext context }) {
   return (Store<AppState> store) async {
-    onAppSettingsUpdate(context, settings);
+    onAppSettingsUpdate(settings, context: context);
     await settings.persistPreferences();
     store.dispatch(setSettings(settings));
   };
 }
 
-void onAppSettingsUpdate(BuildContext context, AppSettings newSettings) {
+void onAppSettingsUpdate(AppSettings newSettings, { BuildContext context }) {
   final App app = App();
-  DynamicTheme.of(context).setTheme(newSettings.themeName);
   app.player.setOptions(
     skipSilence: newSettings.skipSilence ?? false,
     speed: newSettings.speed ?? 1.0,
   );
+  if(context != null) {
+    DynamicTheme.of(context).setTheme(newSettings.themeName);
+  }
 }
 
 Action setSettings(AppSettings settings) {

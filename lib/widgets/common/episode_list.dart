@@ -24,7 +24,7 @@ class EpisodesListState extends State<EpisodesList> {
   List<Episode> get episodes => widget.episodes;
   EpisodeQueue get episodeQueue => widget.episodeQueue;
 
-  List<ActionType> availableActions = [
+  List<ActionType> availableActions = <ActionType>[
     ActionType.DOWNLOAD_EPISODE,
     ActionType.DELETE_EPISODE,
     ActionType.FAVORITE_EPISODE,

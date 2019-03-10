@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:hear2learn/models/episode.dart';
-import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/widgets/common/episode_list.dart';
 
 class PodcastEpisodesList extends StatelessWidget {

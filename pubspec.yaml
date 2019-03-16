@@ -30,7 +30,6 @@ dependencies:
   dio: ^1.0.13
   dynamic_theme:
     path: ./packages/dynamic_theme
-  firebase_analytics: ^2.0.2
   flushbar: ^1.2.1
   flutter_cache_manager: ^0.2.0
   flutter_html: ^0.8.2

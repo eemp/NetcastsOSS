@@ -194,6 +194,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  file:
+    dependency: transitive
+    description:
+      name: file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.7"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -227,6 +234,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+1"
+  flutter_driver:
+    dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_html:
     dependency: "direct main"
     description:
@@ -267,6 +279,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.6+9"
+  fuchsia_remote_debug_protocol:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   glob:
     dependency: transitive
     description:
@@ -491,6 +508,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   plugin:
     dependency: transitive
     description:
@@ -505,6 +529,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
+  process:
+    dependency: transitive
+    description:
+      name: process
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.9"
   pub_semver:
     dependency: transitive
     description:
@@ -540,6 +571,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
+  resource:
+    dependency: transitive
+    description:
+      name: resource
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.5"
+  screenshots:
+    dependency: "direct dev"
+    description:
+      name: screenshots
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.6"
   share:
     dependency: "direct main"
     description:

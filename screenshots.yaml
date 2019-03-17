@@ -1,9 +1,9 @@
 # Screen capture tests
 tests:
-  - test/home.dart
+  - test_driver/app.dart
 
 # Interim location of screenshots from tests
-staging: /tmp/screenshots
+staging: tmp/screenshots
 
 # A list of locales supported by the app
 locales:
@@ -12,7 +12,7 @@ locales:
 # A list of devices to emulate
 devices:
   android:
-    - Nexus 6P
+    - Nexus 5X
 
 # Frame screenshots
-# frame: true
+frame: false

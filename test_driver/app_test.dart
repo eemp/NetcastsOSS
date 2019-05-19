@@ -16,6 +16,7 @@ void main() {
     // Connect to the Flutter driver before running any tests
     setUpAll(() async {
       driver = await FlutterDriver.connect();
+      await Future.delayed(Duration(milliseconds: 10000));
     });
 
     // Close the connection to the driver after the tests have completed
@@ -25,11 +26,15 @@ void main() {
       }
     });
 
+    test('check flutter health driver', () async {
+      Health health = await driver.checkHealth();
+      print(health.status);
+    });
+
     test('home', () async {
-      final SerializableFinder scienceTextFinder = find.text('Science');
-      await driver.waitFor(scienceTextFinder);
+      final SerializableFinder homeFinder = find.text('Science');
+      await driver.waitFor(homeFinder);
       await screenshot(driver, config, 'home');
-      //expect(await driver.getText(scienceTextFinder), 'Science');
     });
   });
 }

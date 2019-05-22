@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:http/http.dart' as http;
 
 class ElasticsearchClient {
@@ -33,7 +34,7 @@ class ElasticsearchClient {
     ).timeout(const Duration(seconds: 5));
     final String responseBody = response.body;
 
-    return compute<String, ElasticsearchResponse>(parseResponse, responseBody);
+    return dash.compute<String, ElasticsearchResponse>(parseResponse, responseBody);
   }
 
   static String getPath(String index, String type, String route) {

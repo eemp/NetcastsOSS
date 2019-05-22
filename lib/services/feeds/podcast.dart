@@ -1,21 +1,22 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:webfeed/webfeed.dart';
 
 Future<Podcast> getPodcastFromFeed({ Podcast podcast, String url }) async {
   //final response = await http.get(url);
-  //RssFeed feed = await compute(parseFeed, response.body);
+  //RssFeed feed = await dash.compute(parseFeed, response.body);
   url = podcast?.feed ?? url;
 
   //CacheManager.showDebugLogs = true;
   final File file = await DefaultCacheManager().getSingleFile(url);
   final String feedContent = await file.readAsString();
-  final RssFeed feed = await compute(parseFeed, feedContent);
+  final RssFeed feed = await dash.compute(parseFeed, feedContent);
 
   final List<Episode> episodes = feed.items.map((RssItem item) => Episode(
     description: item.description,

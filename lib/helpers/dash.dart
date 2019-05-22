@@ -1,5 +1,24 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart' as flutter show compute;
+import 'package:flutter/foundation.dart' show ComputeCallback;
+
+bool get isInDebugMode {
+  bool inDebugMode = false;
+  assert(inDebugMode = true);
+  return inDebugMode;
+}
+
+// for more information on this hack, see https://github.com/flutter/flutter/issues/24703#issuecomment-473335593
+Future<R> compute<Q, R>(ComputeCallback<Q, R> callback, Q message) async {
+  if (isInDebugMode) {
+    return callback(message);
+  }
+
+  return await flutter.compute(callback, message);
+}
 
 dynamic apply(Function fn, [List<dynamic> args, Map<String, dynamic> namedArgs]) {
   return Function.apply(

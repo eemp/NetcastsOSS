@@ -13,8 +13,7 @@ Future<Podcast> getPodcastFromFeed({ Podcast podcast, String url }) async {
   url = podcast?.feed ?? url;
 
   //CacheManager.showDebugLogs = true;
-  final CacheManager cacheManager = await CacheManager.getInstance();
-  final File file = await cacheManager.getFile(url);
+  final File file = await DefaultCacheManager().getSingleFile(url);
   final String feedContent = await file.readAsString();
   final RssFeed feed = await compute(parseFeed, feedContent);
 

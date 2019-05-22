@@ -12,15 +12,15 @@ void showBatchEpisodeDeleteNotification(BuildContext context, List<Episode> epis
   }
 
   // ignore: always_specify_types
-  Flushbar()
-    ..backgroundColor = Theme.of(context).accentColor
-    ..titleText = Text('Deleted Episodes', style: Theme.of(context).accentTextTheme.title)
-    ..messageText = Text(
-        'Finished deleting ${episodes.length} total ${episodes.length > 1 ? "episodes" : "episode"}',
-        style: Theme.of(context).accentTextTheme.body1
-      )
-    ..duration = const Duration(seconds: DEFAULT_DURATION)
-    ..show(context);
+  Flushbar(
+    backgroundColor: Theme.of(context).accentColor,
+    titleText: Text('Deleted Episodes', style: Theme.of(context).accentTextTheme.title),
+    messageText: Text(
+      'Finished deleting ${episodes.length} total ${episodes.length > 1 ? "episodes" : "episode"}',
+      style: Theme.of(context).accentTextTheme.body1
+    ),
+    duration: const Duration(seconds: DEFAULT_DURATION),
+  )..show(context);
 }
 
 void showEpisodeDeleteNotification(BuildContext context, Episode episode) {
@@ -29,12 +29,12 @@ void showEpisodeDeleteNotification(BuildContext context, Episode episode) {
   }
 
   // ignore: always_specify_types
-  Flushbar()
-    ..backgroundColor = Theme.of(context).accentColor
-    ..titleText = Text('Deleted Episode', style: Theme.of(context).accentTextTheme.title)
-    ..messageText = Text('Finished deleting "${episode.title}"', style: Theme.of(context).accentTextTheme.body1)
-    ..duration = const Duration(seconds: DEFAULT_DURATION)
-    ..show(context);
+  Flushbar(
+    backgroundColor: Theme.of(context).accentColor,
+    titleText: Text('Deleted Episode', style: Theme.of(context).accentTextTheme.title),
+    messageText: Text('Finished deleting "${episode.title}"', style: Theme.of(context).accentTextTheme.body1),
+    duration: const Duration(seconds: DEFAULT_DURATION),
+  )..show(context);
 }
 
 void showNoConnectivityNotification(BuildContext context) {
@@ -43,12 +43,12 @@ void showNoConnectivityNotification(BuildContext context) {
   }
 
   // ignore: always_specify_types
-  Flushbar()
-    ..backgroundColor = Theme.of(context).accentColor
-    ..titleText = Text('No Connectivity', style: Theme.of(context).accentTextTheme.title)
-    ..messageText = Text('Please try again later when connectivity is available to download episodes', style: Theme.of(context).accentTextTheme.body1)
-    ..duration = const Duration(seconds: DEFAULT_DURATION)
-    ..show(context);
+  Flushbar(
+    backgroundColor: Theme.of(context).accentColor,
+    titleText: Text('No Connectivity', style: Theme.of(context).accentTextTheme.title),
+    messageText: Text('Please try again later when connectivity is available to download episodes', style: Theme.of(context).accentTextTheme.body1),
+    duration: const Duration(seconds: DEFAULT_DURATION),
+  )..show(context);
 }
 
 void showNoWifiNotification(BuildContext context) {
@@ -57,11 +57,11 @@ void showNoWifiNotification(BuildContext context) {
   }
 
   // ignore: always_specify_types
-  Flushbar()
-    ..backgroundColor = Theme.of(context).accentColor
-    ..titleText = Text('Wifi Unavailable', style: Theme.of(context).accentTextTheme.title)
-    ..messageText = Text('Please try again later or update app settings to download without wifi', style: Theme.of(context).accentTextTheme.body1)
-    ..mainButton = FlatButton(
+  Flushbar(
+    backgroundColor: Theme.of(context).accentColor,
+    titleText: Text('Wifi Unavailable', style: Theme.of(context).accentTextTheme.title),
+    messageText: Text('Please try again later or update app settings to download without wifi', style: Theme.of(context).accentTextTheme.body1),
+    mainButton: FlatButton(
       child: Text('Settings', style: Theme.of(context).accentTextTheme.button),
       onPressed: () {
         Navigator.push(
@@ -72,7 +72,7 @@ void showNoWifiNotification(BuildContext context) {
           ),
         );
       }
-    )
-    ..duration = const Duration(seconds: DEFAULT_DURATION)
-    ..show(context);
+    ),
+    duration: const Duration(seconds: DEFAULT_DURATION),
+  )..show(context);
 }

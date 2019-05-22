@@ -16,7 +16,7 @@ void main() {
     // Connect to the Flutter driver before running any tests
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      await Future.delayed(Duration(milliseconds: 10000));
+      await Future.delayed(Duration(milliseconds: 3000));
     });
 
     // Close the connection to the driver after the tests have completed
@@ -35,6 +35,23 @@ void main() {
       final SerializableFinder homeFinder = find.text('Science');
       await driver.waitFor(homeFinder);
       await screenshot(driver, config, 'home');
+
+      final SerializableFinder drawerButton = find.byTooltip('Open navigation menu');
+      await driver.tap(drawerButton);
+      await screenshot(driver, config, 'drawer');
+
+      final SerializableFinder exploreMenuOption = find.text('Explore');
+      await driver.tap(exploreMenuOption);
+      await screenshot(driver, config, 'explore');
+
+      final SerializableFinder podcastSearchField = find.byValueKey('podcast-search');
+      await driver.tap(podcastSearchField);
+      await driver.enterText('TED');
+      await driver.waitFor(find.text('TED'));
+      final SerializableFinder podcastSearchButton = find.byTooltip('Search for Podcasts');
+      await driver.tap(podcastSearchButton);
+      await driver.waitFor(find.text('TED Radio Hour'));
+      await screenshot(driver, config, 'explore-with-results');
     });
   });
 }

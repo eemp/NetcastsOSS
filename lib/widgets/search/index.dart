@@ -53,11 +53,12 @@ class PodcastSearchState extends State<PodcastSearch> {
           autofocus: true,
           controller: inputController,
           focusNode: inputFocus,
+          key: Key('podcast-search'),
           style: const TextStyle(
             color: Colors.white,
           ),
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.white),
+          decoration: InputDecoration(
+            prefixIcon: Icon(userQuery.isEmpty ? Icons.search : Icons.trending_flat, color: Colors.white),
             hintText: 'Search for podcasts...',
             hintStyle: TextStyle(color: Colors.white)
           ),
@@ -75,6 +76,15 @@ class PodcastSearchState extends State<PodcastSearch> {
         ),
         actions: userQuery.isNotEmpty
           ? <Widget>[
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  results = searchPodcastsByTextQuery(userQuery);
+                });
+              },
+              tooltip: 'Search for Podcasts',
+            ),
             IconButton(
               icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () {

@@ -204,24 +204,13 @@ Action setEpisodePosition(Duration position) {
   );
 }
 
-//Function generateThunkEpisodeAction(Function persistFn, ActionType actionType) {
-  //return (Episode episode) async {
-    //return (Store<AppState> store) async {
-      //await persistFn(episode);
-      //store.dispatch(
-        //Action(
-          //type: actionType,
-          //payload: <String, dynamic>{
-            //'episode': episode,
-          //},
-        //),
-      //);
-    //};
-  //};
-//}
-
-//ThunkAction<AppState> finishEpisode = generateThunkEpisodeAction(episode_helpers.finishEpisode, ActionType.FINISH_EPISODE);
-//ThunkAction<AppState> unfinishEpisode = generateThunkEpisodeAction(episode_helpers.unfinishEpisode, ActionType.UNFINISH_EPISODE);
+ThunkAction<AppState> batchFavorite(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(favoriteEpisode(episode));
+    }
+  };
+}
 
 ThunkAction<AppState> favoriteEpisode(Episode episode) {
   return (Store<AppState> store) async {
@@ -232,6 +221,14 @@ ThunkAction<AppState> favoriteEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+  };
+}
+
+ThunkAction<AppState> batchUnfavorite(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(unfavoriteEpisode(episode));
+    }
   };
 }
 
@@ -247,6 +244,14 @@ ThunkAction<AppState> unfavoriteEpisode(Episode episode) {
   };
 }
 
+ThunkAction<AppState> batchFinish(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(finishEpisode(episode));
+    }
+  };
+}
+
 ThunkAction<AppState> finishEpisode(Episode episode) {
   return (Store<AppState> store) async {
     await episode_helpers.finishEpisode(episode);
@@ -256,6 +261,14 @@ ThunkAction<AppState> finishEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+  };
+}
+
+ThunkAction<AppState> batchUnfinish(List<Episode> episodes) {
+  return (Store<AppState> store) async {
+    for(Episode episode in episodes) {
+      store.dispatch(unfinishEpisode(episode));
+    }
   };
 }
 

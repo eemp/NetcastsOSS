@@ -46,11 +46,11 @@ void main() {
 
       final SerializableFinder podcastSearchField = find.byValueKey('podcastSearch');
       await driver.tap(podcastSearchField);
-      await driver.enterText('TED');
-      await driver.waitFor(find.text('TED'));
+      await driver.enterText('infinite monkey');
+      await driver.waitFor(find.text('infinite monkey'));
       final SerializableFinder podcastSearchButton = find.byTooltip('Search for Podcasts');
       await driver.tap(podcastSearchButton);
-      final SerializableFinder podcastResult = find.text('TED Talks Daily');
+      final SerializableFinder podcastResult = find.text('The Infinite Monkey Cage');
       await driver.waitFor(podcastResult);
       await screenshot(driver, config, 'explore-with-results');
 

@@ -53,7 +53,7 @@ class PodcastSearchState extends State<PodcastSearch> {
           autofocus: true,
           controller: inputController,
           focusNode: inputFocus,
-          key: Key('podcast-search'),
+          key: Key('podcastSearch'),
           style: const TextStyle(
             color: Colors.white,
           ),

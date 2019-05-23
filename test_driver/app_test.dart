@@ -44,14 +44,23 @@ void main() {
       await driver.tap(exploreMenuOption);
       await screenshot(driver, config, 'explore');
 
-      final SerializableFinder podcastSearchField = find.byValueKey('podcast-search');
+      final SerializableFinder podcastSearchField = find.byValueKey('podcastSearch');
       await driver.tap(podcastSearchField);
       await driver.enterText('TED');
       await driver.waitFor(find.text('TED'));
       final SerializableFinder podcastSearchButton = find.byTooltip('Search for Podcasts');
       await driver.tap(podcastSearchButton);
-      await driver.waitFor(find.text('TED Radio Hour'));
+      final SerializableFinder podcastResult = find.text('TED Talks Daily');
+      await driver.waitFor(podcastResult);
       await screenshot(driver, config, 'explore-with-results');
+
+      await driver.tap(podcastResult);
+      await driver.waitFor(podcastResult);
+      await screenshot(driver, config, 'podcast');
+
+      final SerializableFinder episodesTab = find.text('Episodes');
+      await driver.tap(episodesTab);
+      await screenshot(driver, config, 'episodes');
     });
   });
 }

@@ -68,7 +68,7 @@ class Settings extends StatelessWidget {
                   value: settings.skipSilence,
                 ),
                 ListTile(
-                  trailing: InputDecorator(
+                  title: InputDecorator(
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<double>(
                         isDense: true,
@@ -96,7 +96,7 @@ class Settings extends StatelessWidget {
                 ),
                 const Divider(),
                 ListTile(
-                  trailing: InputDecorator(
+                  title: InputDecorator(
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isDense: true,

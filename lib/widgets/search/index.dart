@@ -53,14 +53,14 @@ class PodcastSearchState extends State<PodcastSearch> {
           autofocus: true,
           controller: inputController,
           focusNode: inputFocus,
-          key: Key('podcastSearch'),
+          key: const Key('podcastSearch'),
           style: const TextStyle(
             color: Colors.white,
           ),
           decoration: InputDecoration(
             prefixIcon: Icon(userQuery.isEmpty ? Icons.search : Icons.trending_flat, color: Colors.white),
             hintText: 'Search for podcasts...',
-            hintStyle: TextStyle(color: Colors.white)
+            hintStyle: const TextStyle(color: Colors.white)
           ),
           onChanged: (String text) {
             setState(() {

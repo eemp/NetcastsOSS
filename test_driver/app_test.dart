@@ -1,11 +1,11 @@
-// Imports the Flutter Driver API
+import 'dart:async';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:screenshots/config.dart';
 import 'package:screenshots/capture_screen.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final Map config = Config().config;
+  final Map<dynamic, dynamic> config = Config().config;
 
   group('Netcasts OSS App', () {
     // First, define the Finders. We can use these to locate Widgets from the
@@ -16,7 +16,7 @@ void main() {
     // Connect to the Flutter driver before running any tests
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      await Future.delayed(Duration(milliseconds: 3000));
+      await Future<void>.delayed(Duration(milliseconds: 3000));
     });
 
     // Close the connection to the driver after the tests have completed
@@ -27,7 +27,7 @@ void main() {
     });
 
     test('check flutter health driver', () async {
-      Health health = await driver.checkHealth();
+      final Health health = await driver.checkHealth();
       print(health.status);
     });
 

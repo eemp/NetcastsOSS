@@ -6,13 +6,13 @@
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/>
 </a>
 
-|Homepage|Drawer|Search|Podcast|
+|Homepage|Drawer|Explore|Discover|
 |-----|-----|-----|-----|
-|![Homepage](images/netcastsOSS_home.png)|![Drawer](images/netcastsOSS_drawer.png)|![Search](images/netcastsOSS_search.png)|![Podcast](images/netcastsOSS_podcast.png)
+|![Homepage](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-home.png)|![Drawer](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-drawer.png)|![Explore](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-explore.png)|![Discover](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-explore-with-results.png)
 
-|Episodes|Player|Library|Downloads|
+|Podcast|Episodes|Player|Settings|
 |-----|-----|-----|-----|
-|![Episodes](images/netcastsOSS_episodes.png)|![Player](images/netcastsOSS_player.png)|![Library](images/netcastsOSS_library.png)|![Downloads](images/netcastsOSS_downloads.png)
+|![Podcast](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-podcast.png)|![Episodes](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-episodes.png)|![Player](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-episode.png)|![Settings](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-settings.png)
 
 ## Why another podcast app?
 
@@ -42,8 +42,7 @@
 
 Currently, I maintain a datastore with popular podcast data.  In order to
 contribute, you would need information about this datastore.  As a substitute,
-one of the items in the roadmap is to provide a data mocking layer to support
-general app feature development.  However, you are able to reproduce
+you are able to reproduce
 this datastore using the [podcasts-fetcher](/packages/podcasts-fetcher) work.
 
 ## App Releases

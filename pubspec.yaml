@@ -57,6 +57,7 @@ dependencies:
     path: ./packages/gpodder_client
   timeago: ^2.0.9
   transparent_image: ^0.1.0
+  url_launcher: ^5.0.2
   uuid: ^2.0.0
   webfeed: ^0.4.0
 

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
-import 'package:hear2learn/main_prod.dart' as app;
+import 'package:hear2learn/main_prod.dart' as app; // ignore: uri_does_not_exist
 
 Future<void> main() async {
   // This line enables the extension

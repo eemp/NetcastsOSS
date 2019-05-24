@@ -61,6 +61,19 @@ void main() {
       final SerializableFinder episodesTab = find.text('Episodes');
       await driver.tap(episodesTab);
       await screenshot(driver, config, 'episodes');
+
+      final SerializableFinder episode = find.text('How We Measure the Universe');
+      await driver.tap(episode);
+      await screenshot(driver, config, 'episode');
+
+      await driver.tap(find.pageBack());
+      await driver.tap(find.pageBack());
+      await driver.tap(find.pageBack());
+      //await driver.tap(drawerButton);
+
+      final SerializableFinder settingsMenuOption = find.text('Settings');
+      await driver.tap(settingsMenuOption);
+      await screenshot(driver, config, 'settings');
     });
   });
 }

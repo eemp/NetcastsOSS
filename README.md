@@ -8,11 +8,11 @@
 
 |Homepage|Drawer|Explore|Discover|
 |-----|-----|-----|-----|
-|![Homepage](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-home.png)|![Drawer](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-drawer.png)|![Explore](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-explore.png)|![Discover](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-explore-with-results.png)
+|![Homepage](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-home.png)|![Drawer](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-drawer.png)|![Explore](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-explore.png)|![Discover](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-explore-with-results.png)
 
 |Podcast|Episodes|Player|Settings|
 |-----|-----|-----|-----|
-|![Podcast](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-podcast.png)|![Episodes](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-episodes.png)|![Player](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-episode.png)|![Settings](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus 5X-settings.png)
+|![Podcast](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-podcast.png)|![Episodes](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-episodes.png)|![Player](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-episode.png)|![Settings](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%205X-settings.png)
 
 ## Why another podcast app?
 

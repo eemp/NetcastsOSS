@@ -8,6 +8,7 @@ import 'package:hear2learn/widgets/queue/index.dart';
 import 'package:hear2learn/widgets/search/index.dart';
 import 'package:hear2learn/widgets/settings/index.dart';
 import 'package:hear2learn/widgets/subscriptions/index.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -124,6 +125,13 @@ class AppDrawer extends StatelessWidget {
               );
             },
             title: const Text('Settings'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.security),
+            onTap: () async {
+              await launch('https://github.com/eemp/NetcastsOSS/blob/master/privacy_policy.md');
+            },
+            title: const Text('Privacy Policy'),
           ),
         ],
       ),

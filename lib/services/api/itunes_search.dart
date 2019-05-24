@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:http/http.dart' as http;
 
 class ITunesSearchAPI {
@@ -38,7 +39,7 @@ class ITunesSearchAPI {
   Future<List<ITunesSearchAPIResult>> search(String query, [ Map<String, String> options ]) async {
     final Map<String, String> queryOptions = options ?? defaultQueryOptions;
     final Uri uri = Uri.https(AUTHORITY, PATH, <String, String>{ 'term': query }..addAll(queryOptions));
-    return compute(parseResults, (await http.get(uri)).body);
+    return dash.compute(parseResults, (await http.get(uri)).body);
   }
 }
 

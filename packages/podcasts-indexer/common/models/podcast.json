@@ -1,0 +1,87 @@
+{
+  "name": "podcast",
+  "properties": {
+    "artist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "artwork100": {
+      "type": "string"
+    },
+    "artwork30": {
+      "type": "string"
+    },
+    "artwork600": {
+      "type": "string"
+    },
+    "artwork60": {
+      "type": "string"
+    },
+    "artworkOrig": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "episodes": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "feed": {
+      "type": "string"
+    },
+    "genres": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "forceId": true,
+      "id": true
+    },
+    "last_modified_date": {
+      "type": "date"
+    },
+    "name": {
+      "type": "string"
+    },
+    "popularity": {
+      "type": "number"
+    },
+    "primary_genre": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "release_date": {
+      "type": "date"
+    },
+    "type": {
+      "type": "string"
+    }
+  }
+}

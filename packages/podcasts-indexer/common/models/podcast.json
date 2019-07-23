@@ -25,10 +25,12 @@
       "type": "string"
     },
     "artworkOrig": {
-      "type": "string"
+      "type": "string",
+      "dataType": "TEXT"
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "dataType": "TEXT"
     },
     "episodes": {
       "type": "object",

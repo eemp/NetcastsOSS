@@ -12,6 +12,14 @@
     ],
     "index": "hear2learn"
   },
+  "mysql": {
+    "connector": "mysql",
+    "database": "qYGEb4ynAH",
+    "host": "remotemysql.com",
+    "password": "Q17vMDbESr",
+    "port": 3306,
+    "user": "qYGEb4ynAH"
+  },
   "sqlite": {
     "connector": "sqlite3",
     "file": "podcasts.sqlite3"

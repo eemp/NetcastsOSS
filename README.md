@@ -40,6 +40,22 @@
 
 ## Contributing
 
+The repo might seem like an odd mix of the flutter stack and the npm world.
+In part, it's laziness and reliance of convenience/experience with node/npm.
+
+### Development in Docker
+
+There is no support for developing via an emulator.  A priviledge docker
+container is used in conjunction with an usb-connected device.
+
+* Build the docker image via `npm run build:docker` (it will be called flutter-dev - it's a generic image to allow flutter development)
+* Start developing via `npm run start:docker`
+
+By default, this will trigger `flutter run` within the container.  However, to
+use another entrypoint, try `npm run start:docker -- lib/main_prod.dart`.
+
+### Caveats
+
 Currently, I maintain a datastore with popular podcast data.  In order to
 contribute, you would need information about this datastore.  As a substitute,
 you are able to reproduce

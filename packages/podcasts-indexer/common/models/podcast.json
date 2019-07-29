@@ -45,6 +45,9 @@
     },
     "genres": {
       "type": "object",
+      "mysql": {
+        "dataType": "JSON"
+      },
       "properties": {
         "id": {
           "type": "string"

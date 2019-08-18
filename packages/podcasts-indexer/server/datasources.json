@@ -1,0 +1,27 @@
+{
+  "es": {
+    "apiVersion": "master",
+    "connector": "es",
+    "hosts": [
+      {
+        "auth": "qjrddhgpbq:41vtfspb70",
+        "protocol": "https",
+        "host": "podcasts-9232921312.us-east-1.bonsaisearch.net",
+        "port": 443
+      }
+    ],
+    "index": "hear2learn"
+  },
+  "mysql": {
+    "connector": "mysql",
+    "database": "qYGEb4ynAH",
+    "host": "remotemysql.com",
+    "password": "Q17vMDbESr",
+    "port": 3306,
+    "user": "qYGEb4ynAH"
+  },
+  "sqlite": {
+    "connector": "sqlite3",
+    "file": "podcasts.sqlite3"
+  }
+}

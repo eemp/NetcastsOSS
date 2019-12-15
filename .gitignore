@@ -20,5 +20,5 @@ coverage/
 # *.jorm.dart
 
 # security
-lib/main_prod.dart
+# lib/main_prod.dart
 android/key.properties

@@ -1,26 +1,20 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:hear2learn/app.dart';
-import 'package:hear2learn/run_app.dart';
-
-Future<void> main() async {
-  final App app = App();
-  await app.init(
-    elasticHost: 'hear2learn.azurewebsites.net',
-    //elasticHost: 'qjrddhgpbq:41vtfspb70@podcasts-9232921312.us-east-1.bonsaisearch.net',
-  );
-
-  final FirebaseAnalytics analytics = FirebaseAnalytics();
-  final FirebaseAnalyticsObserver analyticsObserver =
-      FirebaseAnalyticsObserver(analytics: analytics);
-
-  await start(
-    navigatorObservers: <NavigatorObserver>[
-      app.store.state.settings.privacySetting ? analyticsObserver : null,
-    ].where((NavigatorObserver observer) => observer != null).toList(),
-  );
-}
+U2FsdGVkX1+fdebCOLFCWTCKYrh1MJB+3xcfLxloPZ/JE1b+NzQAnjXB/nXTG/yC
+pbhoeWpyjPKqLinoSxkEVnCw7z8xfwMbnNflh0Y7UZ1bxREH5XpaYycIhewqFQtf
+hjNIEyAE2TeLt6/PuqSGECuszgk6WA2sLQm066UoE9ab1ndOYISqGfvQFNuqbr0c
+OEtodE46IkuMdrP1/S6vY8UsLkS/ga8hd82HPNLkOA0LWdOynKK6mtmT7AfSt2DJ
+1eJiVMXqJ+VRrI8F61DObLLG4urLy8oDXd+eYi0oxz9g5W8xCBWRlWw40P9DTXxG
+VPvDdvR4ErzYT79JuYy7vDEF5Np3mBP4M39qSyzWLgENxf4CATFaVX2hKm78kqZU
+7N4ZqAyHNNdne0Hqt1FLVr2Na2AXgzzXc/a995GtTuNaWpex7LS5TweXZaiTnqYm
+OJ4vII9+zTSFVtsUGW2VeNUXFKSnDpnj4AwYmZ4V/bEj5U/Dx3HU/qLFqIhvBMoM
+CykncPffmPba9BhEwX0m51wgiZHqLeLmDRlaanVu71gFD87bq8OLXJZwu3oqutdY
+S6S/OnrHoeMScgZbQuPMrV9YoE3DiSbvAJMYsipxG3vSLsh3g707HwzpIaCx5W8T
+MOkjYhWT9Sj2/kAx5y5vLcFLlDWYKn7ioy89SwLPSfm+MNShSxpmYYfgL286oxY8
+b0eJjOrZlTIAyRUAxnyFymoKXH+7k0MqfofQyCU7qUOUJL+48fiNd1YWRtWlPrjZ
+T1hQVuOekriRUHAa1yb86JR8/gc9G68d1DAMDQJqN8yiXV9C97klwmFcBUgQn/qH
+9F6QDVHqLui9jBobA4421K4+Y8FH0birwPEwqOOf4KOKQFFjc/Vw5RPjDtnvNzQW
+VJJj95WBlF0q76ytlAtB0nhyQBkeUqjs/cOTElNnOW8F5bTyI0g7tk4UNZV/cUFQ
+DZQKx0N4OHs926oUVIci178pCn/tfQ2o8Pyg1Jexyq3r0YTD2VauvqcTDNzXGJcC
+dWDL2TcAifcrRlEushSEhi+EVitRZjwiyN+YEJPkWsh+wnPL5WjK/xeo5KTn/xfv
+PnABvXzERoUZR6i7MUEKD2l0bSkadDCMVhDrrT0Vn3WmqYXPmFyXibh/lQ9wE4x8
+ahtC5727ERAzzirJFxY+KNgiTzn24DrejgCcw/QsBCKrjeUG4tzKH5tafSOUs6WI
+cqinUlJ2cj2j4fqPUI+ATw==

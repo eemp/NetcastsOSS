@@ -1,0 +1,25 @@
+{
+  "name": "NetcastsOSS",
+  "version": "1.0.0",
+  "description": "Simple podcasts (netcasts) management powered by open source software",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "build:apk": "npm run clean; docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter build appbundle",
+    "build:docker": "docker build -t flutter-dev .",
+    "clean": "docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter clean; rm -f .packages",
+    "start:docker": "npm run clean; docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter run",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eemp/NetcastsOSS.git"
+  },
+  "author": "Mihir Patel",
+  "bugs": {
+    "url": "https://github.com/eemp/NetcastsOSS/issues"
+  },
+  "homepage": "https://github.com/eemp/NetcastsOSS"
+}

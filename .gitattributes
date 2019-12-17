@@ -1,0 +1,2 @@
+#pattern  filter=crypt diff=crypt
+lib/main_prod.dart filter=crypt diff=crypt

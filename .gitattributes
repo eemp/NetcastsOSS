@@ -1,2 +1,5 @@
 #pattern  filter=crypt diff=crypt
 lib/main_prod.dart filter=crypt diff=crypt
+keystore/app.keystore filter=crypt diff=crypt
+keystore/app.keystore.p12 filter=crypt diff=crypt
+keystore/app.pem filter=crypt diff=crypt

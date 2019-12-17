@@ -3,3 +3,4 @@ lib/main_prod.dart filter=crypt diff=crypt
 keystore/app.keystore filter=crypt diff=crypt
 keystore/app.keystore.p12 filter=crypt diff=crypt
 keystore/app.pem filter=crypt diff=crypt
+android/key.properties filter=crypt diff=crypt

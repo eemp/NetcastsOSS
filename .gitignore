@@ -44,4 +44,4 @@ coverage/
 
 ## security
 # lib/main_prod.dart
-android/key.properties
+# android/key.properties

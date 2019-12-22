@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/app_settings.dart';
@@ -133,6 +134,21 @@ class Settings extends StatelessWidget {
                   subtitle: const Text('Help improve the app'),
                   title: const Text('Share Usage Information'),
                   value: settings.privacySetting,
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text('Donate'),
+                  subtitle: Row(
+                    children: app.donations.map((IAPItem donation) => Container(
+                      child: RaisedButton(
+                        child: Text('\$' + donation.price),
+                        onPressed: () {
+                          FlutterInappPurchase.instance.requestPurchase(donation.productId);
+                        },
+                      ),
+                      margin: EdgeInsets.only(right: 8.0),
+                    )).toList(),
+                  ),
                 ),
               ],
             ),

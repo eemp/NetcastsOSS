@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:local_notifications/local_notifications.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_action.dart';
@@ -28,6 +29,7 @@ class App {
     description: 'Grant this app the ability to show notifications',
     importance: AndroidNotificationChannelImportance.HIGH,
   );
+  List<IAPItem> donations;
   String downloadsPath;
   ElasticsearchClient elasticClient;
   Episode episode;
@@ -69,6 +71,8 @@ class App {
 
     await initNotifications();
 
+    await initDonations();
+
     initPlayer();
   }
 
@@ -92,6 +96,11 @@ class App {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult connectivity) {
       store.dispatch(setConnectivity(connectivity));
     });
+  }
+
+  Future<void> initDonations() async {
+    await FlutterInappPurchase.instance.initConnection;
+    donations = await FlutterInappPurchase.instance.getProducts(['io.eemp.netcastsoss.donation.1', 'io.eemp.netcastsoss.donation.5']);
   }
 
   void initPlayer() {

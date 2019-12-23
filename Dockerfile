@@ -6,11 +6,20 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install some dependencies
 RUN dpkg --add-architecture i386 && apt-get update \
-    && apt-get install -y --force-yes expect git wget unzip xz-utils \
+    && apt-get install -y --force-yes curl expect git wget unzip xz-utils \
     libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1
 
 # Install java
 RUN apt-get install -y openjdk-8-jdk-headless
+
+# Download and install Gradle
+#RUN mkdir -p /opt/gradle && \
+    #cd /opt/gradle && \
+    #curl -L https://services.gradle.org/distributions/gradle-6.0-bin.zip -o gradle-6.0-bin.zip && \
+    #unzip gradle-6.0-bin.zip && \
+    #rm gradle-6.0-bin.zip
+
+#ENV GRADLE_HOME /opt/gradle/gradle-6.0
 
 # Install the Android SDK
 RUN cd /opt && wget --output-document=android-sdk.zip --quiet \
@@ -19,7 +28,7 @@ RUN cd /opt && wget --output-document=android-sdk.zip --quiet \
 
 # Install Flutter
 RUN cd /opt && wget --output-document=flutter-sdk.tar.xz --quiet \
-    https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.7.8+hotfix.4-stable.tar.xz \
+    https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.12.13+hotfix.5-stable.tar.xz \
     && tar xf flutter-sdk.tar.xz \
     && rm -f flutter-sdk-tar.xz
 
@@ -27,6 +36,7 @@ RUN cd /opt && wget --output-document=flutter-sdk.tar.xz --quiet \
 ENV FLUTTER_HOME /opt/flutter
 ENV ANDROID_SDK_ROOT /opt/android-sdk
 ENV ANDROID_HOME /opt/android-sdk
+#ENV PATH ${GRADLE_HOME}/bin:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${FLUTTER_HOME}/bin:${PATH}
 ENV PATH ${PATH}:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${FLUTTER_HOME}/bin
 
 # Install SDK elements. This might change depending on what your app needs

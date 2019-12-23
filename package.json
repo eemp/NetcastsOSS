@@ -8,8 +8,9 @@
   },
   "scripts": {
     "build:docker": "docker build -t flutter-dev .",
-    "clean:packages": "rm -f .packages",
-    "start:docker": "npm run clean:packages; docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter run",
+    "clean": "docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter clean; rm -f .packages",
+    "release": "npm run clean; docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter build appbundle --target lib/main_prod.dart",
+    "start:docker": "npm run clean; docker run --rm -it --privileged --volume=$PWD:/opt/workspace flutter-dev flutter run",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

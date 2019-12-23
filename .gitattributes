@@ -3,3 +3,4 @@ lib/main_prod.dart filter=crypt diff=crypt
 keystore/keystore.jks filter=crypt diff=crypt
 keystore/upload_certificate.pem filter=crypt diff=crypt
 android/key.properties filter=crypt diff=crypt
+android/app/google-services.json filter=crypt diff=crypt

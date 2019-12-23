@@ -39,6 +39,7 @@ class App {
   final AudioPlayer player = AudioPlayer();
   SharedPreferences prefs;
   Store<AppState> store;
+  StreamSubscription _purchaseUpdatedSubscription;
 
   factory App() {
     return app;
@@ -101,6 +102,9 @@ class App {
   Future<void> initDonations() async {
     await FlutterInappPurchase.instance.initConnection;
     donations = await FlutterInappPurchase.instance.getProducts(['io.eemp.netcastsoss.donation.1', 'io.eemp.netcastsoss.donation.5']);
+    _purchaseUpdatedSubscription = FlutterInappPurchase.purchaseUpdated.listen((PurchasedItem item) {
+      FlutterInappPurchase.instance.consumePurchaseAndroid(item.purchaseToken);
+    });
   }
 
   void initPlayer() {

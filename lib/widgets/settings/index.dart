@@ -141,7 +141,7 @@ class Settings extends StatelessWidget {
                   subtitle: Row(
                     children: app.donations.map((IAPItem donation) => Container(
                       child: RaisedButton(
-                        child: Text('\$' + donation.price),
+                        child: Text('\$' + donation.price.toString().padLeft(2, '0')),
                         onPressed: () {
                           FlutterInappPurchase.instance.requestPurchase(donation.productId);
                         },

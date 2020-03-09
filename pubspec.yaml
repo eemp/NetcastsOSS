@@ -93,6 +93,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+   - assets/data/podcasts.sqlite3
    - images/01--default-fadein-image.jpg
    - images/02--default-fadein-image.jpg
    - images/03--default-fadein-image.jpg

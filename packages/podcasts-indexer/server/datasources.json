@@ -22,6 +22,6 @@
   },
   "sqlite": {
     "connector": "sqlite3",
-    "file": "podcasts.sqlite3"
+    "file": "../../assets/data/podcasts.sqlite3"
   }
 }

@@ -1,5 +1,10 @@
 {
   "name": "podcast",
+  "settings": {
+    "sqlite3": {
+      "table": "podcasts"
+    }
+  },
   "properties": {
     "artist": {
       "type": "object",

@@ -28,7 +28,7 @@ RUN cd /opt && wget --output-document=android-sdk.zip --quiet \
 
 # Install Flutter
 RUN cd /opt && wget --output-document=flutter-sdk.tar.xz --quiet \
-    https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.12.13+hotfix.5-stable.tar.xz \
+    https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.12.13+hotfix.8-stable.tar.xz \
     && tar xf flutter-sdk.tar.xz \
     && rm -f flutter-sdk-tar.xz
 

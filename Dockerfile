@@ -61,5 +61,8 @@ RUN flutter doctor -v
 RUN flutter upgrade
 
 # Go to workspace
-RUN mkdir -p /opt/workspace
+RUN mkdir -p /opt/workspace/packages
 WORKDIR /opt/workspace
+
+COPY pubspec* ./
+RUN flutter pub get

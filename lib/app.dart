@@ -8,6 +8,7 @@ import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_action.dart';
+import 'package:hear2learn/models/podcast_v2.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/models/user_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -29,6 +30,7 @@ class App {
     description: 'Grant this app the ability to show notifications',
     importance: AndroidNotificationChannelImportance.HIGH,
   );
+  final MyDatabase podcastsDB = MyDatabase();
   List<IAPItem> donations;
   String downloadsPath;
   ElasticsearchClient elasticClient;

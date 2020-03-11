@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/helpers/dynamic_theme.dart';
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/helpers/podcast.dart' as podcast_helpers;
 import 'package:hear2learn/models/app_settings.dart';

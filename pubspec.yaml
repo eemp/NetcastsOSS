@@ -33,8 +33,6 @@ dependencies:
   cached_network_image: ^2.0.0-rc.1
   connectivity: ^0.4.2
   dio: ^1.0.13
-  dynamic_theme:
-    path: ./packages/dynamic_theme
   firebase_analytics: ^5.0.9
   flushbar:
     git:
@@ -49,7 +47,6 @@ dependencies:
   flutter_inapp_purchase: ^2.0.6
   jaguar_orm: any
   jaguar_query_sqflite: ^2.2.5
-  local_notifications: ^0.0.7
   moor: ^2.4.2
   moor_ffi: ^0.4.0
   package_info: ^0.4.0

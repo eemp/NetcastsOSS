@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
+import 'package:hear2learn/models/podcast_v2.dart' as pv2;
 import 'package:hear2learn/models/podcast_subscription.dart';
 
 const String PODCAST_TYPE = 'podcast';
@@ -19,29 +20,39 @@ Future<List<Podcast>> getSubscriptions() {
 
 Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
   final App app = App();
+  final pv2.MyDatabase podcastsDB = app.podcastsDB;
   final client = app.elasticClient;
 
-  final query = {
-    'query': {
-      'bool': {
-        'filter': [
-          { 'exists': { 'field': 'feed' } },
-          {
-            'term': {
-              'primary_genre.id': genreId,
-            }
-          }
-        ]
-      }
-    },
-    'sort': [
-      'popularity',
-    ],
-  };
-  return client.search(
-    type: PODCAST_TYPE,
-    body: query,
-  ).then((response) => toPodcasts(response));
+  return podcastsDB.podcastsByGenre(genreId).then((podcasts) =>
+    podcasts.map((podcast) =>
+      // TODO: replace usage of legacy model
+      Podcast(
+        artwork30: podcast.artwork30,
+        artwork60: podcast.artwork60,
+        artwork100: podcast.artwork100,
+        artwork600: podcast.artwork600,
+        artworkOrig: podcast.artworkOrig,
+        description: podcast.description,
+        //List<Episode> episodes;
+        episodesCount: podcast.episodesCount,
+        feed: podcast.feed,
+        //List<Genre> genres;
+        id: podcast.id,
+        //DateTime lastModifiedDate;
+        logoUrl: podcast.logoUrl,
+        name: podcast.name,
+        //primaryGenre: podcast.primaryGenre,
+        //popularity: podcast.popularity,
+        title: podcast.title,
+        //DateTime releaseDate;
+        url: podcast.url,
+      )
+    ).toList()
+  ).catchError((err, stack) {
+    print('Ran into error: ' + err.toString());
+    print(stack.toString());
+    return err;
+  });
 }
 
 Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {

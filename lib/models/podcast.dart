@@ -76,6 +76,7 @@ class Podcast {
   String url; // TODO(eemp): to be deprecated, removed
 
   Podcast({
+    this.artist,
     this.artwork30,
     this.artwork60,
     this.artwork100,
@@ -97,7 +98,7 @@ class Podcast {
 
   String getByline() {
     return name != artist?.name
-      ? 'by ${artist.name}, ${episodesCount.toString()} total episodes'
+      ? 'by ${artist?.name}, ${episodesCount.toString()} total episodes'
       : '${episodesCount.toString()} total episodes';
   }
 

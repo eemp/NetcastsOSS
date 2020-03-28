@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
+import 'package:hear2learn/models/podcast.dart' as legacy;
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,7 +12,7 @@ import 'package:path/path.dart';
 part 'podcast_v2.g.dart';
 
 class Podcasts extends Table {
-  //Artist artist;
+  TextColumn get artist => text().nullable()();
   TextColumn get artwork30 => text().nullable()();
   TextColumn get artwork60 => text().nullable()();
   TextColumn get artwork100 => text().nullable()();
@@ -18,7 +20,7 @@ class Podcasts extends Table {
   TextColumn get artworkOrig => text().nullable()();
   TextColumn get description => text().nullable()();
   //List<Episode> episodes;
-  IntColumn get episodesCount => integer().nullable()();
+  TextColumn get episodes => text().nullable()();
   TextColumn get feed => text().nullable()();
   //List<Genre> genres;
   TextColumn get id => text().nullable()();
@@ -32,7 +34,12 @@ class Podcasts extends Table {
   TextColumn get url => text().nullable()(); // TODO(eemp): to be deprecated, removed
 }
 
-@UseMoor(tables: [Podcasts])
+@UseMoor(
+  tables: [Podcasts],
+  queries: {
+    'podcastsFTS': "SELECT podcasts.* FROM (SELECT rowid, name FROM podcasts_fts WHERE podcasts_fts.name MATCH 'infinite monkey') AS fts LEFT JOIN podcasts ON (rowid = id)",
+  },
+)
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
   MyDatabase() : super(_openConnection());
@@ -42,13 +49,81 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future<List<Podcast>> podcastsByGenre(genreId) async {
+  Future<List<legacy.Podcast>> podcastsByGenre(genreId) async {
     return (
       select(podcasts)
         ..where((t) => t.primaryGenre.like("%$genreId%"))
         ..orderBy([(t) => OrderingTerm(expression: t.popularity, mode: OrderingMode.asc)])
         ..limit(10)
-    ).get();
+    ).map((Podcast podcast) {
+      var episodes = jsonDecode(jsonDecode(podcast.episodes));
+      return legacy.Podcast(
+        artist: legacy.Artist.fromJson(json.decode(podcast.artist)),
+        artwork30: podcast.artwork30,
+        artwork60: podcast.artwork60,
+        artwork100: podcast.artwork100,
+        artwork600: podcast.artwork600,
+        artworkOrig: podcast.artworkOrig,
+        description: podcast.description,
+        //List<Episode> episodes;
+        episodesCount: episodes['count'],
+        feed: podcast.feed,
+        //List<Genre> genres;
+        id: podcast.id,
+        //DateTime lastModifiedDate;
+        logoUrl: podcast.logoUrl,
+        name: podcast.name,
+        //primaryGenre: podcast.primaryGenre,
+        //popularity: podcast.popularity,
+        title: podcast.title,
+        //DateTime releaseDate;
+        url: podcast.url,
+      );
+    }).get();
+  }
+
+  Future<List<legacy.Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {
+    final int offset = page * pageSize;
+    return (
+      customSelectQuery(
+        '''
+        SELECT podcasts.*
+        FROM (
+          SELECT rowid, name FROM podcasts_fts
+          WHERE podcasts_fts.name MATCH '$textQuery'
+        ) AS fts LEFT JOIN podcasts ON (rowid = id)
+        LIMIT $pageSize
+        OFFSET $offset
+        '''
+      ).get().then((rows) =>
+        rows.map((row) {
+          var podcast = row.data;
+          var episodes = jsonDecode(jsonDecode(podcast['episodes']));
+          return legacy.Podcast(
+            artist: legacy.Artist.fromJson(json.decode(podcast['artist'])),
+            artwork30: podcast['artwork30'],
+            artwork60: podcast['artwork60'],
+            artwork100: podcast['artwork100'],
+            artwork600: podcast['artwork600'],
+            artworkOrig: podcast['artworkOrig'],
+            description: podcast['description'],
+            //List<Episode> episodes;
+            episodesCount: episodes['count'],
+            feed: podcast['feed'],
+            //List<Genre> genres;
+            id: podcast['id'],
+            //DateTime lastModifiedDate;
+            logoUrl: podcast['logoUrl'],
+            name: podcast['name'],
+            //primaryGenre: podcast['primaryGenre'],
+            //popularity: podcast['popularity'],
+            title: podcast['title'],
+            //DateTime releaseDate;
+            url: podcast['url'],
+          );
+        }).toList()
+      )
+    );
   }
 }
 

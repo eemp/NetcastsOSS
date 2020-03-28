@@ -139,7 +139,7 @@ class PodcastSearchState extends State<PodcastSearch> {
                         borderRadius: BorderRadius.circular(8.0),
                         child: Container(
                           child: image,
-                          width: 80.0,
+                          width: 64.0,
                         ),
                       ),
                       onTap: () {

@@ -8,13 +8,14 @@ part of 'podcast_v2.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Podcast extends DataClass implements Insertable<Podcast> {
+  final String artist;
   final String artwork30;
   final String artwork60;
   final String artwork100;
   final String artwork600;
   final String artworkOrig;
   final String description;
-  final int episodesCount;
+  final String episodes;
   final String feed;
   final String id;
   final String logoUrl;
@@ -24,13 +25,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
   final String title;
   final String url;
   Podcast(
-      {this.artwork30,
+      {this.artist,
+      this.artwork30,
       this.artwork60,
       this.artwork100,
       this.artwork600,
       this.artworkOrig,
       this.description,
-      this.episodesCount,
+      this.episodes,
       this.feed,
       this.id,
       this.logoUrl,
@@ -43,9 +45,10 @@ class Podcast extends DataClass implements Insertable<Podcast> {
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final stringType = db.typeSystem.forDartType<String>();
-    final intType = db.typeSystem.forDartType<int>();
     final doubleType = db.typeSystem.forDartType<double>();
     return Podcast(
+      artist:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}artist']),
       artwork30: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}artwork30']),
       artwork60: stringType
@@ -58,8 +61,8 @@ class Podcast extends DataClass implements Insertable<Podcast> {
           .mapFromDatabaseResponse(data['${effectivePrefix}artwork_orig']),
       description: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
-      episodesCount: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}episodes_count']),
+      episodes: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}episodes']),
       feed: stringType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       logoUrl: stringType
@@ -78,13 +81,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Podcast(
+      artist: serializer.fromJson<String>(json['artist']),
       artwork30: serializer.fromJson<String>(json['artwork30']),
       artwork60: serializer.fromJson<String>(json['artwork60']),
       artwork100: serializer.fromJson<String>(json['artwork100']),
       artwork600: serializer.fromJson<String>(json['artwork600']),
       artworkOrig: serializer.fromJson<String>(json['artworkOrig']),
       description: serializer.fromJson<String>(json['description']),
-      episodesCount: serializer.fromJson<int>(json['episodesCount']),
+      episodes: serializer.fromJson<String>(json['episodes']),
       feed: serializer.fromJson<String>(json['feed']),
       id: serializer.fromJson<String>(json['id']),
       logoUrl: serializer.fromJson<String>(json['logoUrl']),
@@ -99,13 +103,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'artist': serializer.toJson<String>(artist),
       'artwork30': serializer.toJson<String>(artwork30),
       'artwork60': serializer.toJson<String>(artwork60),
       'artwork100': serializer.toJson<String>(artwork100),
       'artwork600': serializer.toJson<String>(artwork600),
       'artworkOrig': serializer.toJson<String>(artworkOrig),
       'description': serializer.toJson<String>(description),
-      'episodesCount': serializer.toJson<int>(episodesCount),
+      'episodes': serializer.toJson<String>(episodes),
       'feed': serializer.toJson<String>(feed),
       'id': serializer.toJson<String>(id),
       'logoUrl': serializer.toJson<String>(logoUrl),
@@ -120,6 +125,8 @@ class Podcast extends DataClass implements Insertable<Podcast> {
   @override
   PodcastsCompanion createCompanion(bool nullToAbsent) {
     return PodcastsCompanion(
+      artist:
+          artist == null && nullToAbsent ? const Value.absent() : Value(artist),
       artwork30: artwork30 == null && nullToAbsent
           ? const Value.absent()
           : Value(artwork30),
@@ -138,9 +145,9 @@ class Podcast extends DataClass implements Insertable<Podcast> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      episodesCount: episodesCount == null && nullToAbsent
+      episodes: episodes == null && nullToAbsent
           ? const Value.absent()
-          : Value(episodesCount),
+          : Value(episodes),
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       logoUrl: logoUrl == null && nullToAbsent
@@ -160,13 +167,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
   }
 
   Podcast copyWith(
-          {String artwork30,
+          {String artist,
+          String artwork30,
           String artwork60,
           String artwork100,
           String artwork600,
           String artworkOrig,
           String description,
-          int episodesCount,
+          String episodes,
           String feed,
           String id,
           String logoUrl,
@@ -176,13 +184,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
           String title,
           String url}) =>
       Podcast(
+        artist: artist ?? this.artist,
         artwork30: artwork30 ?? this.artwork30,
         artwork60: artwork60 ?? this.artwork60,
         artwork100: artwork100 ?? this.artwork100,
         artwork600: artwork600 ?? this.artwork600,
         artworkOrig: artworkOrig ?? this.artworkOrig,
         description: description ?? this.description,
-        episodesCount: episodesCount ?? this.episodesCount,
+        episodes: episodes ?? this.episodes,
         feed: feed ?? this.feed,
         id: id ?? this.id,
         logoUrl: logoUrl ?? this.logoUrl,
@@ -195,13 +204,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
   @override
   String toString() {
     return (StringBuffer('Podcast(')
+          ..write('artist: $artist, ')
           ..write('artwork30: $artwork30, ')
           ..write('artwork60: $artwork60, ')
           ..write('artwork100: $artwork100, ')
           ..write('artwork600: $artwork600, ')
           ..write('artworkOrig: $artworkOrig, ')
           ..write('description: $description, ')
-          ..write('episodesCount: $episodesCount, ')
+          ..write('episodes: $episodes, ')
           ..write('feed: $feed, ')
           ..write('id: $id, ')
           ..write('logoUrl: $logoUrl, ')
@@ -216,44 +226,47 @@ class Podcast extends DataClass implements Insertable<Podcast> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      artwork30.hashCode,
+      artist.hashCode,
       $mrjc(
-          artwork60.hashCode,
+          artwork30.hashCode,
           $mrjc(
-              artwork100.hashCode,
+              artwork60.hashCode,
               $mrjc(
-                  artwork600.hashCode,
+                  artwork100.hashCode,
                   $mrjc(
-                      artworkOrig.hashCode,
+                      artwork600.hashCode,
                       $mrjc(
-                          description.hashCode,
+                          artworkOrig.hashCode,
                           $mrjc(
-                              episodesCount.hashCode,
+                              description.hashCode,
                               $mrjc(
-                                  feed.hashCode,
+                                  episodes.hashCode,
                                   $mrjc(
-                                      id.hashCode,
+                                      feed.hashCode,
                                       $mrjc(
-                                          logoUrl.hashCode,
+                                          id.hashCode,
                                           $mrjc(
-                                              name.hashCode,
+                                              logoUrl.hashCode,
                                               $mrjc(
-                                                  primaryGenre.hashCode,
+                                                  name.hashCode,
                                                   $mrjc(
-                                                      popularity.hashCode,
-                                                      $mrjc(title.hashCode,
-                                                          url.hashCode)))))))))))))));
+                                                      primaryGenre.hashCode,
+                                                      $mrjc(
+                                                          popularity.hashCode,
+                                                          $mrjc(title.hashCode,
+                                                              url.hashCode))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Podcast &&
+          other.artist == this.artist &&
           other.artwork30 == this.artwork30 &&
           other.artwork60 == this.artwork60 &&
           other.artwork100 == this.artwork100 &&
           other.artwork600 == this.artwork600 &&
           other.artworkOrig == this.artworkOrig &&
           other.description == this.description &&
-          other.episodesCount == this.episodesCount &&
+          other.episodes == this.episodes &&
           other.feed == this.feed &&
           other.id == this.id &&
           other.logoUrl == this.logoUrl &&
@@ -265,13 +278,14 @@ class Podcast extends DataClass implements Insertable<Podcast> {
 }
 
 class PodcastsCompanion extends UpdateCompanion<Podcast> {
+  final Value<String> artist;
   final Value<String> artwork30;
   final Value<String> artwork60;
   final Value<String> artwork100;
   final Value<String> artwork600;
   final Value<String> artworkOrig;
   final Value<String> description;
-  final Value<int> episodesCount;
+  final Value<String> episodes;
   final Value<String> feed;
   final Value<String> id;
   final Value<String> logoUrl;
@@ -281,13 +295,14 @@ class PodcastsCompanion extends UpdateCompanion<Podcast> {
   final Value<String> title;
   final Value<String> url;
   const PodcastsCompanion({
+    this.artist = const Value.absent(),
     this.artwork30 = const Value.absent(),
     this.artwork60 = const Value.absent(),
     this.artwork100 = const Value.absent(),
     this.artwork600 = const Value.absent(),
     this.artworkOrig = const Value.absent(),
     this.description = const Value.absent(),
-    this.episodesCount = const Value.absent(),
+    this.episodes = const Value.absent(),
     this.feed = const Value.absent(),
     this.id = const Value.absent(),
     this.logoUrl = const Value.absent(),
@@ -298,13 +313,14 @@ class PodcastsCompanion extends UpdateCompanion<Podcast> {
     this.url = const Value.absent(),
   });
   PodcastsCompanion.insert({
+    this.artist = const Value.absent(),
     this.artwork30 = const Value.absent(),
     this.artwork60 = const Value.absent(),
     this.artwork100 = const Value.absent(),
     this.artwork600 = const Value.absent(),
     this.artworkOrig = const Value.absent(),
     this.description = const Value.absent(),
-    this.episodesCount = const Value.absent(),
+    this.episodes = const Value.absent(),
     this.feed = const Value.absent(),
     this.id = const Value.absent(),
     this.logoUrl = const Value.absent(),
@@ -315,13 +331,14 @@ class PodcastsCompanion extends UpdateCompanion<Podcast> {
     this.url = const Value.absent(),
   });
   PodcastsCompanion copyWith(
-      {Value<String> artwork30,
+      {Value<String> artist,
+      Value<String> artwork30,
       Value<String> artwork60,
       Value<String> artwork100,
       Value<String> artwork600,
       Value<String> artworkOrig,
       Value<String> description,
-      Value<int> episodesCount,
+      Value<String> episodes,
       Value<String> feed,
       Value<String> id,
       Value<String> logoUrl,
@@ -331,13 +348,14 @@ class PodcastsCompanion extends UpdateCompanion<Podcast> {
       Value<String> title,
       Value<String> url}) {
     return PodcastsCompanion(
+      artist: artist ?? this.artist,
       artwork30: artwork30 ?? this.artwork30,
       artwork60: artwork60 ?? this.artwork60,
       artwork100: artwork100 ?? this.artwork100,
       artwork600: artwork600 ?? this.artwork600,
       artworkOrig: artworkOrig ?? this.artworkOrig,
       description: description ?? this.description,
-      episodesCount: episodesCount ?? this.episodesCount,
+      episodes: episodes ?? this.episodes,
       feed: feed ?? this.feed,
       id: id ?? this.id,
       logoUrl: logoUrl ?? this.logoUrl,
@@ -354,6 +372,18 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
   final GeneratedDatabase _db;
   final String _alias;
   $PodcastsTable(this._db, [this._alias]);
+  final VerificationMeta _artistMeta = const VerificationMeta('artist');
+  GeneratedTextColumn _artist;
+  @override
+  GeneratedTextColumn get artist => _artist ??= _constructArtist();
+  GeneratedTextColumn _constructArtist() {
+    return GeneratedTextColumn(
+      'artist',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _artwork30Meta = const VerificationMeta('artwork30');
   GeneratedTextColumn _artwork30;
   @override
@@ -430,15 +460,13 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
     );
   }
 
-  final VerificationMeta _episodesCountMeta =
-      const VerificationMeta('episodesCount');
-  GeneratedIntColumn _episodesCount;
+  final VerificationMeta _episodesMeta = const VerificationMeta('episodes');
+  GeneratedTextColumn _episodes;
   @override
-  GeneratedIntColumn get episodesCount =>
-      _episodesCount ??= _constructEpisodesCount();
-  GeneratedIntColumn _constructEpisodesCount() {
-    return GeneratedIntColumn(
-      'episodes_count',
+  GeneratedTextColumn get episodes => _episodes ??= _constructEpisodes();
+  GeneratedTextColumn _constructEpisodes() {
+    return GeneratedTextColumn(
+      'episodes',
       $tableName,
       true,
     );
@@ -544,13 +572,14 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
 
   @override
   List<GeneratedColumn> get $columns => [
+        artist,
         artwork30,
         artwork60,
         artwork100,
         artwork600,
         artworkOrig,
         description,
-        episodesCount,
+        episodes,
         feed,
         id,
         logoUrl,
@@ -570,6 +599,10 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
   VerificationContext validateIntegrity(PodcastsCompanion d,
       {bool isInserting = false}) {
     final context = VerificationContext();
+    if (d.artist.present) {
+      context.handle(
+          _artistMeta, artist.isAcceptableValue(d.artist.value, _artistMeta));
+    }
     if (d.artwork30.present) {
       context.handle(_artwork30Meta,
           artwork30.isAcceptableValue(d.artwork30.value, _artwork30Meta));
@@ -594,11 +627,9 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
       context.handle(_descriptionMeta,
           description.isAcceptableValue(d.description.value, _descriptionMeta));
     }
-    if (d.episodesCount.present) {
-      context.handle(
-          _episodesCountMeta,
-          episodesCount.isAcceptableValue(
-              d.episodesCount.value, _episodesCountMeta));
+    if (d.episodes.present) {
+      context.handle(_episodesMeta,
+          episodes.isAcceptableValue(d.episodes.value, _episodesMeta));
     }
     if (d.feed.present) {
       context.handle(
@@ -646,6 +677,9 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
   @override
   Map<String, Variable> entityToSql(PodcastsCompanion d) {
     final map = <String, Variable>{};
+    if (d.artist.present) {
+      map['artist'] = Variable<String, StringType>(d.artist.value);
+    }
     if (d.artwork30.present) {
       map['artwork30'] = Variable<String, StringType>(d.artwork30.value);
     }
@@ -664,8 +698,8 @@ class $PodcastsTable extends Podcasts with TableInfo<$PodcastsTable, Podcast> {
     if (d.description.present) {
       map['description'] = Variable<String, StringType>(d.description.value);
     }
-    if (d.episodesCount.present) {
-      map['episodes_count'] = Variable<int, IntType>(d.episodesCount.value);
+    if (d.episodes.present) {
+      map['episodes'] = Variable<String, StringType>(d.episodes.value);
     }
     if (d.feed.present) {
       map['feed'] = Variable<String, StringType>(d.feed.value);

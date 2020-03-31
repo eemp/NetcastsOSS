@@ -1,30 +1,14 @@
-{
-  "es": {
-    "apiVersion": "master",
-    "connector": "es",
-    "hosts": [
-      {
-        "auth": "qjrddhgpbq:41vtfspb70",
-        "protocol": "https",
-        "host": "podcasts-9232921312.us-east-1.bonsaisearch.net",
-        "port": 443
-      }
-    ],
-    "index": "hear2learn"
-  },
-  "mysql": {
-    "charset": "utf8mb4",
-    "collation": "utf8mb4_general_ci",
-    "connector": "mysql",
-    "connectionLimit": 5,
-    "database": "uBvzqxFkIM",
-    "host": "remotemysql.com",
-    "password": "eH5aZObkUB",
-    "port": 3306,
-    "user": "uBvzqxFkIM"
-  },
-  "sqlite": {
-    "connector": "sqlite3",
-    "file": "../../assets/data/podcasts.sqlite3"
-  }
-}
+U2FsdGVkX18KnNzlFaY6f5FiYDMX+h+RW29/r2sBEMHE2J1nGPk4nuhY0gbnSbYv
+iOzsLx5JFi2ncNLzJdBCNkzAUFdvS/AS6QHywxsG5kBMaq96KBY/kzDswuDkwgJ3
+PRqd1IgTjKdoo1eiWFbK6SdwSb1H7y0gYWWY8VuwGxxQYGUg1rCAZCeMUK78yrfd
+t3MVySVsmCH09xfVm3wlqWK0wH6aR4SB8Ltn/jSnsOIWO9/snDQUng05Insruw1t
++HRn3ALhkhY1hiLYfzmFecsoI719fUUrFh4ER3/4p7Ptu2eOidUpyoXbEz3E+xmT
+hO/lZmKW/L1xrTomvoaOVdE2sx6ueVyzPH31WdX9d9jR+KH83MNhjoUpri7errJY
+oWlxAFhvWusV/6amWwdRFa/M9iKR1z1robqx6+eOO46rTOuiwwmjWDf1Cu9mYP3R
+zyIL+/WU3PC0LoPGrdTAo7gb75QcZbB6UQLqUibrYls7UNXmqSkVl3xvYUKO2Ls+
+8sR78gyq0g9PSPwnzPM4kFflK3tifbXj571ctQVpvZs4mUYcMX1iH0SXzyhh3/ZG
+OvFkptviTx7V+dcEq+rxj/J0FS39NOMU2NR5Yq2DtDPgt0w1iZKogdI8mvZf+Twd
+NIPVjinJXyn/YrX6Cfdk1okf+7/RvzUnH6O3OGgewjQL0hLJThcrqaR5w+aq5ELt
+Q0CcsVbCuOyuL1CGnM3sogRWtaBWmY6CksQeVtbrhV+fcL+s0egS4CZzbw2BkZT9
+iHWC1XzwLh2NwMh1+U2f5LmfsKSBOX8qoNEU5pHxirjLXagCT/bBPOmidnv9La0R
+JKAI3DMqty0qcfGOHT8HDAVCIVlHAdFBrxREM9RkMjbxY+sWBApjq4K9OcxiUb6b

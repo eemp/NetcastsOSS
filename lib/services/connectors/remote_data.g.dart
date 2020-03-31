@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'podcast_v2.dart';
+part of 'remote_data.dart';
 
 // **************************************************************************
 // MoorGenerator

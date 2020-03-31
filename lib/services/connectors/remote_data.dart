@@ -6,7 +6,7 @@ import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 
-part 'podcast_v2.g.dart';
+part 'remote_data.g.dart';
 
 typedef DatabaseOpener = FutureOr<QueryExecutor> Function();
 

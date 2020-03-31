@@ -1,6 +1,9 @@
 {
   "name": "podcast",
   "settings": {
+    "mysql": {
+      "table": "podcasts"
+    },
     "sqlite3": {
       "table": "podcasts"
     }

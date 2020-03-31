@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "migrate:es-sqlite": "FROM_DS=es TO_DS=sqlite node scripts/data-migrator.js",
+    "migrate:sqlite-mysql": "FROM_DS=sqlite TO_DS=mysql node scripts/data-migrator.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

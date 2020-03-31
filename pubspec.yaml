@@ -33,6 +33,7 @@ dependencies:
   cached_network_image: ^2.0.0-rc.1
   connectivity: ^0.4.2
   dio: ^1.0.13
+  easy_debounce: ^1.0.1
   firebase_analytics: ^5.0.9
   flushbar:
     git:
@@ -49,6 +50,11 @@ dependencies:
   jaguar_query_sqflite: ^2.2.5
   moor: ^2.4.2
   moor_ffi: ^0.4.0
+  moor_mysql:
+    path: ./packages/moor_mysql
+    # git:
+    #  url: https://github.com/simolus3/moor.git
+    #  path: extras/mysql
   package_info: ^0.4.0
   path: ^1.6.2
   path_provider: ^0.5.0

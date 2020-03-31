@@ -8,7 +8,6 @@ import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_action.dart';
-import 'package:hear2learn/models/podcast_v2.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
 import 'package:hear2learn/models/user_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
@@ -16,6 +15,7 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
+import 'package:hear2learn/services/connectors/remote_data.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +30,6 @@ class App {
     //description: 'Grant this app the ability to show notifications',
     //importance: AndroidNotificationChannelImportance.HIGH,
   //);
-  final MyDatabase podcastsDB = MyDatabase();
   List<IAPItem> donations;
   String downloadsPath;
   ElasticsearchClient elasticClient;
@@ -40,6 +39,7 @@ class App {
   PackageInfo packageInfo;
   final AudioPlayer player = AudioPlayer();
   SharedPreferences prefs;
+  RemoteData remoteData;
   Store<AppState> store;
   StreamSubscription _purchaseUpdatedSubscription;
 
@@ -49,15 +49,12 @@ class App {
 
   App._internal();
 
-  Future<void> init({ String elasticHost }) async {
+  Future<void> init({ var remoteDataDB, String remoteDataStrategy }) async {
     packageInfo = await PackageInfo.fromPlatform();
 
     store = appStore();
 
-    elasticClient = ElasticsearchClient(
-      host: elasticHost,
-      index: 'hear2learn',
-    );
+    remoteData = RemoteData(db: remoteDataDB, strategy: remoteDataStrategy);
 
     localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();

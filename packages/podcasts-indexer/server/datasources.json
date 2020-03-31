@@ -13,12 +13,15 @@
     "index": "hear2learn"
   },
   "mysql": {
+    "charset": "utf8mb4",
+    "collation": "utf8mb4_general_ci",
     "connector": "mysql",
-    "database": "qYGEb4ynAH",
+    "connectionLimit": 5,
+    "database": "uBvzqxFkIM",
     "host": "remotemysql.com",
-    "password": "Q17vMDbESr",
+    "password": "eH5aZObkUB",
     "port": 3306,
-    "user": "qYGEb4ynAH"
+    "user": "uBvzqxFkIM"
   },
   "sqlite": {
     "connector": "sqlite3",

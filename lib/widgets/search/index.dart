@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
@@ -23,18 +24,23 @@ class PodcastSearchState extends State<PodcastSearch> {
 
   final TextEditingController inputController = TextEditingController();
   FocusNode inputFocus;
+  int timestamp = new DateTime.now().millisecondsSinceEpoch;
   String userQuery = '';
 
-  Future<List<Podcast>> results;
+  PagewiseLoadController<Podcast> get pageLoadController => PagewiseLoadController<Podcast>(
+    pageSize: 10,
+    pageFuture: (int pageIndex) {
+      return searchPodcastsByTextQuery(userQuery, page: pageIndex);
+    },
+  );
 
   @override
   void initState() {
     super.initState();
 
     inputFocus = FocusNode();
+    timestamp = new DateTime.now().millisecondsSinceEpoch;
     userQuery = '';
-
-    results = Future<List<Podcast>>.value(<Podcast>[]);
   }
 
   @override
@@ -46,6 +52,13 @@ class PodcastSearchState extends State<PodcastSearch> {
 
   @override
   Widget build(BuildContext context) {
+    Function debouncedStateUpdate = dash.debounce((updatedUserQuery) {
+      setState(() {
+        userQuery = updatedUserQuery;
+        timestamp = new DateTime.now().millisecondsSinceEpoch;
+      });
+    }, Duration(milliseconds: 800));
+
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
@@ -63,14 +76,12 @@ class PodcastSearchState extends State<PodcastSearch> {
             hintStyle: const TextStyle(color: Colors.white)
           ),
           onChanged: (String text) {
-            setState(() {
-              userQuery = text;
-            });
+            debouncedStateUpdate([text]);
           },
           onSubmitted: (String text) {
             setState(() {
               userQuery = text;
-              results = searchPodcastsByTextQuery(userQuery);
+              timestamp = new DateTime.now().millisecondsSinceEpoch;
             });
           },
         ),
@@ -80,7 +91,7 @@ class PodcastSearchState extends State<PodcastSearch> {
               icon: const Icon(Icons.search, color: Colors.white),
               onPressed: () {
                 setState(() {
-                  results = searchPodcastsByTextQuery(userQuery);
+                  timestamp = new DateTime.now().millisecondsSinceEpoch;
                 });
               },
               tooltip: 'Search for Podcasts',
@@ -90,7 +101,7 @@ class PodcastSearchState extends State<PodcastSearch> {
               onPressed: () {
                 setState(() {
                   userQuery = '';
-                  results = Future<List<Podcast>>.value(<Podcast>[]);
+                  timestamp = new DateTime.now().millisecondsSinceEpoch;
                 });
                 inputController.clear();
                 FocusScope.of(context).requestFocus(inputFocus);
@@ -100,70 +111,62 @@ class PodcastSearchState extends State<PodcastSearch> {
           : <Widget>[],
       ),
       body: Container(
-        child: FutureBuilder<List<Podcast>>(
-          future: results,
-          builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-            if(snapshot.hasError) {
-              return const PlaceholderScreen(
-                icon: Icons.error_outline,
-                subtitle: 'Unable to search podcasts. Please check your connectivity or try again later.',
-                title: 'No podcasts to show',
-              );
-            }
-            if(!snapshot.hasData) {
-              return Container(
-                child: const Center(child: CircularProgressIndicator()),
-              );
-            }
-            if(snapshot.data.isEmpty) {
-              return const PlaceholderScreen(
-                icon: Icons.search,
+        child: PagewiseListView<Podcast>(
+          // pageSize: 10,
+          itemBuilder: (BuildContext context, Podcast podcast, int index) {
+            final Widget image = WithFadeInImage(
+              heroTag: 'search/${podcast.artwork600}',
+              location: podcast.artwork600,
+            );
+            return ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                  child: image,
+                  width: 64.0,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => PodcastPage(
+                      image: image,
+                      podcast: podcast,
+                    ),
+                    settings: const RouteSettings(name: PodcastPage.routeName),
+                  ),
+                );
+              },
+              subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
+              title: Text(podcast.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+            );
+          },
+          loadingBuilder: (context) {
+            return Container(
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          },
+          noItemsFoundBuilder: (context) {
+            return Container(
+              // height: MediaQuery.of(context).size.height - kToolbarHeight,
+              child: PlaceholderScreen(
+                // icon: Icons.search,
                 subtitle: 'Search for podcasts by keywords above.',
                 title: 'No podcasts to show',
-              );
-            }
-
-            return PagewiseListView<Podcast>(
-              pageSize: 10,
-              itemBuilder: (BuildContext context, Podcast podcast, int index) {
-                final Widget image = WithFadeInImage(
-                  heroTag: 'search/${podcast.artwork600}',
-                  location: podcast.artwork600,
-                );
-
-                return Column(
-                  children: <Widget>[
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Container(
-                          child: image,
-                          width: 64.0,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => PodcastPage(
-                              image: image,
-                              podcast: podcast,
-                            ),
-                            settings: const RouteSettings(name: PodcastPage.routeName),
-                          ),
-                        );
-                      },
-                      subtitle: Text(podcast.getByline(), maxLines: 2, overflow: TextOverflow.ellipsis),
-                      title: Text(podcast.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    ),
-                    const Divider(),
-                  ],
-                );
-              },
-              pageFuture: (int pageIndex) {
-                return searchPodcastsByTextQuery(userQuery, page: pageIndex);
-              },
+              )
+            );
+          },
+          pageLoadController: pageLoadController,
+          retryBuilder: (context, callback) {
+            return Container(
+              // height: MediaQuery.of(context).size.height - kToolbarHeight,
+              child: PlaceholderScreen(
+                // icon: Icons.search,
+                subtitle: 'Service unavailable at this time - try again later.',
+                title: 'No podcasts to show',
+              )
             );
           },
         ),

@@ -227,6 +227,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.17"
+  easy_debounce:
+    dependency: "direct main"
+    description:
+      name: easy_debounce
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   ffi:
     dependency: transitive
     description:
@@ -480,6 +487,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  moor_mysql:
+    dependency: "direct main"
+    description:
+      path: "packages/moor_mysql"
+      relative: true
+    source: path
+    version: "1.0.0"
   multi_server_socket:
     dependency: transitive
     description:
@@ -730,6 +744,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.2+1"
+  sqljocky5:
+    dependency: transitive
+    description:
+      name: sqljocky5
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   sqlparser:
     dependency: transitive
     description:
@@ -814,6 +835,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
+  typed_buffer:
+    dependency: transitive
+    description:
+      name: typed_buffer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   typed_data:
     dependency: transitive
     description:

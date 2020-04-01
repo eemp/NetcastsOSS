@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:local_notifications/local_notifications.dart';
+//import 'package:local_notifications/local_notifications.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
@@ -15,6 +15,7 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
+import 'package:hear2learn/services/connectors/remote_data.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,12 +24,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
   static final App app = App._internal();
-  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    id: 'default_notification',
-    name: 'Default',
-    description: 'Grant this app the ability to show notifications',
-    importance: AndroidNotificationChannelImportance.HIGH,
-  );
+  //static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    //id: 'default_notification',
+    //name: 'Default',
+    //description: 'Grant this app the ability to show notifications',
+    //importance: AndroidNotificationChannelImportance.HIGH,
+  //);
   List<IAPItem> donations;
   String downloadsPath;
   ElasticsearchClient elasticClient;
@@ -38,6 +39,7 @@ class App {
   PackageInfo packageInfo;
   final AudioPlayer player = AudioPlayer();
   SharedPreferences prefs;
+  RemoteData remoteData;
   Store<AppState> store;
   StreamSubscription _purchaseUpdatedSubscription;
 
@@ -47,15 +49,12 @@ class App {
 
   App._internal();
 
-  Future<void> init({ String elasticHost }) async {
+  Future<void> init({ var remoteDataDB, String remoteDataStrategy }) async {
     packageInfo = await PackageInfo.fromPlatform();
 
     store = appStore();
 
-    elasticClient = ElasticsearchClient(
-      host: elasticHost,
-      index: 'hear2learn',
-    );
+    remoteData = RemoteData(db: remoteDataDB, strategy: remoteDataStrategy);
 
     localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();
@@ -90,7 +89,7 @@ class App {
   }
 
   Future<void> initNotifications() async {
-    await LocalNotifications.createAndroidNotificationChannel(channel: channel);
+    //await LocalNotifications.createAndroidNotificationChannel(channel: channel);
   }
 
   void initConnectivityListener() {
@@ -163,27 +162,27 @@ class App {
     String title,
   }) async {
     //await LocalNotifications.removeNotification(0);
-    await LocalNotifications.createNotification(
-      actions: <NotificationAction>[
-        NotificationAction(
-          actionText: actionText,
-          callback: callback,
-          callbackName: 'onNotificationActionClick',
-          payload: payload,
-          launchesApp: launchesApp,
-        ),
-      ],
-      androidSettings: AndroidSettings(
-        channel: channel,
-        isOngoing: isOngoing,
-      ),
-      content: content,
-      id: 0,
-      title: title,
-    );
+    //await LocalNotifications.createNotification(
+      //actions: <NotificationAction>[
+        //NotificationAction(
+          //actionText: actionText,
+          //callback: callback,
+          //callbackName: 'onNotificationActionClick',
+          //payload: payload,
+          //launchesApp: launchesApp,
+        //),
+      //],
+      //androidSettings: AndroidSettings(
+        //channel: channel,
+        //isOngoing: isOngoing,
+      //),
+      //content: content,
+      //id: 0,
+      //title: title,
+    //);
   }
 
   Future<void> removeNotification() async {
-    await LocalNotifications.removeNotification(0);
+    //await LocalNotifications.removeNotification(0);
   }
 }

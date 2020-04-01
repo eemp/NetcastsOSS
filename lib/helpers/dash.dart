@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart' as flutter show compute;
 import 'package:flutter/foundation.dart' show ComputeCallback;
 
@@ -56,6 +57,15 @@ bool isEmpty(String value) {
 
 bool isNotEmpty(String value) {
   return value != null && value.isNotEmpty;
+}
+
+// TODO: no return values
+Function debounce(Function fn, Duration delay, { String debounceId }) {
+  debounceId = debounceId ?? StackTrace.current.toString().split("\n")[1];
+
+  return ([List<dynamic> args]) {
+    EasyDebounce.debounce(debounceId, delay, () => apply(fn, args));
+  };
 }
 
 Function throttle(Function fn, Duration delay) {

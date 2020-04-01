@@ -5,6 +5,7 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:hear2learn/services/connectors/remote_data.dart' as pv2;
 
 const String PODCAST_TYPE = 'podcast';
 
@@ -19,65 +20,24 @@ Future<List<Podcast>> getSubscriptions() {
 
 Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
   final App app = App();
-  final client = app.elasticClient;
+  final pv2.RemoteData remoteData = app.remoteData;
 
-  final query = {
-    'query': {
-      'bool': {
-        'filter': [
-          { 'exists': { 'field': 'feed' } },
-          {
-            'term': {
-              'primary_genre.id': genreId,
-            }
-          }
-        ]
-      }
-    },
-    'sort': [
-      'popularity',
-    ],
-  };
-  return client.search(
-    type: PODCAST_TYPE,
-    body: query,
-  ).then((response) => toPodcasts(response));
+  return remoteData.podcastsByGenre(genreId).catchError((err, stack) {
+    print('searchPodcastsByGenre: Ran into error: ' + err.toString());
+    print(stack.toString());
+    return err;
+  });
 }
 
 Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {
   final App app = App();
-  final client = app.elasticClient;
+  final pv2.RemoteData remoteData = app.remoteData;
 
-  final query = {
-    'from': page * pageSize,
-    'query': {
-      'bool': {
-        'filter': [
-          { 'exists': { 'field': 'feed' } },
-        ],
-        'minimum_should_match': 1,
-        'should': [
-          {
-            'multi_match': {
-              'fields': [
-                'name^16',
-                'artist.name^8',
-                'genre^8',
-                'description',
-              ],
-              'operator': 'and',
-              'query': textQuery
-            }
-          }
-        ],
-      }
-    },
-    'size': pageSize,
-  };
-  return client.search(
-    body: query,
-    type: PODCAST_TYPE,
-  ).then((response) => toPodcasts(response));
+  return remoteData.searchPodcastsByTextQuery(textQuery, pageSize: pageSize, page: page).catchError((err, stack) {
+    print('searchPodcastsByTextQuery: Ran into error: ' + err.toString());
+    print(stack.toString());
+    return err;
+  });
 }
 
 Future<void> subscribeToPodcast(Podcast podcast) async {
@@ -97,8 +57,4 @@ Future<void> unsubscribeFromPodcast(Podcast podcast) async {
   final App app = App();
   final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
   await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
-}
-
-List<Podcast> toPodcasts(ElasticsearchResponse response) {
-  return response.hits.map((hit) => Podcast.fromJson(hit.source)).toList();
 }

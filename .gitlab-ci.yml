@@ -11,11 +11,15 @@ stages:
 #  - build
 
 lint:
+  except:
+    - schedules
   stage: test
   script:
     - flutter analyze
 
 tests:
+  except:
+    - schedules
   stage: test
   script:
     - flutter test

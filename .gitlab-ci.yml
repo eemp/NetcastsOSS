@@ -1,11 +1,6 @@
 # A functional, but probably terrible, example of GitLab CI for Flutter
 image: cirrusci/flutter
 
-variables:
-before_script:
-  - flutter channel dev
-  - flutter upgrade
-
 stages:
   - test
 #  - build
@@ -14,6 +9,9 @@ lint:
   except:
     - schedules
   stage: test
+  before_script:
+    - flutter channel dev
+    - flutter upgrade
   script:
     - flutter analyze
 
@@ -21,6 +19,9 @@ tests:
   except:
     - schedules
   stage: test
+  before_script:
+    - flutter channel dev
+    - flutter upgrade
   script:
     - flutter test
 

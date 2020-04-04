@@ -27,7 +27,7 @@ mysql-activity:
     name: arey/mysql-client
     entrypoint: [""]
   script:
-    - mysql -h $DB_HOST -p $DB_PASS -D $DB_NAME -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;"
+    - mysql -h $DB_HOST -P DB_PORT -D $DB_NAME -u $DB_USER -p $DB_PASS -D $DB_NAME -e $DB_ACTIVITY_STMT
 
 #build:
 #  stage: build

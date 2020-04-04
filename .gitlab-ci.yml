@@ -20,6 +20,15 @@ tests:
   script:
     - flutter test
 
+mysql-activity:
+  only:
+    - schedules
+  image:
+    name: arey/mysql-client
+    entrypoint: [""]
+  script:
+    - mysql -h $DB_HOST -p $DB_PASS -D $DB_NAME -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;"
+
 #build:
 #  stage: build
 #  script:

@@ -27,14 +27,14 @@ tests:
     - flutter test
   when: manual
 
-mysql-activity:
-  only:
-    - schedules
-  image:
-    name: arey/mysql-client
-    entrypoint: [""]
-  script:
-    - mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;" $DB_NAME
+# mysql-activity:
+#   only:
+#     - schedules
+#   image:
+#     name: arey/mysql-client
+#     entrypoint: [""]
+#   script:
+#     - mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;" $DB_NAME
 
 #build:
 #  stage: build

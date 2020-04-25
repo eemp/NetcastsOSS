@@ -14,6 +14,7 @@ lint:
     - flutter upgrade
   script:
     - flutter analyze
+  when: manual
 
 tests:
   except:
@@ -24,6 +25,7 @@ tests:
     - flutter upgrade
   script:
     - flutter test
+  when: manual
 
 mysql-activity:
   only:

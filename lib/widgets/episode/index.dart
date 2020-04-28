@@ -47,6 +47,7 @@ class EpisodePage extends StatelessWidget {
                 onFinish: onFinish,
                 onPause: onPause,
                 onPlay: onPlay,
+                onResume: onResume,
                 onShare: onShare,
                 onUnfavorite: onUnfavorite,
                 onUnfinish: onUnfinish,
@@ -99,6 +100,11 @@ class EpisodePage extends StatelessWidget {
   void onPlay() {
     final App app = App();
     app.store.dispatch(playEpisode(episode));
+  }
+
+  void onResume() {
+    final App app = App();
+    app.store.dispatch(resumeEpisode());
   }
 
   void onShare() {

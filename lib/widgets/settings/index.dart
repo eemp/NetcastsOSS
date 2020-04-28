@@ -77,13 +77,14 @@ class Settings extends StatelessWidget {
                           child: Text(speed.toString()),
                           value: speed,
                         )).toList(),
-                        onChanged: (double speed) {
-                          app.store.dispatch(
-                            updateSettings(settings.copyWith(
-                              speed: speed,
-                            ))
-                          );
-                        },
+                        // temporarily disable while transitioning to new player
+                        // onChanged: (double speed) {
+                        //   app.store.dispatch(
+                        //     updateSettings(settings.copyWith(
+                        //       speed: speed,
+                        //     ))
+                        //   );
+                        // },
                         value: settings.speed != null ? num.parse(settings.speed.toStringAsFixed(1)) : 1.0,
                       ),
                     ),
@@ -91,7 +92,7 @@ class Settings extends StatelessWidget {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                       icon: Icon(Icons.play_arrow),
-                      labelText: 'Player Speed',
+                      labelText: 'Player Speed (Under Maintenance)',
                     ),
                   ),
                 ),

@@ -11,12 +11,14 @@ class EpisodePlayer extends StatelessWidget {
   final Episode episode;
   final Function onPause;
   final Function onPlay;
+  final Function onResume;
 
   const EpisodePlayer({
     Key key,
     this.episode,
     this.onPause,
     this.onPlay,
+    this.onResume,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class EpisodePlayer extends StatelessWidget {
       converter: getEpisodeSelector(episode),
       builder: (BuildContext context, Episode episode) {
         final bool canPlay = dash.isNotEmpty(episode.downloadPath);
+        final bool isActive = episode?.isActive() ?? false;
         final bool isPlaying = episode?.isPlaying() ?? false;
         final bool isQueued = episode.url == episode?.url;
         final Duration duration = canPlay ? episode?.length : null;
@@ -99,7 +102,12 @@ class EpisodePlayer extends StatelessWidget {
                           onPause();
                         }
                         else {
-                          onPlay();
+                          if(episode.status == EpisodeStatus.PAUSED && isActive) {
+                            onResume();
+                          }
+                          else {
+                            onPlay();
+                          }
                         }
                       } : null,
                       child: Padding(

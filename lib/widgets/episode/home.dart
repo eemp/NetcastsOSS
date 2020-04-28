@@ -12,6 +12,7 @@ class EpisodeHome extends StatelessWidget {
   final Function onFinish;
   final Function onPause;
   final Function onPlay;
+  final Function onResume;
   final Function onShare;
   final Function onUnfavorite;
   final Function onUnfinish;
@@ -25,6 +26,7 @@ class EpisodeHome extends StatelessWidget {
     this.onFinish,
     this.onPause,
     this.onPlay,
+    this.onResume,
     this.onShare,
     this.onUnfavorite,
     this.onUnfinish,
@@ -73,6 +75,7 @@ class EpisodeHome extends StatelessWidget {
             episode: episode,
             onPause: onPause,
             onPlay: onPlay,
+            onResume: onResume,
           ),
           padding: const EdgeInsets.only(bottom: 16.0),
         ),

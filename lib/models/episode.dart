@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/redux/selectors.dart';
+import 'package:hear2learn/redux/state.dart';
 import 'package:intl/intl.dart';
+import 'package:redux/redux.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 enum EpisodeStatus {
@@ -115,7 +118,7 @@ class Episode {
   }
 
   String getPlayerDetails() {
-    return jsonEncode(<int>[position.inSeconds, length.inSeconds]);
+    return jsonEncode(<int>[position?.inSeconds ?? 0, length?.inSeconds ?? 0]);
   }
 
   void setPlayerDetails(String details) {
@@ -126,6 +129,12 @@ class Episode {
 
   bool isPlaying() {
     return status == EpisodeStatus.PLAYING;
+  }
+
+  bool isActive() {
+    final Store<AppState> store = app.store;
+    final Episode currentEpisode = playingEpisodeSelector(store);
+    return this.url == currentEpisode?.url;
   }
 
   bool isPlayedToEnd() {
@@ -151,7 +160,7 @@ class Episode {
 
   @override
   String toString() {
-    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, ]';
+    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, downloadPath=${downloadPath}]';
   }
 
   @override

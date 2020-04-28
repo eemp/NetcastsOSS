@@ -24,12 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: ^0.1.2
 
-  #audioplayers: ^0.8.0
-  audioplayers:
-    #path: ./packages/audioplayers
-    git:
-      url: https://github.com/eemp/audioplayers.git
-      ref: exoplayer
+  audio_service: ^0.7.1
   cached_network_image: ^2.0.0-rc.1
   connectivity: ^0.4.2
   dio: ^1.0.13
@@ -41,23 +36,21 @@ dependencies:
       ref: dev_version
   flutter_cache_manager: any
   flutter_html: ^0.8.2
+  flutter_inapp_purchase: ^2.0.6
   flutter_pagewise: ^1.2.2
   flutter_redux: ^0.5.2
   http: any
   intl: any
-  flutter_inapp_purchase: ^2.0.6
   jaguar_orm: any
   jaguar_query_sqflite: ^2.2.5
+  just_audio: ^0.1.3
   moor: ^2.4.2
   moor_ffi: ^0.4.0
   moor_mysql:
     path: ./packages/moor_mysql
-    # git:
-    #  url: https://github.com/simolus3/moor.git
-    #  path: extras/mysql
-  package_info: ^0.4.0
+  package_info: ^0.4.0+16
   path: ^1.6.2
-  path_provider: ^0.5.0
+  path_provider: ^1.5.1
   percent_indicator: ^1.0.13
   redux: ^3.0.0
   redux_thunk: ^0.2.1

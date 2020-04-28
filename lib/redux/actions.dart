@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/services/audio.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/helpers/dynamic_theme.dart';
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
@@ -15,9 +17,6 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/notifications.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-
-const String PAUSE_BUTTON = '⏸️';
-const String PLAY_BUTTON = '▶️';
 
 enum ActionType {
   UPDATE_CONNECTIVITY,
@@ -73,18 +72,7 @@ Action setConnectivity(ConnectivityResult connectivity) {
 
 ThunkAction<AppState> pauseEpisode(Episode episode) {
   return (Store<AppState> store) async {
-    final App app = App();
-
-    app.player.pause();
-    await app.createNotification(
-      actionText: '$PLAY_BUTTON Resume',
-      callback: (String payload) {
-        store.dispatch(resumeEpisode());
-      },
-      content: playingEpisodeSelector(store).title,
-      payload: 'playAction',
-      title: playingEpisodeSelector(store).podcastTitle,
-    );
+    AudioService.pause();
 
     store.dispatch(Action(
       type: ActionType.PAUSE_EPISODE,
@@ -95,29 +83,63 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
   };
 }
 
-ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }) {
+ThunkAction<AppState> reflectAudioServiceStatus(PlaybackState playbackState) {
+  final App app = App();
   return (Store<AppState> store) async {
-    final App app = App();
+    final Episode currentEpisode = playingEpisodeSelector(store);
+
+    final BasicPlaybackState basicPlaybackState = playbackState?.basicState;
+    if(!AudioService.running) {
+      store.dispatch(completeEpisode(currentEpisode));
+      return;
+    }
+
+    if(playbackState?.currentPosition != null) {
+      store.dispatch(updateEpisodePosition(
+        Duration(milliseconds: playbackState.currentPosition)
+      ));
+    }
+
+    final bool shouldUpdateCurrentEpisodeDuration = currentEpisode != null && (
+      currentEpisode.length == null || currentEpisode.length.inMilliseconds != AudioService.currentMediaItem?.duration
+    );
+    if(AudioService.currentMediaItem?.duration != null && shouldUpdateCurrentEpisodeDuration) {
+      store.dispatch(Action(
+        type: ActionType.SET_EPISODE_LENGTH,
+        payload: <String, dynamic>{
+          'length': Duration(
+            milliseconds: AudioService.currentMediaItem.duration,
+          ),
+        },
+      ));
+    }
+  };
+}
+
+ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }) {
+  final App app = App();
+
+  return (Store<AppState> store) async {
     final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
+    final Duration position = matchingEpisode.position ?? Duration();
 
-    app.player.play(
-      matchingEpisode.downloadPath,
-      isLocal: true,
-      position: matchingEpisode.position ?? const Duration(),
-      skipSilence: store.state.settings.skipSilence ?? false,
-      speed: store.state.settings.speed ?? 1.0,
+    final Function onPlaybackStateUpdateCallback = (playbackState) => (
+      store.dispatch(reflectAudioServiceStatus(playbackState))
     );
 
-    await app.createNotification(
-      actionText: '$PAUSE_BUTTON Pause',
-      callback: (String payload) {
-        store.dispatch(pauseEpisode(matchingEpisode));
+    await initAudioService(onPlaybackStateUpdateCallback);
+
+    await AudioService.customAction('loadAndPlayMedia', {
+      'mediaItem': {
+        'album': matchingEpisode.podcastTitle,
+        'artist': matchingEpisode.podcastTitle,
+        // artwork: matchingEpisode.podcast?.artwork100,
+        'path': matchingEpisode.downloadPath,
+        'title': matchingEpisode.title,
+        //'position': position,
       },
-      content: matchingEpisode.title,
-      isOngoing: true,
-      payload: 'pauseAction',
-      title: matchingEpisode.podcastTitle,
-    );
+      'position': matchingEpisode.position?.inMilliseconds,
+    });
 
     store.dispatch(Action(
       type: ActionType.PLAY_EPISODE,
@@ -148,22 +170,11 @@ ThunkAction<AppState> queuePlaylist(EpisodeQueue episodeQueue) {
   };
 }
 
-
 ThunkAction<AppState> resumeEpisode() {
   return (Store<AppState> store) async {
     final App app = App();
 
-    app.player.resume();
-    await app.createNotification(
-      actionText: '$PAUSE_BUTTON Pause',
-      callback: (String payload) {
-        store.dispatch(pauseEpisode(playingEpisodeSelector(store)));
-      },
-      content: playingEpisodeSelector(store).title,
-      isOngoing: true,
-      payload: 'pauseAction',
-      title: playingEpisodeSelector(store).podcastTitle,
-    );
+    AudioService.play();
 
     store.dispatch(Action(
       type: ActionType.RESUME_EPISODE,
@@ -174,7 +185,7 @@ ThunkAction<AppState> resumeEpisode() {
 Action seekInEpisode(Duration position) {
   final App app = App();
 
-  app.player.seek(position);
+  AudioService.seekTo(position.inMilliseconds);
   return setEpisodePosition(
     position > const Duration(seconds: 0)
       ? position
@@ -261,6 +272,7 @@ ThunkAction<AppState> finishEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+    setEpisodePosition(Duration.zero);
   };
 }
 
@@ -338,8 +350,6 @@ ThunkAction<AppState> completeEpisode([Episode episode]) {
     final Episode playingEpisode = store.state.userEpisodes[store.state.playingEpisode];
     episode ??= playingEpisode;
     if(episode != null && episode.url == playingEpisode?.url) {
-      app.player.stop();
-      app.removeNotification();
       store.dispatch(Action(
         type: ActionType.COMPLETE_EPISODE,
       ));
@@ -499,10 +509,10 @@ ThunkAction<AppState> updateSettings(AppSettings settings, { BuildContext contex
 
 void onAppSettingsUpdate(AppSettings newSettings, { BuildContext context }) {
   final App app = App();
-  app.player.setOptions(
-    skipSilence: newSettings.skipSilence ?? false,
-    speed: newSettings.speed ?? 1.0,
-  );
+  //app.player.setOptions(
+    //skipSilence: newSettings.skipSilence ?? false,
+    //speed: newSettings.speed ?? 1.0,
+  //);
   if(context != null) {
     DynamicTheme.of(context).setTheme(newSettings.themeName);
   }

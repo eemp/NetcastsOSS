@@ -130,9 +130,4 @@ class EpisodeTileConnector extends StatelessWidget {
     final App app = App();
     app.store.dispatch(playEpisode(episode, episodeQueue: episodeQueue));
   }
-
-  void onEpisodeResume() {
-    final App app = App();
-    app.store.dispatch(resumeEpisode());
-  }
 }

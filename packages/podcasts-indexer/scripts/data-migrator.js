@@ -31,7 +31,7 @@ origModel.find({limit: 9999}).then(results => {
   const records = results.map(result => result.toJSON());
   console.log(`Found ${records.length} records to migrate...`);
   return toDS.autoupdate(modelName).then(result =>
-    strategy(records);
+    strategy(records)
   );
 }).then(() => {
   console.log('Finished pushing podcasts data.');

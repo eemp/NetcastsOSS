@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.3"
+  dart_web_audio:
+    dependency: transitive
+    description:
+      name: dart_web_audio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   dio:
     dependency: "direct main"
     description:

@@ -1,24 +1,70 @@
 # A functional, but probably terrible, example of GitLab CI for Flutter
 image: cirrusci/flutter
 
-variables:
-before_script:
-  - flutter channel dev
-  - flutter upgrade
-
 stages:
   - test
 #  - build
 
 lint:
+  except:
+    - schedules
   stage: test
+  before_script:
+    - flutter channel dev
+    - flutter upgrade
   script:
     - flutter analyze
+  when: manual
 
 tests:
+  except:
+    - schedules
   stage: test
+  before_script:
+    - flutter channel dev
+    - flutter upgrade
   script:
     - flutter test
+  when: manual
+
+# mysql-activity:
+#   only:
+#     - schedules
+#   image:
+#     name: arey/mysql-client
+#     entrypoint: [""]
+#   script:
+#     - mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;" $DB_NAME
+
+itunes-data:
+  only:
+    refs:
+      - schedules
+    variables:
+      - $WHICH_SCHEDULE == "itunes-data"
+  image:
+    name: node:current
+  before_script:
+    - curl -XGET https://gist.githubusercontent.com/eemp/b3e810a3cd691834ed65c994cbd0da6a/raw/475e1278f93e5006fc12a3b7a6940ce08c1cd14d/transcrypt > transcrypt
+    - yes | bash ./transcrypt -c aes-256-cbc -p $TRANSCRYPT_PASSWORD || true
+    - npm install --prefix packages/podcasts-indexer
+  script:
+    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:data:mysql
+
+feeds-data:
+  only:
+    refs:
+      - schedules
+    variables:
+      - $WHICH_SCHEDULE == "feeds-data"
+  image:
+    name: node:current
+  before_script:
+    - curl -XGET https://gist.githubusercontent.com/eemp/b3e810a3cd691834ed65c994cbd0da6a/raw/475e1278f93e5006fc12a3b7a6940ce08c1cd14d/transcrypt > transcrypt
+    - yes | bash ./transcrypt -c aes-256-cbc -p $TRANSCRYPT_PASSWORD || true
+    - npm install --prefix packages/podcasts-indexer
+  script:
+    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:feeds-data:mysql
 
 #build:
 #  stage: build

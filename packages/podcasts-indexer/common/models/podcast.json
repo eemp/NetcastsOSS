@@ -49,13 +49,11 @@
       }
     },
     "feed": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "genres": {
       "type": "object",
-      "mysql": {
-        "dataType": "JSON"
-      },
       "properties": {
         "id": {
           "type": "string"
@@ -68,9 +66,13 @@
     "id": {
       "type": "string",
       "forceId": true,
-      "id": true
+      "id": true,
+      "required": true
     },
-    "last_modified_date": {
+    "last_modified_timestamp": {
+      "type": "date"
+    },
+    "last_updated": {
       "type": "date"
     },
     "name": {

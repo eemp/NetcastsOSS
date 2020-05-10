@@ -64,7 +64,9 @@ function enhancePodcastWithFeedData(podcast, callback) {
         return Promise.resolve(true);
       });
     }
-  ).asCallback(callback);
+  ).catch(err => {
+    console.error(`Unable to enhancePodcastWithFeedData for ${podcast.url}...`, err);
+  }).asCallback(callback);
 }
 
 function fetchFeedData(podcast) {
@@ -83,7 +85,7 @@ function fetchFeedData(podcast) {
   })
   .then(feedData => {
     const lastUpdated = _.get(feedData, 'items.0.pubDate')
-      ? moment(_.get(feedData, 'items.0.pubDate'))
+      ? moment(_.get(feedData, 'items.0.pubDate')).toDate()
       : undefined;
     return {
       artworkOrig: _.get(feedData, 'image.url'),

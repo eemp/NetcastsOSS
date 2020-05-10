@@ -47,7 +47,7 @@ fetchPodcasts().then(podcasts => {
 });
 
 function fetchPodcasts() {
-  return model.find({ limit: totalBatchSize, order: 'last_modified_timestamp ASC' });
+  return model.find({ limit: totalBatchSize, order: ['last_modified_timestamp ASC', 'popularity ASC'] });
 }
 
 function enhancePodcastWithFeedData(podcast, callback) {

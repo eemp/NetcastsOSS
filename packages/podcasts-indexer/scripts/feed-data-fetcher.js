@@ -54,15 +54,12 @@ function enhancePodcastWithFeedData(podcast, callback) {
   const { id } = podcast;
 
   return Promise.resolve(fetchFeedData(podcast)).then(
-    // podcastInfoFromFeed => model.updateAttributes(podcastInfoFromFeed)
     podcastInfoFromFeed => {
       if(_.isEmpty(podcastInfoFromFeed)) {
         return Promise.resolve();
       }
 
-      return model.upsertWithWhere({ id }, podcastInfoFromFeed).then(() => {
-        return Promise.resolve(true);
-      });
+      return model.upsertWithWhere({ id }, podcastInfoFromFeed);
     }
   ).catch(err => {
     console.error(`Unable to enhancePodcastWithFeedData for ${podcast.url}...`, err);

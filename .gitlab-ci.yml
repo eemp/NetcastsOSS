@@ -66,6 +66,15 @@ feeds-data:
   script:
     - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:feeds-data:mysql
 
+ping-api:
+  only:
+    refs:
+      - schedules
+    variables:
+      - $WHICH_SCHEDULE == "ping-api"
+  script:
+    curl -XGET "$API_BASE_URL/ping"
+
 #build:
 #  stage: build
 #  script:

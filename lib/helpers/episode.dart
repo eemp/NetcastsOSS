@@ -183,3 +183,13 @@ Future<void> deleteEpisode(Episode episode) async {
   );
   episode.downloadPath = null;
 }
+
+bool isActive(episode) {
+  final App app = App();
+  final Store<AppState> store = app.store;
+  final Episode currentEpisode = playingEpisodeSelector(store);
+  if(episode is null || currentEpisode is null) {
+    return false;
+  }
+  return episode.url == currentEpisode.url;
+}

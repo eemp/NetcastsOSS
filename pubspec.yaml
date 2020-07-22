@@ -68,6 +68,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.1.2
   flutter_launcher_icons: "^0.7.0"
+  mockito: any
   moor_generator: ^2.4.0
   #jaguar_orm_gen: any
   openapi_generator: ^1.0.8

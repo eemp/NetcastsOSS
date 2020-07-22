@@ -1,10 +1,6 @@
 import 'dart:convert';
 
-import 'package:hear2learn/app.dart';
-import 'package:hear2learn/redux/selectors.dart';
-import 'package:hear2learn/redux/state.dart';
 import 'package:intl/intl.dart';
-import 'package:redux/redux.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 enum EpisodeStatus {
@@ -27,8 +23,6 @@ EpisodeQueue episodeQueueFromString(String enumName) {
 }
 
 class Episode {
-  final App app = App();
-
   static const int END_OF_EPISODE_THRESHOLD = 60;
 
   String description;
@@ -129,12 +123,6 @@ class Episode {
 
   bool isPlaying() {
     return status == EpisodeStatus.PLAYING;
-  }
-
-  bool isActive() {
-    final Store<AppState> store = app.store;
-    final Episode currentEpisode = playingEpisodeSelector(store);
-    return this.url == currentEpisode?.url;
   }
 
   bool isPlayedToEnd() {

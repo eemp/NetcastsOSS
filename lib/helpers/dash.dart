@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:easy_debounce/easy_debounce.dart';
-import 'package:flutter/foundation.dart' as flutter show compute;
-import 'package:flutter/foundation.dart' show ComputeCallback;
+import 'package:flutter/foundation.dart' as flutter show compute, ComputeCallback;
 
 bool get isInDebugMode {
   bool inDebugMode = false;
@@ -12,7 +11,7 @@ bool get isInDebugMode {
 }
 
 // for more information on this hack, see https://github.com/flutter/flutter/issues/24703#issuecomment-473335593
-Future<R> compute<Q, R>(ComputeCallback<Q, R> callback, Q message) async {
+Future<R> compute<Q, R>(flutter.ComputeCallback<Q, R> callback, Q message) async {
   if (isInDebugMode) {
     return callback(message);
   }

@@ -11,6 +11,7 @@ import 'package:jaguar_mimetype/jaguar_mimetype.dart';
 import 'package:netcastsoss_data_api/api/ping_controller_api.dart';
 import 'package:netcastsoss_data_api/api/podcasts_controller_api.dart';
 
+import 'package:netcastsoss_data_api/model/inline_response200.dart';
 import 'package:netcastsoss_data_api/model/loopback_count.dart';
 import 'package:netcastsoss_data_api/model/new_podcasts.dart';
 import 'package:netcastsoss_data_api/model/ping_response.dart';
@@ -24,6 +25,7 @@ import 'package:netcastsoss_data_api/model/podcasts_with_relations.dart';
 
 
 final _jsonJaguarRepo = JsonRepo()
+..add(InlineResponse200Serializer())
 ..add(LoopbackCountSerializer())
 ..add(NewPodcastsSerializer())
 ..add(PingResponseSerializer())

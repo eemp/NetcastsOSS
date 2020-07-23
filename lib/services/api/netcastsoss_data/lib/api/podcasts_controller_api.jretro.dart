@@ -30,19 +30,28 @@ abstract class _$PodcastsControllerApiClient implements ApiClient {
   }
 
   Future<List<PodcastsWithRelations>> podcastsControllerFind(
-      PodcastsFilter1 filter) async {
+      PodcastsFilter filter) async {
     var req = base.get.path(basePath).path("/podcasts").query("filter", filter);
     return req.go(throwOnErr: true).map(decodeList);
   }
 
   Future<PodcastsWithRelations> podcastsControllerFindById(
-      String id, PodcastsFilter filter) async {
+      String id, PodcastsFilter1 filter) async {
     var req = base.get
         .path(basePath)
         .path("/podcasts/:id")
         .pathParams("id", id)
         .query("filter", filter);
     return req.go(throwOnErr: true).map(decodeOne);
+  }
+
+  Future<List<InlineResponse200>> podcastsControllerFindPopularPodcasts(
+      PodcastsFilter filter) async {
+    var req = base.get
+        .path(basePath)
+        .path("/podcasts/popular-by-genre")
+        .query("filter", filter);
+    return req.go(throwOnErr: true).map(decodeList);
   }
 
   Future<void> podcastsControllerReplaceById(
@@ -53,6 +62,16 @@ abstract class _$PodcastsControllerApiClient implements ApiClient {
         .pathParams("id", id)
         .json(jsonConverter.to(podcasts));
     await req.go(throwOnErr: true);
+  }
+
+  Future<List<PodcastsWithRelations>> podcastsControllerSearchPodcastsByText(
+      String q, num limit) async {
+    var req = base.get
+        .path(basePath)
+        .path("/podcasts/text-search")
+        .query("q", q)
+        .query("limit", limit);
+    return req.go(throwOnErr: true).map(decodeList);
   }
 
   Future<LoopbackCount> podcastsControllerUpdateAll(

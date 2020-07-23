@@ -21,11 +21,6 @@ abstract class _$PodcastsFilter1Serializer
     setMapValueIfNotNull(ret, 'order',
         codeNonNullIterable(model.order, (val) => val as String, []));
     setMapValueIfNotNull(
-        ret,
-        'where',
-        codeNonNullMap(model.where, (val) => passProcessor.serialize(val),
-            <String, dynamic>{}));
-    setMapValueIfNotNull(
         ret, 'fields', _podcastsFieldsSerializer.toMap(model.fields));
     return ret;
   }
@@ -40,11 +35,6 @@ abstract class _$PodcastsFilter1Serializer
         order: codeNonNullIterable<String>(
                 map['order'] as Iterable, (val) => val as String, <String>[]) ??
             getJserDefault('order'),
-        where: codeNonNullMap<Object>(
-                map['where'] as Map,
-                (val) => passProcessor.deserialize(val) as Object,
-                <String, Object>{}) ??
-            getJserDefault('where'),
         fields: _podcastsFieldsSerializer.fromMap(map['fields'] as Map) ??
             getJserDefault('fields'));
     return obj;

@@ -76,13 +76,16 @@ Class | Method | HTTP request | Description
 *PodcastsControllerApi* | [**podcastsControllerDeleteById**](doc//PodcastsControllerApi.md#podcastscontrollerdeletebyid) | **Delete** /podcasts/:id | 
 *PodcastsControllerApi* | [**podcastsControllerFind**](doc//PodcastsControllerApi.md#podcastscontrollerfind) | **Get** /podcasts | 
 *PodcastsControllerApi* | [**podcastsControllerFindById**](doc//PodcastsControllerApi.md#podcastscontrollerfindbyid) | **Get** /podcasts/:id | 
+*PodcastsControllerApi* | [**podcastsControllerFindPopularPodcasts**](doc//PodcastsControllerApi.md#podcastscontrollerfindpopularpodcasts) | **Get** /podcasts/popular-by-genre | 
 *PodcastsControllerApi* | [**podcastsControllerReplaceById**](doc//PodcastsControllerApi.md#podcastscontrollerreplacebyid) | **Put** /podcasts/:id | 
+*PodcastsControllerApi* | [**podcastsControllerSearchPodcastsByText**](doc//PodcastsControllerApi.md#podcastscontrollersearchpodcastsbytext) | **Get** /podcasts/text-search | 
 *PodcastsControllerApi* | [**podcastsControllerUpdateAll**](doc//PodcastsControllerApi.md#podcastscontrollerupdateall) | **Patch** /podcasts | 
 *PodcastsControllerApi* | [**podcastsControllerUpdateById**](doc//PodcastsControllerApi.md#podcastscontrollerupdatebyid) | **Patch** /podcasts/:id | 
 
 
 ## Documentation For Models
 
+ - [InlineResponse200](doc//InlineResponse200.md)
  - [LoopbackCount](doc//LoopbackCount.md)
  - [NewPodcasts](doc//NewPodcasts.md)
  - [PingResponse](doc//PingResponse.md)

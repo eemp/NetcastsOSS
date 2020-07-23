@@ -19,9 +19,6 @@ class PodcastsFilter1 {
   @Alias('order', isNullable: false,  )
   final List<String> order;
   
-  @Alias('where', isNullable: false,  )
-  final Map<String, Object> where;
-  
   @Alias('fields', isNullable: false,  )
   final PodcastsFields fields;
   
@@ -34,7 +31,6 @@ class PodcastsFilter1 {
      this.limit = null,  
      this.skip = null,  
      this.order = const [],  
-     this.where = const {},  
      this.fields = null 
     
     }
@@ -42,7 +38,7 @@ class PodcastsFilter1 {
 
   @override
   String toString() {
-    return 'PodcastsFilter1[offset=$offset, limit=$limit, skip=$skip, order=$order, where=$where, fields=$fields, ]';
+    return 'PodcastsFilter1[offset=$offset, limit=$limit, skip=$skip, order=$order, fields=$fields, ]';
   }
 }
 

@@ -22,18 +22,28 @@ void main() {
       // TODO
     });
 
-    //Future<List<PodcastsWithRelations>> podcastsControllerFind({ PodcastsFilter1 filter }) async 
+    //Future<List<PodcastsWithRelations>> podcastsControllerFind({ PodcastsFilter filter }) async 
     test('test podcastsControllerFind', () async {
       // TODO
     });
 
-    //Future<PodcastsWithRelations> podcastsControllerFindById(String id, { PodcastsFilter filter }) async 
+    //Future<PodcastsWithRelations> podcastsControllerFindById(String id, { PodcastsFilter1 filter }) async 
     test('test podcastsControllerFindById', () async {
+      // TODO
+    });
+
+    //Future<List<AnyType>> podcastsControllerFindPopularPodcasts({ PodcastsFilter filter }) async 
+    test('test podcastsControllerFindPopularPodcasts', () async {
       // TODO
     });
 
     //Future podcastsControllerReplaceById(String id, { Podcasts podcasts }) async 
     test('test podcastsControllerReplaceById', () async {
+      // TODO
+    });
+
+    //Future<List<PodcastsWithRelations>> podcastsControllerSearchPodcastsByText({ String q, num limit }) async 
+    test('test podcastsControllerSearchPodcastsByText', () async {
       // TODO
     });
 

@@ -14,7 +14,9 @@ Method | HTTP request | Description
 [**podcastsControllerDeleteById**](PodcastsControllerApi.md#podcastsControllerDeleteById) | **Delete** /podcasts/:id | 
 [**podcastsControllerFind**](PodcastsControllerApi.md#podcastsControllerFind) | **Get** /podcasts | 
 [**podcastsControllerFindById**](PodcastsControllerApi.md#podcastsControllerFindById) | **Get** /podcasts/:id | 
+[**podcastsControllerFindPopularPodcasts**](PodcastsControllerApi.md#podcastsControllerFindPopularPodcasts) | **Get** /podcasts/popular-by-genre | 
 [**podcastsControllerReplaceById**](PodcastsControllerApi.md#podcastsControllerReplaceById) | **Put** /podcasts/:id | 
+[**podcastsControllerSearchPodcastsByText**](PodcastsControllerApi.md#podcastsControllerSearchPodcastsByText) | **Get** /podcasts/text-search | 
 [**podcastsControllerUpdateAll**](PodcastsControllerApi.md#podcastsControllerUpdateAll) | **Patch** /podcasts | 
 [**podcastsControllerUpdateById**](PodcastsControllerApi.md#podcastsControllerUpdateById) | **Patch** /podcasts/:id | 
 
@@ -151,7 +153,7 @@ No authorization required
 import 'package:netcastsoss_data_api/api.dart';
 
 var api_instance = new PodcastsControllerApi();
-var filter = ; // PodcastsFilter1 | 
+var filter = ; // PodcastsFilter | 
 
 try { 
     var result = api_instance.podcastsControllerFind(filter);
@@ -165,7 +167,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | [**PodcastsFilter1**](.md)|  | [optional] [default to null]
+ **filter** | [**PodcastsFilter**](.md)|  | [optional] [default to null]
 
 ### Return type
 
@@ -193,7 +195,7 @@ import 'package:netcastsoss_data_api/api.dart';
 
 var api_instance = new PodcastsControllerApi();
 var id = id_example; // String | 
-var filter = ; // PodcastsFilter | 
+var filter = ; // PodcastsFilter1 | 
 
 try { 
     var result = api_instance.podcastsControllerFindById(id, filter);
@@ -208,11 +210,52 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **String**|  | [default to null]
- **filter** | [**PodcastsFilter**](.md)|  | [optional] [default to null]
+ **filter** | [**PodcastsFilter1**](.md)|  | [optional] [default to null]
 
 ### Return type
 
 [**PodcastsWithRelations**](PodcastsWithRelations.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **podcastsControllerFindPopularPodcasts**
+> List<InlineResponse200> podcastsControllerFindPopularPodcasts(filter)
+
+
+
+### Example 
+```dart
+import 'package:netcastsoss_data_api/api.dart';
+
+var api_instance = new PodcastsControllerApi();
+var filter = ; // PodcastsFilter | 
+
+try { 
+    var result = api_instance.podcastsControllerFindPopularPodcasts(filter);
+    print(result);
+} catch (e) {
+    print("Exception when calling PodcastsControllerApi->podcastsControllerFindPopularPodcasts: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | [**PodcastsFilter**](.md)|  | [optional] [default to null]
+
+### Return type
+
+[**List<InlineResponse200>**](InlineResponse200.md)
 
 ### Authorization
 
@@ -264,6 +307,49 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **podcastsControllerSearchPodcastsByText**
+> List<PodcastsWithRelations> podcastsControllerSearchPodcastsByText(q, limit)
+
+
+
+### Example 
+```dart
+import 'package:netcastsoss_data_api/api.dart';
+
+var api_instance = new PodcastsControllerApi();
+var q = q_example; // String | 
+var limit = 8.14; // num | 
+
+try { 
+    var result = api_instance.podcastsControllerSearchPodcastsByText(q, limit);
+    print(result);
+} catch (e) {
+    print("Exception when calling PodcastsControllerApi->podcastsControllerSearchPodcastsByText: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **q** | **String**|  | [optional] [default to null]
+ **limit** | **num**|  | [optional] [default to null]
+
+### Return type
+
+[**List<PodcastsWithRelations>**](PodcastsWithRelations.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

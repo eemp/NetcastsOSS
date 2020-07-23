@@ -6,11 +6,12 @@ import 'dart:async';
 
 import 'package:netcastsoss_data_api/model/podcasts.dart';
 import 'package:netcastsoss_data_api/model/loopback_count.dart';
-import 'package:netcastsoss_data_api/model/podcasts_filter1.dart';
 import 'package:netcastsoss_data_api/model/podcasts_filter.dart';
+import 'package:netcastsoss_data_api/model/podcasts_filter1.dart';
 import 'package:netcastsoss_data_api/model/new_podcasts.dart';
 import 'package:netcastsoss_data_api/model/podcasts_with_relations.dart';
 import 'package:netcastsoss_data_api/model/podcasts_partial.dart';
+import 'package:netcastsoss_data_api/model/inline_response200.dart';
 
 part 'podcasts_controller_api.jretro.dart';
 
@@ -71,7 +72,7 @@ class PodcastsControllerApi extends ApiClient with _$PodcastsControllerApiClient
     @GetReq(path: "/podcasts")
     Future<List<PodcastsWithRelations>> podcastsControllerFind(
         
-            @QueryParam("filter") PodcastsFilter1 filter
+            @QueryParam("filter") PodcastsFilter filter
         ) {
         return super.podcastsControllerFind(
         
@@ -87,11 +88,26 @@ class PodcastsControllerApi extends ApiClient with _$PodcastsControllerApiClient
     Future<PodcastsWithRelations> podcastsControllerFindById(
             @PathParam("id") String id
         ,
-            @QueryParam("filter") PodcastsFilter filter
+            @QueryParam("filter") PodcastsFilter1 filter
         ) {
         return super.podcastsControllerFindById(
         id
         ,
+        filter
+
+        ).timeout(timeout);
+    }
+
+    /// 
+    ///
+    /// 
+    @GetReq(path: "/podcasts/popular-by-genre")
+    Future<List<InlineResponse200>> podcastsControllerFindPopularPodcasts(
+        
+            @QueryParam("filter") PodcastsFilter filter
+        ) {
+        return super.podcastsControllerFindPopularPodcasts(
+        
         filter
 
         ).timeout(timeout);
@@ -111,6 +127,25 @@ class PodcastsControllerApi extends ApiClient with _$PodcastsControllerApiClient
 
         ,
         podcasts
+        ).timeout(timeout);
+    }
+
+    /// 
+    ///
+    /// 
+    @GetReq(path: "/podcasts/text-search")
+    Future<List<PodcastsWithRelations>> podcastsControllerSearchPodcastsByText(
+        
+            @QueryParam("q") String q, 
+        
+            @QueryParam("limit") num limit
+        ) {
+        return super.podcastsControllerSearchPodcastsByText(
+        
+        q, 
+        
+        limit
+
         ).timeout(timeout);
     }
 

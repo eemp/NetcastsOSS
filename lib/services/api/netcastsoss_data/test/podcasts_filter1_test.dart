@@ -26,11 +26,6 @@ void main() {
       // TODO
     });
 
-    // Map<String, Object> where (default value: const {})
-    test('to test the property `where`', () async {
-      // TODO
-    });
-
     // PodcastsFields fields (default value: null)
     test('to test the property `fields`', () async {
       // TODO

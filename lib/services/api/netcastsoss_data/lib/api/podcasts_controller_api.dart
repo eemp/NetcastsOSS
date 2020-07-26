@@ -138,13 +138,13 @@ class PodcastsControllerApi extends ApiClient with _$PodcastsControllerApiClient
         
             @QueryParam("q") String q, 
         
-            @QueryParam("limit") num limit
+            @QueryParam("filter") PodcastsFilter filter
         ) {
         return super.podcastsControllerSearchPodcastsByText(
         
         q, 
         
-        limit
+        filter
 
         ).timeout(timeout);
     }

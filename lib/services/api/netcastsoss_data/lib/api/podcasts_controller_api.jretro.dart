@@ -65,12 +65,12 @@ abstract class _$PodcastsControllerApiClient implements ApiClient {
   }
 
   Future<List<PodcastsWithRelations>> podcastsControllerSearchPodcastsByText(
-      String q, num limit) async {
+      String q, PodcastsFilter filter) async {
     var req = base.get
         .path(basePath)
         .path("/podcasts/text-search")
         .query("q", q)
-        .query("limit", limit);
+        .query("filter", filter);
     return req.go(throwOnErr: true).map(decodeList);
   }
 

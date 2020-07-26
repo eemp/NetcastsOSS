@@ -311,7 +311,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **podcastsControllerSearchPodcastsByText**
-> List<PodcastsWithRelations> podcastsControllerSearchPodcastsByText(q, limit)
+> List<PodcastsWithRelations> podcastsControllerSearchPodcastsByText(q, filter)
 
 
 
@@ -321,10 +321,10 @@ import 'package:netcastsoss_data_api/api.dart';
 
 var api_instance = new PodcastsControllerApi();
 var q = q_example; // String | 
-var limit = 8.14; // num | 
+var filter = ; // PodcastsFilter | 
 
 try { 
-    var result = api_instance.podcastsControllerSearchPodcastsByText(q, limit);
+    var result = api_instance.podcastsControllerSearchPodcastsByText(q, filter);
     print(result);
 } catch (e) {
     print("Exception when calling PodcastsControllerApi->podcastsControllerSearchPodcastsByText: $e\n");
@@ -336,7 +336,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **q** | **String**|  | [optional] [default to null]
- **limit** | **num**|  | [optional] [default to null]
+ **filter** | [**PodcastsFilter**](.md)|  | [optional] [default to null]
 
 ### Return type
 

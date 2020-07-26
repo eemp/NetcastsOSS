@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/helpers/episode.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';

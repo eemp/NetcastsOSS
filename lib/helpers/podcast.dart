@@ -5,9 +5,12 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
-import 'package:hear2learn/services/connectors/remote_data.dart' as pv2;
+import 'package:netcastsoss_data_api/api.dart';
+import 'package:netcastsoss_data_api/model/podcasts_filter.dart';
 
 const String PODCAST_TYPE = 'podcast';
+
+var jaguarApiGen = NetcastsossDataApi();
 
 Future<List<Podcast>> getSubscriptions() {
   final App app = App();
@@ -18,26 +21,30 @@ Future<List<Podcast>> getSubscriptions() {
   });
 }
 
-Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
-  final App app = App();
-  final pv2.RemoteData remoteData = app.remoteData;
-
-  return remoteData.podcastsByGenre(genreId).catchError((err, stack) {
-    print('searchPodcastsByGenre: Ran into error: ' + err.toString());
-    print(stack.toString());
-    return err;
-  });
+Future<List<dynamic>> fetchPopularPodcastsByGenre() async {
+  var api_instance = jaguarApiGen.getPodcastsControllerApi();
+  var result = await api_instance.podcastsControllerFindPopularPodcasts(null);
+  return result
+    .map((podcastsByGenre) => ({
+      'genre': podcastsByGenre.genre,
+      'items': remotePodcastsToPodcasts(podcastsByGenre.items),
+    }))
+    .toList();
 }
 
 Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {
-  final App app = App();
-  final pv2.RemoteData remoteData = app.remoteData;
+  var api_instance = jaguarApiGen.getPodcastsControllerApi();
+  var result = await api_instance.podcastsControllerSearchPodcastsByText(textQuery, PodcastsFilter(
+    skip: page * pageSize,
+    limit: pageSize,
+  ));
+  return remotePodcastsToPodcasts(result);
+}
 
-  return remoteData.searchPodcastsByTextQuery(textQuery, pageSize: pageSize, page: page).catchError((err, stack) {
-    print('searchPodcastsByTextQuery: Ran into error: ' + err.toString());
-    print(stack.toString());
-    return err;
-  });
+List<Podcast> remotePodcastsToPodcasts(remotePodcasts) {
+  return remotePodcasts.map<Podcast>((remotePodcast) =>
+    Podcast.fromRemote(remotePodcast)
+  ).toList();
 }
 
 Future<void> subscribeToPodcast(Podcast podcast) async {

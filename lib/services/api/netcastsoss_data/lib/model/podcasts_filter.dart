@@ -31,8 +31,8 @@ class PodcastsFilter {
 
 {
      this.offset = null,  
-     this.limit = null,  
-     this.skip = null,  
+     this.limit = 10,  
+     this.skip = 0,  
      this.order = const [],  
      this.where = const {},  
      this.fields = null 
@@ -42,7 +42,9 @@ class PodcastsFilter {
 
   @override
   String toString() {
-    return 'PodcastsFilter[offset=$offset, limit=$limit, skip=$skip, order=$order, where=$where, fields=$fields, ]';
+    // return PodcastsFilter[offset=$offset, limit=$limit, skip=$skip, order=$order, where=$where, fields=$fields, ]';
+    // TODO: hack, need to serialize to JSON correctly
+    return '{"limit": $limit, "skip": $skip}';
   }
 }
 

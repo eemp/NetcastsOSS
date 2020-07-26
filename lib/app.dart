@@ -13,7 +13,6 @@ import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
-import 'package:hear2learn/services/connectors/remote_data.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +29,6 @@ class App {
   Map<String, dynamic> models = <String, dynamic>{};
   PackageInfo packageInfo;
   SharedPreferences prefs;
-  RemoteData remoteData;
   Store<AppState> store;
   StreamSubscription _purchaseUpdatedSubscription;
 
@@ -40,12 +38,10 @@ class App {
 
   App._internal();
 
-  Future<void> init({ var remoteDataDB, String remoteDataStrategy }) async {
+  Future<void> init() async {
     packageInfo = await PackageInfo.fromPlatform();
 
     store = appStore();
-
-    remoteData = RemoteData(db: remoteDataDB, strategy: remoteDataStrategy);
 
     localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();

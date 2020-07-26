@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/helpers/episode.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
@@ -27,7 +28,7 @@ class EpisodePlayer extends StatelessWidget {
       converter: getEpisodeSelector(episode),
       builder: (BuildContext context, Episode episode) {
         final bool canPlay = dash.isNotEmpty(episode.downloadPath);
-        final bool isActive = episode?.isActive() ?? false;
+        final bool isActiveEpisode = isActive(episode);
         final bool isPlaying = episode?.isPlaying() ?? false;
         final bool isQueued = episode.url == episode?.url;
         final Duration duration = canPlay ? episode?.length : null;
@@ -102,7 +103,7 @@ class EpisodePlayer extends StatelessWidget {
                           onPause();
                         }
                         else {
-                          if(episode.status == EpisodeStatus.PAUSED && isActive) {
+                          if(episode.status == EpisodeStatus.PAUSED && isActiveEpisode) {
                             onResume();
                           }
                           else {

@@ -72,7 +72,9 @@ ping-api:
       - schedules
     variables:
       - $WHICH_SCHEDULE == "ping-api"
-  image: byrnedo/alpine-curl
+  image:
+    name: byrnedo/alpine-curl
+    entrypoint: ["/bin/sh", "-c"]
   script:
     curl -XGET "$API_BASE_URL/ping"
 

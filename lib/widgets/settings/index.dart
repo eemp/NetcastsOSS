@@ -5,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/themes.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
@@ -22,7 +23,7 @@ class Settings extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(
+      appBar: EnhancedAppBar(
         title: const Text('Settings'),
       ),
       body: StoreConnector<AppState, AppSettings>(

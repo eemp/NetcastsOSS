@@ -6,6 +6,7 @@ import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/drawer.dart';
 import 'package:hear2learn/widgets/home/list.dart';
@@ -54,7 +55,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: EnhancedAppBar(
         title: const Text('Home'),
       ),
       body: FutureBuilder<List<Widget>>(

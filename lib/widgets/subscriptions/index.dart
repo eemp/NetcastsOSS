@@ -6,6 +6,7 @@ import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/common/vertical_list_view.dart';
@@ -20,7 +21,7 @@ class SubscriptionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: EnhancedAppBar(
         title: const Text(LIBRARY_LABEL),
       ),
       body: StoreConnector<AppState, List<Podcast>>(

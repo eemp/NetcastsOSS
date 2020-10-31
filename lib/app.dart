@@ -11,6 +11,7 @@ import 'package:hear2learn/models/user_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
+import 'package:hear2learn/services/chromecast.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:package_info/package_info.dart';
@@ -28,6 +29,7 @@ class App {
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = <String, dynamic>{};
   PackageInfo packageInfo;
+  ServiceDiscovery serviceDiscovery; // chromecast support
   SharedPreferences prefs;
   Store<AppState> store;
   StreamSubscription _purchaseUpdatedSubscription;
@@ -56,6 +58,9 @@ class App {
 
     await initModels();
 
+    initPlayer();
+
+    initCastService();
     await initDonations();
   }
 
@@ -103,6 +108,14 @@ class App {
       },
       const Duration(milliseconds: 1000)
     );
+  }
+
+  void initCastService() {
+    serviceDiscovery = ServiceDiscovery();
+    //serviceDiscovery.changes.listen((_) {
+      //setState(() => _servicesFound = _serviceDiscovery.foundServices.length > 0);
+    //});
+    serviceDiscovery.startDiscovery();
   }
 
   Future<String> getApplicationLocalDatabasePath() async {

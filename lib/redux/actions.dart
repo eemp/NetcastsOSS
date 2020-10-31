@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:dart_chromecast/casting/cast.dart';
+import 'package:dart_chromecast/casting/cast_device.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/audio.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
@@ -15,10 +17,14 @@ import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/notifications.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 enum ActionType {
+  CLEAR_CAST,
+  UPDATE_CAST,
+
   UPDATE_CONNECTIVITY,
 
   COMPLETE_EPISODE,
@@ -70,9 +76,47 @@ Action setConnectivity(ConnectivityResult connectivity) {
   );
 }
 
+ThunkAction<AppState> disconnectCast() {
+  return (Store<AppState> store) async {
+    final CastSender cast = store.state.castSender;
+    await cast?.disconnect();
+    store.dispatch(Action(
+      type: ActionType.CLEAR_CAST,
+    ));
+  };
+}
+
+ThunkAction<AppState> connectToCast(CastDevice device) {
+  CastSender cast = CastSender(device);
+  return (Store<AppState> store) async {
+    final previousCast = store.state.castSender;
+    if(previousCast != null) {
+      await store.dispatch(disconnectCast());
+    }
+
+    bool connected = await cast.connect();
+    if(connected) {
+      cast.launch();
+      store.dispatch(Action(
+        type: ActionType.UPDATE_CAST,
+        payload: <String, dynamic>{
+          'castSender': cast,
+        },
+      ));
+    }
+  };
+}
+
 ThunkAction<AppState> pauseEpisode(Episode episode) {
   return (Store<AppState> store) async {
-    AudioService.pause();
+    final CastSender castSender = store.state.castSender;
+
+    if(castSender != null) {
+      castSender.togglePause();
+    }
+    else {
+      AudioService.pause();
+    }
 
     store.dispatch(Action(
       type: ActionType.PAUSE_EPISODE,
@@ -83,12 +127,44 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
   };
 }
 
+ThunkAction<AppState> updateEpisodeLength(episode) {
+  return (Store<AppState> store) async {
+    AudioPlayer player = AudioPlayer();
+    Duration duration = await player.setFilePath(episode.downloadPath);
+    store.dispatch(Action(
+      type: ActionType.SET_EPISODE_LENGTH,
+      payload: <String, dynamic>{
+        'length': duration,
+      },
+    ));
+    await player.dispose();
+  };
+}
+
+ThunkAction<AppState> reflectCastStatus(CastMediaStatus castStatus) {
+  final App app = App();
+  return (Store<AppState> store) async {
+    final Episode currentEpisode = playingEpisodeSelector(store);
+
+    if(castStatus.isFinished) {
+      store.dispatch(completeEpisode(currentEpisode));
+      return;
+    }
+
+    print(castStatus);
+    if(castStatus.position != null) {
+      store.dispatch(updateEpisodePosition(
+        Duration(seconds: castStatus.position.toInt())
+      ));
+    }
+  };
+}
+
 ThunkAction<AppState> reflectAudioServiceStatus(PlaybackState playbackState) {
   final App app = App();
   return (Store<AppState> store) async {
     final Episode currentEpisode = playingEpisodeSelector(store);
 
-    final BasicPlaybackState basicPlaybackState = playbackState?.basicState;
     if(!AudioService.running) {
       store.dispatch(completeEpisode(currentEpisode));
       return;
@@ -121,25 +197,43 @@ ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }
 
   return (Store<AppState> store) async {
     final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
+    final CastSender castSender = store.state.castSender;
     final Duration position = matchingEpisode.position ?? Duration();
 
-    final Function onPlaybackStateUpdateCallback = (playbackState) => (
-      store.dispatch(reflectAudioServiceStatus(playbackState))
-    );
+    if(castSender != null) {
+      castSender.load(CastMedia(
+        contentId: matchingEpisode.url,
+        title: matchingEpisode.title,
+      ));
+      if(matchingEpisode.position != null) {
+        castSender.seek(matchingEpisode.position.inSeconds.toDouble());
+      }
 
-    await initAudioService(onPlaybackStateUpdateCallback);
+      // figure out episode length
+      store.dispatch(updateEpisodeLength(matchingEpisode));
 
-    await AudioService.customAction('loadAndPlayMedia', {
-      'mediaItem': {
-        'album': matchingEpisode.podcastTitle,
-        'artist': matchingEpisode.podcastTitle,
-        // artwork: matchingEpisode.podcast?.artwork100,
-        'path': matchingEpisode.downloadPath,
-        'title': matchingEpisode.title,
-        //'position': position,
-      },
-      'position': matchingEpisode.position?.inMilliseconds,
-    });
+      castSender.castMediaStatusController.stream.listen((CastMediaStatus castStatus) => (
+        store.dispatch(reflectCastStatus(castStatus))
+      ));
+    }
+    else {
+      final Function onPlaybackStateUpdateCallback = (playbackState) => (
+        store.dispatch(reflectAudioServiceStatus(playbackState))
+      );
+
+      await initAudioService(onPlaybackStateUpdateCallback);
+      await AudioService.customAction('loadAndPlayMedia', {
+        'mediaItem': {
+          'album': matchingEpisode.podcastTitle,
+          'artist': matchingEpisode.podcastTitle,
+          // artwork: matchingEpisode.podcast?.artwork100,
+          'path': matchingEpisode.downloadPath,
+          'title': matchingEpisode.title,
+          //'position': position,
+        },
+        'position': matchingEpisode.position?.inMilliseconds,
+      });
+    }
 
     store.dispatch(Action(
       type: ActionType.PLAY_EPISODE,
@@ -173,8 +267,14 @@ ThunkAction<AppState> queuePlaylist(EpisodeQueue episodeQueue) {
 ThunkAction<AppState> resumeEpisode() {
   return (Store<AppState> store) async {
     final App app = App();
+    final CastSender castSender = store.state.castSender;
 
-    AudioService.play();
+    if(castSender != null) {
+      castSender.togglePause();
+    }
+    else {
+      AudioService.play();
+    }
 
     store.dispatch(Action(
       type: ActionType.RESUME_EPISODE,
@@ -182,15 +282,24 @@ ThunkAction<AppState> resumeEpisode() {
   };
 }
 
-Action seekInEpisode(Duration position) {
-  final App app = App();
+ThunkAction<AppState> seekInEpisode(Duration position) {
+  return (Store<AppState> store) async {
+    final App app = App();
+    final CastSender castSender = store.state.castSender;
 
-  AudioService.seekTo(position.inMilliseconds);
-  return setEpisodePosition(
-    position > const Duration(seconds: 0)
-      ? position
-      : const Duration(seconds: 0)
-  );
+    if(castSender != null) {
+      castSender.seek(position.inSeconds.toDouble());
+    }
+    else {
+      AudioService.seekTo(position.inMilliseconds);
+    }
+
+    return setEpisodePosition(
+      position > const Duration(seconds: 0)
+        ? position
+        : const Duration(seconds: 0)
+    );
+  };
 }
 
 ThunkAction<AppState> updateEpisodePosition(Duration position) {

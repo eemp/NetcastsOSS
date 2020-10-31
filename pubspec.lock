@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  cli_util:
+    dependency: transitive
+    description:
+      name: cli_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   client_cookie:
     dependency: transitive
     description:
@@ -225,6 +232,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.0"
+  dart_chromecast:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "06f83a21192b37e63d9fe7ba6c4383e17050573f"
+      url: "https://github.com/eemp/dart_chromecast.git"
+    source: git
+    version: "0.1.0"
+  dart_internal:
+    dependency: transitive
+    description:
+      name: dart_internal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.9"
   dart_style:
     dependency: transitive
     description:
@@ -340,6 +363,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.5"
+  flutter_mdns_plugin:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: d08fc4db13d1d2100a25fca228411156cd174f33
+      url: "https://github.com/terrabythia/flutter_mdns_plugin.git"
+    source: git
+    version: "0.0.1"
   flutter_pagewise:
     dependency: "direct main"
     description:
@@ -579,6 +611,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.12"
+  observable:
+    dependency: "direct main"
+    description:
+      name: observable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.22.2"
   openapi_generator:
     dependency: "direct dev"
     description:
@@ -698,6 +737,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.12"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.16+1"
   pub_semver:
     dependency: transitive
     description:
@@ -1033,5 +1079,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.8.0 <3.0.0"
+  dart: ">=2.8.0 <2.9.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"

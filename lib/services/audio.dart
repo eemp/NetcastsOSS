@@ -26,6 +26,7 @@ Future<void> initAudioService(Function onPlaybackStateUpdateCallback) async {
   await AudioService.connect();
   await AudioService.start(
     androidNotificationChannelName: 'Netcasts OSS Audio',
+    androidStopOnRemoveTask: true,
     // androidNotificationIcon: 'mipmap/launcher_icon',
     backgroundTaskEntrypoint: backgroundAudioPlayerTask,
     enableQueue: true,

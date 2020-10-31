@@ -5,6 +5,7 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/episode_list.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
@@ -17,7 +18,7 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: EnhancedAppBar(
         title: const Text('Favorites')
       ),
       body: StoreConnector<AppState, List<Episode>>(

@@ -27,6 +27,10 @@ dependencies:
   audio_service: ^0.7.1
   cached_network_image: ^2.0.0-rc.1
   connectivity: ^0.4.2
+  dart_chromecast:
+    git:
+      url: https://github.com/eemp/dart_chromecast.git
+      ref: master
   dio: ^1.0.13
   easy_debounce: ^1.0.1
   firebase_analytics: ^5.0.9
@@ -34,6 +38,10 @@ dependencies:
   flutter_cache_manager: any
   flutter_html: ^0.8.2
   flutter_inapp_purchase: ^2.0.6
+  flutter_mdns_plugin:
+    git:
+      url: https://github.com/terrabythia/flutter_mdns_plugin.git
+      ref: master
   flutter_pagewise: ^1.2.2
   flutter_redux: ^0.5.2
   http: any
@@ -43,6 +51,7 @@ dependencies:
   just_audio: ^0.1.3
   netcastsoss_data_api:
     path: ./lib/services/api/netcastsoss_data
+  observable: ^0.22.2
   openapi_generator_annotations: ^1.0.8
   package_info: ^0.4.0+16
   path: ^1.6.2

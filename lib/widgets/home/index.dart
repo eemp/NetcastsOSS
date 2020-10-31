@@ -6,6 +6,7 @@ import 'package:hear2learn/constants.dart';
 import 'package:hear2learn/helpers/podcast.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/drawer.dart';
 import 'package:hear2learn/widgets/home/list.dart';
@@ -35,14 +36,18 @@ class Home extends StatelessWidget {
 
   static Future<List<Widget>> getHomepageLists() async {
     try {
+      var podcastsByGenre = await fetchPopularPodcastsByGenre();
+      var homepageLists = podcastsByGenre
+        .map((section) =>
+          buildHomepageList(null, section['genre'], section['items'])
+        )
+        .toList();
       return <Widget>[
         buildSubscriptionsPreview(),
-        buildHomepageList(const Icon(Icons.lightbulb_outline), 'Science', await searchPodcastsByGenre(SCIENCE_GENRE_ID)),
-        buildHomepageList(const Icon(Icons.power_settings_new), 'Technology', await searchPodcastsByGenre(TECH_GENRE_ID)),
-        buildHomepageList(const Icon(Icons.mood), 'Comedy', await searchPodcastsByGenre(COMEDY_GENRE_ID)),
-        buildHomepageList(const Icon(Icons.attach_money), 'Business', await searchPodcastsByGenre(BUSINESS_GENRE_ID)),
+        ...homepageLists
       ];
-    } catch (e) {
+    } catch (e, s) {
+      // print(e.toString() + ': ' + s.toString());
       return getFallbackHomepageLists();
     }
   }
@@ -50,7 +55,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: EnhancedAppBar(
         title: const Text('Home'),
       ),
       body: FutureBuilder<List<Widget>>(

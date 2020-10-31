@@ -1,9 +1,15 @@
+import 'package:dart_chromecast/casting/cast.dart';
+import 'package:dart_chromecast/casting/cast_device.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:redux/redux.dart';
+
+CastSender castSelector(Store<AppState> store) {
+  return store.state.castSender;
+}
 
 Function getEpisodeSelector(Episode episode) {
   return (Store<AppState> store) {

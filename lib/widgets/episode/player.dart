@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hear2learn/app.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/helpers/episode.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 
 class EpisodePlayer extends StatelessWidget {
+  final App app = App();
   final Episode episode;
   final Function onPause;
   final Function onPlay;
+  final Function onResume;
 
-  const EpisodePlayer({
+  EpisodePlayer({
     Key key,
     this.episode,
     this.onPause,
     this.onPlay,
+    this.onResume,
   }) : super(key: key);
 
   @override
@@ -25,6 +30,7 @@ class EpisodePlayer extends StatelessWidget {
       converter: getEpisodeSelector(episode),
       builder: (BuildContext context, Episode episode) {
         final bool canPlay = dash.isNotEmpty(episode.downloadPath);
+        final bool isActiveEpisode = isActive(episode);
         final bool isPlaying = episode?.isPlaying() ?? false;
         final bool isQueued = episode.url == episode?.url;
         final Duration duration = canPlay ? episode?.length : null;
@@ -62,7 +68,7 @@ class EpisodePlayer extends StatelessWidget {
                         min: 0.0,
                         max: durationInSeconds,
                         onChanged: isQueued ? (double value) {
-                          seekInEpisode(Duration(seconds: value.toInt()));
+                          app.store.dispatch(seekInEpisode(Duration(seconds: value.toInt())));
                         } : null,
                         value: dash.clamp(0.0, positionInSeconds ?? 0.0, durationInSeconds),
                       ),
@@ -84,7 +90,7 @@ class EpisodePlayer extends StatelessWidget {
                       icon: const Icon(Icons.replay_10),
                       iconSize: 40.0,
                       onPressed: canPlay ? () {
-                        seekInEpisode(Duration(seconds: position.inSeconds - 10));
+                        app.store.dispatch(seekInEpisode(Duration(seconds: position.inSeconds - 10)));
                       } : null,
                     ),
                     RawMaterialButton(
@@ -99,7 +105,12 @@ class EpisodePlayer extends StatelessWidget {
                           onPause();
                         }
                         else {
-                          onPlay();
+                          if(episode.status == EpisodeStatus.PAUSED && isActiveEpisode) {
+                            onResume();
+                          }
+                          else {
+                            onPlay();
+                          }
                         }
                       } : null,
                       child: Padding(
@@ -115,7 +126,7 @@ class EpisodePlayer extends StatelessWidget {
                       icon: const Icon(Icons.forward_30),
                       iconSize: 40.0,
                       onPressed: canPlay ? () {
-                        seekInEpisode(Duration(seconds: position.inSeconds + 30));
+                        app.store.dispatch(seekInEpisode(Duration(seconds: position.inSeconds + 30)));
                       } : null,
                     ),
                   ],

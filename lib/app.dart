@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:local_notifications/local_notifications.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
@@ -13,6 +11,7 @@ import 'package:hear2learn/models/user_episode.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/redux/store.dart';
+import 'package:hear2learn/services/chromecast.dart';
 import 'package:hear2learn/services/connectors/local_database.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:package_info/package_info.dart';
@@ -23,12 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
   static final App app = App._internal();
-  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    id: 'default_notification',
-    name: 'Default',
-    description: 'Grant this app the ability to show notifications',
-    importance: AndroidNotificationChannelImportance.HIGH,
-  );
   List<IAPItem> donations;
   String downloadsPath;
   ElasticsearchClient elasticClient;
@@ -36,7 +29,7 @@ class App {
   LocalDatabaseAdapter localDatabaseAdapter;
   Map<String, dynamic> models = <String, dynamic>{};
   PackageInfo packageInfo;
-  final AudioPlayer player = AudioPlayer();
+  ServiceDiscovery serviceDiscovery; // chromecast support
   SharedPreferences prefs;
   Store<AppState> store;
   StreamSubscription _purchaseUpdatedSubscription;
@@ -47,15 +40,10 @@ class App {
 
   App._internal();
 
-  Future<void> init({ String elasticHost }) async {
+  Future<void> init() async {
     packageInfo = await PackageInfo.fromPlatform();
 
     store = appStore();
-
-    elasticClient = ElasticsearchClient(
-      host: elasticHost,
-      index: 'hear2learn',
-    );
 
     localDatabaseAdapter = LocalDatabaseAdapter(await getApplicationLocalDatabasePath());
     await localDatabaseAdapter.init();
@@ -70,11 +58,10 @@ class App {
 
     await initModels();
 
-    await initNotifications();
-
-    await initDonations();
-
     initPlayer();
+
+    initCastService();
+    await initDonations();
   }
 
   Future<void> initModels() async {
@@ -87,10 +74,6 @@ class App {
       //await model.drop();
       await model.createTable(ifNotExists: true);
     });
-  }
-
-  Future<void> initNotifications() async {
-    await LocalNotifications.createAndroidNotificationChannel(channel: channel);
   }
 
   void initConnectivityListener() {
@@ -125,20 +108,14 @@ class App {
       },
       const Duration(milliseconds: 1000)
     );
+  }
 
-
-    //AudioPlayer.logEnabled = true;
-    app.player.completionHandler = () {
-      store.dispatch(completeEpisode());
-    };
-    app.player.durationHandler = (Duration duration) {
-      final List<dynamic> throttledUpdateArgs = <dynamic>[ duration ];
-      throttledDurationHandler(throttledUpdateArgs);
-    };
-    app.player.positionHandler = (Duration position) {
-      final List<dynamic> throttledUpdateArgs = <dynamic>[ position ];
-      throttledPositionHandler(throttledUpdateArgs);
-    };
+  void initCastService() {
+    serviceDiscovery = ServiceDiscovery();
+    //serviceDiscovery.changes.listen((_) {
+      //setState(() => _servicesFound = _serviceDiscovery.foundServices.length > 0);
+    //});
+    serviceDiscovery.startDiscovery();
   }
 
   Future<String> getApplicationLocalDatabasePath() async {
@@ -151,39 +128,5 @@ class App {
     const String DIR_NAME = 'downloads';
     final Directory dbDir = await getApplicationDocumentsDirectory();
     return join(dbDir.path, DIR_NAME);
-  }
-
-  Future<void> createNotification({
-    String actionText,
-    Function callback,
-    String content,
-    bool isOngoing = false,
-    bool launchesApp = false,
-    String payload,
-    String title,
-  }) async {
-    //await LocalNotifications.removeNotification(0);
-    await LocalNotifications.createNotification(
-      actions: <NotificationAction>[
-        NotificationAction(
-          actionText: actionText,
-          callback: callback,
-          callbackName: 'onNotificationActionClick',
-          payload: payload,
-          launchesApp: launchesApp,
-        ),
-      ],
-      androidSettings: AndroidSettings(
-        channel: channel,
-        isOngoing: isOngoing,
-      ),
-      content: content,
-      id: 0,
-      title: title,
-    );
-  }
-
-  Future<void> removeNotification() async {
-    await LocalNotifications.removeNotification(0);
   }
 }

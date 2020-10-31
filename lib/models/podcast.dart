@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hear2learn/models/episode.dart';
+import 'package:netcastsoss_data_api/model/podcasts_with_relations.dart';
 
 class Artist {
   String id;
@@ -76,6 +77,7 @@ class Podcast {
   String url; // TODO(eemp): to be deprecated, removed
 
   Podcast({
+    this.artist,
     this.artwork30,
     this.artwork60,
     this.artwork100,
@@ -95,9 +97,26 @@ class Podcast {
     this.url, // todo: to be deprecated, removed
   });
 
+  Podcast.fromRemote(PodcastsWithRelations remotePodcast) {
+    this.artist = Artist.fromJson(remotePodcast.artist);
+    this.artwork30 = remotePodcast.artwork30;
+    this.artwork60 = remotePodcast.artwork60;
+    this.artwork100 = remotePodcast.artwork100;
+    this.artwork600 = remotePodcast.artwork600;
+    this.artworkOrig = remotePodcast.artworkOrig;
+    this.description = remotePodcast.description;
+    // this.episodes = ...;
+    this.feed = remotePodcast.feed;
+    this.id = remotePodcast.id;
+    this.lastModifiedDate = remotePodcast.lastModifiedTimestamp;
+    this.name = remotePodcast.name;
+    this.popularity = remotePodcast.popularity;
+    this.releaseDate = remotePodcast.releaseDate;
+  }
+
   String getByline() {
     return name != artist?.name
-      ? 'by ${artist.name}, ${episodesCount.toString()} total episodes'
+      ? 'by ${artist?.name}, ${episodesCount.toString()} total episodes'
       : '${episodesCount.toString()} total episodes';
   }
 

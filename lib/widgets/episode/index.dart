@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hear2learn/app.dart';
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/redux/actions.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/episode/info.dart';
 import 'package:hear2learn/widgets/episode/home.dart';
 import 'package:share/share.dart';
@@ -21,7 +22,7 @@ class EpisodePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       child: Scaffold(
-        appBar: AppBar(
+        appBar: EnhancedAppBar(
           title: Text('Episode of ' + episode.podcastTitle),
           bottom: const TabBar(
             tabs: <Widget>[
@@ -47,6 +48,7 @@ class EpisodePage extends StatelessWidget {
                 onFinish: onFinish,
                 onPause: onPause,
                 onPlay: onPlay,
+                onResume: onResume,
                 onShare: onShare,
                 onUnfavorite: onUnfavorite,
                 onUnfinish: onUnfinish,
@@ -99,6 +101,11 @@ class EpisodePage extends StatelessWidget {
   void onPlay() {
     final App app = App();
     app.store.dispatch(playEpisode(episode));
+  }
+
+  void onResume() {
+    final App app = App();
+    app.store.dispatch(resumeEpisode());
   }
 
   void onShare() {

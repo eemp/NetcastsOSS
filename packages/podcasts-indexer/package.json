@@ -4,15 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "autoupdate:mysql": "DS=mysql node scripts/autoupdate.js",
+    "build:data:mysql": "DS=mysql node scripts/itunes-data-fetcher.js",
+    "build:feeds-data:mysql": "DS=mysql node scripts/feed-data-fetcher.js",
+    "migrate:es-sqlite": "FROM_DS=es TO_DS=sqlite node scripts/data-migrator.js",
+    "migrate:sqlite-mysql": "FROM_DS=sqlite TO_DS=mysql node scripts/data-migrator.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Mihir Patel",
   "dependencies": {
+    "axios": "^0.19.2",
     "bluebird": "^3.5.5",
+    "bottleneck": "^2.19.5",
+    "highland": "^2.13.5",
     "loopback-connector-es": "^1.4.1",
     "loopback-connector-mysql": "^5.4.1",
     "loopback-connector-sqlite3": "^3.0.0",
-    "loopback-datasource-juggler": "^4.9.0"
+    "loopback-datasource-juggler": "^4.9.0",
+    "rss-parser": "^3.7.6"
   }
 }

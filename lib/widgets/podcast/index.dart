@@ -7,6 +7,7 @@ import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
+import 'package:hear2learn/widgets/common/app_bar.dart';
 import 'package:hear2learn/widgets/common/bottom_app_bar_player.dart';
 import 'package:hear2learn/widgets/common/placeholder_screen.dart';
 import 'package:hear2learn/widgets/podcast/episodes.dart';
@@ -36,7 +37,7 @@ class PodcastPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       child: Scaffold(
-        appBar: AppBar(
+        appBar: EnhancedAppBar(
           title: Text(podcast.name),
           bottom: const TabBar(
             tabs: <Widget>[

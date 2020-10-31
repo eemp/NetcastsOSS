@@ -2,9 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/helpers/reassemble.dart';
+import 'package:hear2learn/helpers/dynamic_theme.dart';
 import 'package:hear2learn/redux/actions.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/themes.dart';
@@ -45,17 +46,26 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final App app = App();
     return DynamicTheme(
       defaultThemeName: ThemeProvider.DEFAULT_THEME,
       themeBuilder: ThemeProvider(),
       widgetBuilder: (BuildContext context, ThemeData theme) {
         return StoreProvider<AppState>(
           store: store,
-          child: MaterialApp(
-            home: Home(),
-            navigatorObservers: navigatorObservers,
-            theme: theme,
-            title: title,
+          child: ReassembleListener(
+            onReassemble: () {
+              // if you need something reloaded on hot reload,
+              // this is the place to do it
+              // print('Reload detected... if necessary, initAudioService');
+              // app.initAudioService();
+            },
+            child: MaterialApp(
+              home: Home(),
+              navigatorObservers: navigatorObservers,
+              theme: theme,
+              title: title,
+            ),
           ),
         );
       },

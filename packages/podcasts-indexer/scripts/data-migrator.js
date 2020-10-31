@@ -3,7 +3,7 @@ const { DataSource } = require('loopback-datasource-juggler');
 
 const datasources = require('../server/datasources.json');
 const modelDefinition = require('../common/models/podcast.json');
-const { name:modelName, properties:modelProperties } = modelDefinition;
+const { name:modelName, properties:modelProperties, settings: modelSettings } = modelDefinition;
 
 const fromDSName = process.env.FROM_DS;
 const toDSName = process.env.TO_DS;
@@ -14,10 +14,10 @@ if(!fromDSName || !toDSName) {
 }
 
 const fromDS = new DataSource(fromDSName, datasources[fromDSName]);
-const origModel = fromDS.define(modelName, modelProperties);
+const origModel = fromDS.define(modelName, modelProperties, modelSettings);
 
 const toDS = new DataSource(toDSName, datasources[toDSName]);
-const targetModel = toDS.define(modelName, modelProperties);
+const targetModel = toDS.define(modelName, modelProperties, modelSettings);
 
 const STRATEGIES = {
   default: replaceOrCreateRecords,
@@ -26,12 +26,18 @@ const STRATEGIES = {
 };
 const strategy = STRATEGIES[strategyName] || STRATEGIES.default;
 
+console.log(`Fetching podcasts records from ${fromDSName} datasource...`);
 origModel.find({limit: 9999}).then(results => {
   const records = results.map(result => result.toJSON());
   console.log(`Found ${records.length} records to migrate...`);
-  toDS.autoupdate(modelName).then(result => {
-    strategy(records);
-  });
+  return toDS.autoupdate(modelName).then(result =>
+    strategy(records)
+  );
+}).then(() => {
+  console.log('Finished pushing podcasts data.');
+}).catch(err => {
+  console.error('Unable to migrate podcasts data, encountered: ', err.message);
+  process.exit(-1);
 });
 
 function createRecords(records) {

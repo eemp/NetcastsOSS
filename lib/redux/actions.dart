@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:dart_chromecast/casting/cast.dart';
+import 'package:dart_chromecast/casting/cast_device.dart';
 import 'package:hear2learn/app.dart';
+import 'package:hear2learn/services/audio.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
+import 'package:hear2learn/helpers/dynamic_theme.dart';
 import 'package:hear2learn/helpers/episode.dart' as episode_helpers;
 import 'package:hear2learn/helpers/podcast.dart' as podcast_helpers;
 import 'package:hear2learn/models/app_settings.dart';
@@ -13,13 +17,14 @@ import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/redux/selectors.dart';
 import 'package:hear2learn/redux/state.dart';
 import 'package:hear2learn/widgets/notifications.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-const String PAUSE_BUTTON = '⏸️';
-const String PLAY_BUTTON = '▶️';
-
 enum ActionType {
+  CLEAR_CAST,
+  UPDATE_CAST,
+
   UPDATE_CONNECTIVITY,
 
   COMPLETE_EPISODE,
@@ -71,20 +76,47 @@ Action setConnectivity(ConnectivityResult connectivity) {
   );
 }
 
+ThunkAction<AppState> disconnectCast() {
+  return (Store<AppState> store) async {
+    final CastSender cast = store.state.castSender;
+    await cast?.disconnect();
+    store.dispatch(Action(
+      type: ActionType.CLEAR_CAST,
+    ));
+  };
+}
+
+ThunkAction<AppState> connectToCast(CastDevice device) {
+  CastSender cast = CastSender(device);
+  return (Store<AppState> store) async {
+    final previousCast = store.state.castSender;
+    if(previousCast != null) {
+      await store.dispatch(disconnectCast());
+    }
+
+    bool connected = await cast.connect();
+    if(connected) {
+      cast.launch();
+      store.dispatch(Action(
+        type: ActionType.UPDATE_CAST,
+        payload: <String, dynamic>{
+          'castSender': cast,
+        },
+      ));
+    }
+  };
+}
+
 ThunkAction<AppState> pauseEpisode(Episode episode) {
   return (Store<AppState> store) async {
-    final App app = App();
+    final CastSender castSender = store.state.castSender;
 
-    app.player.pause();
-    await app.createNotification(
-      actionText: '$PLAY_BUTTON Resume',
-      callback: (String payload) {
-        store.dispatch(resumeEpisode());
-      },
-      content: playingEpisodeSelector(store).title,
-      payload: 'playAction',
-      title: playingEpisodeSelector(store).podcastTitle,
-    );
+    if(castSender != null) {
+      castSender.togglePause();
+    }
+    else {
+      AudioService.pause();
+    }
 
     store.dispatch(Action(
       type: ActionType.PAUSE_EPISODE,
@@ -95,29 +127,113 @@ ThunkAction<AppState> pauseEpisode(Episode episode) {
   };
 }
 
-ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }) {
+ThunkAction<AppState> updateEpisodeLength(episode) {
   return (Store<AppState> store) async {
-    final App app = App();
-    final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
-
-    app.player.play(
-      matchingEpisode.downloadPath,
-      isLocal: true,
-      position: matchingEpisode.position ?? const Duration(),
-      skipSilence: store.state.settings.skipSilence ?? false,
-      speed: store.state.settings.speed ?? 1.0,
-    );
-
-    await app.createNotification(
-      actionText: '$PAUSE_BUTTON Pause',
-      callback: (String payload) {
-        store.dispatch(pauseEpisode(matchingEpisode));
+    AudioPlayer player = AudioPlayer();
+    Duration duration = await player.setFilePath(episode.downloadPath);
+    store.dispatch(Action(
+      type: ActionType.SET_EPISODE_LENGTH,
+      payload: <String, dynamic>{
+        'length': duration,
       },
-      content: matchingEpisode.title,
-      isOngoing: true,
-      payload: 'pauseAction',
-      title: matchingEpisode.podcastTitle,
+    ));
+    await player.dispose();
+  };
+}
+
+ThunkAction<AppState> reflectCastStatus(CastMediaStatus castStatus) {
+  final App app = App();
+  return (Store<AppState> store) async {
+    final Episode currentEpisode = playingEpisodeSelector(store);
+
+    if(castStatus.isFinished) {
+      store.dispatch(completeEpisode(currentEpisode));
+      return;
+    }
+
+    print(castStatus);
+    if(castStatus.position != null) {
+      store.dispatch(updateEpisodePosition(
+        Duration(seconds: castStatus.position.toInt())
+      ));
+    }
+  };
+}
+
+ThunkAction<AppState> reflectAudioServiceStatus(PlaybackState playbackState) {
+  final App app = App();
+  return (Store<AppState> store) async {
+    final Episode currentEpisode = playingEpisodeSelector(store);
+
+    if(!AudioService.running) {
+      store.dispatch(completeEpisode(currentEpisode));
+      return;
+    }
+
+    if(playbackState?.currentPosition != null) {
+      store.dispatch(updateEpisodePosition(
+        Duration(milliseconds: playbackState.currentPosition)
+      ));
+    }
+
+    final bool shouldUpdateCurrentEpisodeDuration = currentEpisode != null && (
+      currentEpisode.length == null || currentEpisode.length.inMilliseconds != AudioService.currentMediaItem?.duration
     );
+    if(AudioService.currentMediaItem?.duration != null && shouldUpdateCurrentEpisodeDuration) {
+      store.dispatch(Action(
+        type: ActionType.SET_EPISODE_LENGTH,
+        payload: <String, dynamic>{
+          'length': Duration(
+            milliseconds: AudioService.currentMediaItem.duration,
+          ),
+        },
+      ));
+    }
+  };
+}
+
+ThunkAction<AppState> playEpisode(Episode episode, { EpisodeQueue episodeQueue }) {
+  final App app = App();
+
+  return (Store<AppState> store) async {
+    final Episode matchingEpisode = store.state.userEpisodes[episode.url] ?? episode;
+    final CastSender castSender = store.state.castSender;
+    final Duration position = matchingEpisode.position ?? Duration();
+
+    if(castSender != null) {
+      castSender.load(CastMedia(
+        contentId: matchingEpisode.url,
+        title: matchingEpisode.title,
+      ));
+      if(matchingEpisode.position != null) {
+        castSender.seek(matchingEpisode.position.inSeconds.toDouble());
+      }
+
+      // figure out episode length
+      store.dispatch(updateEpisodeLength(matchingEpisode));
+
+      castSender.castMediaStatusController.stream.listen((CastMediaStatus castStatus) => (
+        store.dispatch(reflectCastStatus(castStatus))
+      ));
+    }
+    else {
+      final Function onPlaybackStateUpdateCallback = (playbackState) => (
+        store.dispatch(reflectAudioServiceStatus(playbackState))
+      );
+
+      await initAudioService(onPlaybackStateUpdateCallback);
+      await AudioService.customAction('loadAndPlayMedia', {
+        'mediaItem': {
+          'album': matchingEpisode.podcastTitle,
+          'artist': matchingEpisode.podcastTitle,
+          // artwork: matchingEpisode.podcast?.artwork100,
+          'path': matchingEpisode.downloadPath,
+          'title': matchingEpisode.title,
+          //'position': position,
+        },
+        'position': matchingEpisode.position?.inMilliseconds,
+      });
+    }
 
     store.dispatch(Action(
       type: ActionType.PLAY_EPISODE,
@@ -148,22 +264,17 @@ ThunkAction<AppState> queuePlaylist(EpisodeQueue episodeQueue) {
   };
 }
 
-
 ThunkAction<AppState> resumeEpisode() {
   return (Store<AppState> store) async {
     final App app = App();
+    final CastSender castSender = store.state.castSender;
 
-    app.player.resume();
-    await app.createNotification(
-      actionText: '$PAUSE_BUTTON Pause',
-      callback: (String payload) {
-        store.dispatch(pauseEpisode(playingEpisodeSelector(store)));
-      },
-      content: playingEpisodeSelector(store).title,
-      isOngoing: true,
-      payload: 'pauseAction',
-      title: playingEpisodeSelector(store).podcastTitle,
-    );
+    if(castSender != null) {
+      castSender.togglePause();
+    }
+    else {
+      AudioService.play();
+    }
 
     store.dispatch(Action(
       type: ActionType.RESUME_EPISODE,
@@ -171,15 +282,24 @@ ThunkAction<AppState> resumeEpisode() {
   };
 }
 
-Action seekInEpisode(Duration position) {
-  final App app = App();
+ThunkAction<AppState> seekInEpisode(Duration position) {
+  return (Store<AppState> store) async {
+    final App app = App();
+    final CastSender castSender = store.state.castSender;
 
-  app.player.seek(position);
-  return setEpisodePosition(
-    position > const Duration(seconds: 0)
-      ? position
-      : const Duration(seconds: 0)
-  );
+    if(castSender != null) {
+      castSender.seek(position.inSeconds.toDouble());
+    }
+    else {
+      AudioService.seekTo(position.inMilliseconds);
+    }
+
+    return setEpisodePosition(
+      position > const Duration(seconds: 0)
+        ? position
+        : const Duration(seconds: 0)
+    );
+  };
 }
 
 ThunkAction<AppState> updateEpisodePosition(Duration position) {
@@ -261,6 +381,7 @@ ThunkAction<AppState> finishEpisode(Episode episode) {
         'episode': episode,
       },
     ));
+    setEpisodePosition(Duration.zero);
   };
 }
 
@@ -338,8 +459,6 @@ ThunkAction<AppState> completeEpisode([Episode episode]) {
     final Episode playingEpisode = store.state.userEpisodes[store.state.playingEpisode];
     episode ??= playingEpisode;
     if(episode != null && episode.url == playingEpisode?.url) {
-      app.player.stop();
-      app.removeNotification();
       store.dispatch(Action(
         type: ActionType.COMPLETE_EPISODE,
       ));
@@ -499,10 +618,10 @@ ThunkAction<AppState> updateSettings(AppSettings settings, { BuildContext contex
 
 void onAppSettingsUpdate(AppSettings newSettings, { BuildContext context }) {
   final App app = App();
-  app.player.setOptions(
-    skipSilence: newSettings.skipSilence ?? false,
-    speed: newSettings.speed ?? 1.0,
-  );
+  //app.player.setOptions(
+    //skipSilence: newSettings.skipSilence ?? false,
+    //speed: newSettings.speed ?? 1.0,
+  //);
   if(context != null) {
     DynamicTheme.of(context).setTheme(newSettings.themeName);
   }

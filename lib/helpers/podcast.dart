@@ -5,8 +5,12 @@ import 'package:hear2learn/app.dart';
 import 'package:hear2learn/services/connectors/elastic.dart';
 import 'package:hear2learn/models/podcast.dart';
 import 'package:hear2learn/models/podcast_subscription.dart';
+import 'package:netcastsoss_data_api/api.dart';
+import 'package:netcastsoss_data_api/model/podcasts_filter.dart';
 
 const String PODCAST_TYPE = 'podcast';
+
+var jaguarApiGen = NetcastsossDataApi();
 
 Future<List<Podcast>> getSubscriptions() {
   final App app = App();
@@ -17,67 +21,30 @@ Future<List<Podcast>> getSubscriptions() {
   });
 }
 
-Future<List<Podcast>> searchPodcastsByGenre(String genreId) async {
-  final App app = App();
-  final client = app.elasticClient;
-
-  final query = {
-    'query': {
-      'bool': {
-        'filter': [
-          { 'exists': { 'field': 'feed' } },
-          {
-            'term': {
-              'primary_genre.id': genreId,
-            }
-          }
-        ]
-      }
-    },
-    'sort': [
-      'popularity',
-    ],
-  };
-  return client.search(
-    type: PODCAST_TYPE,
-    body: query,
-  ).then((response) => toPodcasts(response));
+Future<List<dynamic>> fetchPopularPodcastsByGenre() async {
+  var api_instance = jaguarApiGen.getPodcastsControllerApi();
+  var result = await api_instance.podcastsControllerFindPopularPodcasts(null);
+  return result
+    .map((podcastsByGenre) => ({
+      'genre': podcastsByGenre.genre,
+      'items': remotePodcastsToPodcasts(podcastsByGenre.items),
+    }))
+    .toList();
 }
 
 Future<List<Podcast>> searchPodcastsByTextQuery(String textQuery, { int pageSize = 10, int page = 0 }) async {
-  final App app = App();
-  final client = app.elasticClient;
+  var api_instance = jaguarApiGen.getPodcastsControllerApi();
+  var result = await api_instance.podcastsControllerSearchPodcastsByText(textQuery, PodcastsFilter(
+    skip: page * pageSize,
+    limit: pageSize,
+  ));
+  return remotePodcastsToPodcasts(result);
+}
 
-  final query = {
-    'from': page * pageSize,
-    'query': {
-      'bool': {
-        'filter': [
-          { 'exists': { 'field': 'feed' } },
-        ],
-        'minimum_should_match': 1,
-        'should': [
-          {
-            'multi_match': {
-              'fields': [
-                'name^16',
-                'artist.name^8',
-                'genre^8',
-                'description',
-              ],
-              'operator': 'and',
-              'query': textQuery
-            }
-          }
-        ],
-      }
-    },
-    'size': pageSize,
-  };
-  return client.search(
-    body: query,
-    type: PODCAST_TYPE,
-  ).then((response) => toPodcasts(response));
+List<Podcast> remotePodcastsToPodcasts(remotePodcasts) {
+  return remotePodcasts.map<Podcast>((remotePodcast) =>
+    Podcast.fromRemote(remotePodcast)
+  ).toList();
 }
 
 Future<void> subscribeToPodcast(Podcast podcast) async {
@@ -97,8 +64,4 @@ Future<void> unsubscribeFromPodcast(Podcast podcast) async {
   final App app = App();
   final PodcastSubscriptionBean subscriptionModel = app.models['podcast_subscription'];
   await subscriptionModel.removeWhere(subscriptionModel.podcastUrl.eq(podcast.feed));
-}
-
-List<Podcast> toPodcasts(ElasticsearchResponse response) {
-  return response.hits.map((hit) => Podcast.fromJson(hit.source)).toList();
 }

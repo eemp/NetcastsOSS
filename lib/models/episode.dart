@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:hear2learn/app.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -24,8 +23,6 @@ EpisodeQueue episodeQueueFromString(String enumName) {
 }
 
 class Episode {
-  final App app = App();
-
   static const int END_OF_EPISODE_THRESHOLD = 60;
 
   String description;
@@ -115,7 +112,7 @@ class Episode {
   }
 
   String getPlayerDetails() {
-    return jsonEncode(<int>[position.inSeconds, length.inSeconds]);
+    return jsonEncode(<int>[position?.inSeconds ?? 0, length?.inSeconds ?? 0]);
   }
 
   void setPlayerDetails(String details) {
@@ -151,7 +148,7 @@ class Episode {
 
   @override
   String toString() {
-    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, ]';
+    return 'Episode[title=$title, pubDate=$pubDate, status=${status.toString()}, size=$size, url=$url, downloadPath=${downloadPath}]';
   }
 
   @override

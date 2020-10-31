@@ -7,7 +7,10 @@ import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/episode.dart';
 import 'package:hear2learn/models/episode_action.dart';
 import 'package:hear2learn/models/user_episode.dart';
+import 'package:hear2learn/redux/selectors.dart';
+import 'package:hear2learn/redux/state.dart';
 import 'package:path/path.dart';
+import 'package:redux/redux.dart';
 
 final Dio dio = Dio();
 
@@ -182,4 +185,14 @@ Future<void> deleteEpisode(Episode episode) async {
       .and(episodeActionModel.type.eq(EpisodeActionType.DOWNLOAD.toString()))
   );
   episode.downloadPath = null;
+}
+
+bool isActive(episode) {
+  final App app = App();
+  final Store<AppState> store = app.store;
+  final Episode currentEpisode = playingEpisodeSelector(store);
+  if(episode == null || currentEpisode == null) {
+    return false;
+  }
+  return episode.url == currentEpisode.url;
 }

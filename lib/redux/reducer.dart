@@ -1,4 +1,6 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:dart_chromecast/casting/cast.dart';
+import 'package:dart_chromecast/casting/cast_device.dart';
 import 'package:hear2learn/helpers/dash.dart' as dash;
 import 'package:hear2learn/models/app_settings.dart';
 import 'package:hear2learn/models/episode.dart';
@@ -8,6 +10,7 @@ import 'package:hear2learn/redux/state.dart';
 
 AppState reducer(AppState state, dynamic action) {
   return AppState(
+    castSender: castSenderReducer(state.castSender, action),
     connectivity: connectivityReducer(state.connectivity, action),
     playingEpisode: playingEpisodeReducer(state.playingEpisode, action),
     settings: settingsReducer(state.settings, action),
@@ -17,6 +20,17 @@ AppState reducer(AppState state, dynamic action) {
 }
 
 const Function AppReducer = reducer;
+
+CastSender castSenderReducer(CastSender state, dynamic action) {
+  switch(action.type) {
+    case ActionType.CLEAR_CAST:
+      return null;
+    case ActionType.UPDATE_CAST:
+      return action.payload['castSender'];
+    default:
+      return state;
+  }
+}
 
 ConnectivityResult connectivityReducer(ConnectivityResult state, dynamic action) {
   switch(action.type) {

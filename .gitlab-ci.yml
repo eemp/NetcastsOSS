@@ -27,15 +27,6 @@ tests:
     - flutter test
   when: manual
 
-# mysql-activity:
-#   only:
-#     - schedules
-#   image:
-#     name: arey/mysql-client
-#     entrypoint: [""]
-#   script:
-#     - mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS -e "UPDATE podcasts SET artworkOrig = artworkOrig ORDER BY id ASC LIMIT 1;" $DB_NAME
-
 itunes-data:
   only:
     refs:
@@ -49,7 +40,7 @@ itunes-data:
     - yes | bash ./transcrypt -c aes-256-cbc -p $TRANSCRYPT_PASSWORD || true
     - npm install --prefix packages/podcasts-indexer
   script:
-    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:data:mysql
+    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:data:mongodb
 
 feeds-data:
   only:
@@ -64,7 +55,7 @@ feeds-data:
     - yes | bash ./transcrypt -c aes-256-cbc -p $TRANSCRYPT_PASSWORD || true
     - npm install --prefix packages/podcasts-indexer
   script:
-    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:feeds-data:mysql
+    - BATCH_SIZE=$BATCH_SIZE OFFSET=$(( 10#$(TZ=America/New_York date +'%H')/$PERIOD * $BATCH_SIZE )) npm run --prefix packages/podcasts-indexer build:feeds-data:mongodb
 
 ping-api:
   only:
